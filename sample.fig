@@ -53,7 +53,10 @@ Single
 	 2610 5580 3690 6795 4950 6885 5940 5580
 # ===========================================
 # SPLINE (3)
-# /--------------------------------- DRAWING TYPE (1 closed, 2 open, 3 closed
+# /--------------------------------- DRAWING TYPE (1 approximated closed, 
+# |                                                2 approximated open, 
+# |                                                3 interpolated closed
+# |                                                4 interpolated open)
 # | /------------------------------- LINE TYPE (0 continuous, 1 dashed ...)
 # | | /----------------------------- WIDTH
 # | | | /--------------------------- COLOR LINE
