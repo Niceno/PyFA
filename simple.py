@@ -66,5 +66,4 @@ write_xfig_header(xf)
 # Draw a text box
 plot_xfig_text_box_cm(xf, 2, 2, 8, 1, "PROBA")
 
-
 xf.close()
