@@ -63,10 +63,7 @@ xf = open("flow.fig", "w")
 # Write header out
 write_xfig_header(xf)
 
-# Draw a box
-# plot_xfig_box_cm(xf, 2, 2, 4, 1)
-# plot_xfig_text_cm(xf, 2, 2, 4, 1, "PROBA")
-
+# Draw a text box
 plot_xfig_text_box_cm(xf, 2, 2, 8, 1, "PROBA")
 
 
