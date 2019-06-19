@@ -36,6 +36,17 @@ def plot_xfig_box_cm(file, x0, y0, box_width, box_height):
   file.write("%5d %5d\n" % ( x0           *XFS,  y0            *XFS))
 
 #===============================================================================
+# Function to plot an empty module box
+#-------------------------------------------------------------------------------
+def plot_xfig_mod_box_cm(file, x0, y0, box_width, box_height):
+  file.write("2 2 0 1 0 28 50 -1 20 0.000 0 0 -1 0 0 5\n")
+  file.write("%5d %5d"   % ( x0           *XFS,  y0            *XFS))
+  file.write("%5d %5d"   % ((x0+box_width)*XFS,  y0            *XFS))
+  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
+  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%5d %5d\n" % ( x0           *XFS,  y0            *XFS))
+
+#===============================================================================
 # Function to print centered frameless text
 #-------------------------------------------------------------------------------
 def plot_xfig_text_center_cm(file, x0, y0, box_width, box_height, text):
@@ -74,8 +85,8 @@ def plot_xfig_text_left_cm(file, x0, y0, box_width, box_height, text):
 #-------------------------------------------------------------------------------
 def plot_xfig_mod_name_box_cm(file, x0, y0, box_width, box_height, text):
 
-  # Plot framing box first
-  plot_xfig_box_cm(file, x0, y0, box_width, box_height)
+  # Plot module framing box first
+  plot_xfig_mod_box_cm(file, x0, y0, box_width, box_height)
 
   # Plot text
   plot_xfig_text_center_cm(file, x0, y0, box_width, box_height, text)
