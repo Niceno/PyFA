@@ -1,17 +1,16 @@
 #===============================================================================
 # Import libraries
 #-------------------------------------------------------------------------------
-import math
 
 #===============================================================================
 # Handy constants
 #-------------------------------------------------------------------------------
 XFS = 450       # xfig scale; xfig units for one cm
 UBH = 0.75      # unit box height
-UBW = 6.0       # unit box width
+UBW = 6         # unit box width
 THICKNESS = 2   # box line thickness
-X0 = 1
-Y0 = UBH
+X0 = 1          # upper left corner position on x axis
+Y0 = 1          # upper left corner position on y axis
 
 #===============================================================================
 # Lists
@@ -25,6 +24,21 @@ meth_list_num = list(range(0,len(meth_list)))
 
 var_list_length = len(var_list)
 var_list_num = list(range(0,len(var_list)))
+
+#===============================================================================
+# Return the code value of a Xfig font
+#-------------------------------------------------------------------------------
+def xfig_font_code(name):
+
+  if name == "Courier":
+    return 12
+  elif name == "Courier-Bold":
+    return 14
+  elif name == "Helvetica":
+    return 16
+  elif name == "Helvetica-Bold":
+    return 18
+
 #===============================================================================
 # Function to write xfig header
 #-------------------------------------------------------------------------------
@@ -103,7 +117,8 @@ def plot_xfig_meth_box_cm(file, x0, y0, box_width, box_height):
 #-------------------------------------------------------------------------------
 def plot_xfig_text_center_cm(file, x0, y0, box_width, box_height, text):
 
-  file.write("4 1 0 45 -1 18 ")           # 18 is helvetica bold,45 is depth
+  file.write("4 1 0 45 -1 ")              # 45 is depth
+  file.write("%5d" % xfig_font_code("Helvetica-Bold"))
   font_size = box_height * 0.5
   file.write("%3d" % (font_size * 36))    # font size
   file.write(" 0.0000 4 ")
@@ -120,7 +135,8 @@ def plot_xfig_text_center_cm(file, x0, y0, box_width, box_height, text):
 #-------------------------------------------------------------------------------
 def plot_xfig_text_left_cm(file, x0, y0, box_width, box_height, text):
 
-  file.write("4 0 0 45 -1 16 ")           # 16 is helvetica,45 is depth
+  file.write("4 0 0 45 -1 ")              # 45 is depth
+  file.write("%5d" % xfig_font_code("Helvetica"))
   font_size = box_height * 0.5
   file.write("%3d" % (font_size * 36))    # font size
   file.write(" 0.0000 4 ")
@@ -148,18 +164,23 @@ def plot_xfig_mod_name_box_cm(file, x0, y0, box_width, box_height, text):
 #-------------------------------------------------------------------------------
   # Plot variables
 def plot_xfig_var_text_left_cm():
+  font_size = UBH * 0.5
+
   for i in range(var_list_length):
-	  plot_xfig_text_left_cm(xf, X0, 2*UBH+var_list_num[i], UBW, UBH,\
-                             var_list[i])
+	  plot_xfig_text_left_cm(xf, X0, 0.25+(Y0+font_size+(UBH-font_size)*0.5) \
+                             +var_list_num[i], UBW, UBH, var_list[i])
 
 #===============================================================================
 # Function to plot methods
 #-------------------------------------------------------------------------------
   # Plot methods
 def plot_xfig_meth_text_left_cm():
+  font_size = UBH * 0.5
+
   for i in range(meth_list_length):
-	  plot_xfig_text_left_cm(xf, X0, 2*UBH+var_list_length+meth_list_num[i],\
-                             UBW, UBH, meth_list[i])
+	  plot_xfig_text_left_cm(xf, X0, 0.25+(Y0+font_size+(UBH-font_size)*0.5) \
+                             +var_list_length+meth_list_num[i], UBW, UBH,\
+                             meth_list[i])
 
 #===============================================================================
 # Function to print variable box
