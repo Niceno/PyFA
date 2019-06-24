@@ -8,16 +8,9 @@ THICKNESS = 2          # box line thickness
 FONT_SIZE = UBH * 0.5  # font size depending on box height
 
 #===============================================================================
-# Function that returns list length
-#-------------------------------------------------------------------------------
-def list_length(lista):                     
-  list_length_value = len(lista)
-  return list_length_value
-
-#===============================================================================
 # Function that returns list indexes
 #-------------------------------------------------------------------------------
-def list_num(lista):                       
+def list_num(lista):
   list_num_value = list(range(0,len(lista)))
   return list_num_value
 
@@ -56,8 +49,6 @@ def write_header(file):
 def plot(file, x0, y0,      \
          module_name,       \
          var_list,          \
-         meth_list_length,  \
-         meth_list_num,     \
          meth_list):
 
   # Draw a module text box
@@ -69,10 +60,8 @@ def plot(file, x0, y0,      \
                 var_list)
 
   # Draw a method text box
-  plot_meth_name(file, x0, y0,         \
-                 var_list,             \
-                 meth_list_length,     \
-                 meth_list_num,        \
+  plot_meth_name(file, x0, y0,   \
+                 var_list,        \
                  meth_list)
 
 #===============================================================================
@@ -188,8 +177,11 @@ def plot_var_text_left_cm(file, x0, y0, var_list):
 # Function to plot methods
 #-------------------------------------------------------------------------------
   # Plot methods
-def plot_meth_text_left_cm(x0, y0, xf, var_list_length, meth_list_num,\
-                                meth_list, meth_list_length):
+def plot_meth_text_left_cm(x0, y0, xf, var_list, meth_list):
+
+  var_list_length = len(var_list)
+  meth_list_length = len(meth_list)
+  meth_list_num    = list_num(meth_list)
 
   for i in range(meth_list_length):
     plot_text_left_cm(xf, x0, 0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5) \
@@ -213,14 +205,15 @@ def plot_var_name(file, x0, y0, var_list):
 #-------------------------------------------------------------------------------
 def plot_meth_name(file, x0, y0,      \
                    var_list,          \
-                   meth_list_length,  \
-                   meth_list_num, meth_list):
+                   meth_list):
 
   var_list_length = len(var_list)
+  meth_list_length = len(meth_list)
+  meth_list_num    = list_num(meth_list)
 
-  # Plot methods framing box first
-  plot_meth_frame(file, x0, y0, UBW, UBH, var_list_length,\
-                            meth_list_length)
+ # Plot methods framing box first
+  plot_meth_frame(file, x0, y0, UBW, UBH, len(var_list),\
+                            len(meth_list))
   # Plot text
-  plot_meth_text_left_cm(x0, y0, file, var_list_length, meth_list_num, \
-                              meth_list, meth_list_length)
+  plot_meth_text_left_cm(x0, y0, file, var_list, \
+                              meth_list)
