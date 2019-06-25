@@ -11,8 +11,9 @@ FONT_SIZE = UBH * 0.5  # font size depending on box height
 # Function that returns list indexes
 #-------------------------------------------------------------------------------
 def list_num(lista):
-  list_num_value = list(range(0,len(lista)))
-  return list_num_value
+
+  list_num_string = list(range(0,len(lista)))
+  return list_num_string
 
 #===============================================================================
 # Return the code value of a Xfig font
@@ -44,7 +45,7 @@ def write_header(file):
   file.write("1200 2\n")
 
 #===============================================================================
-# Function to plot an empty box
+# Function to plot box
 #-------------------------------------------------------------------------------
 def plot(file, x0, y0,      \
          module_name,       \
@@ -52,15 +53,15 @@ def plot(file, x0, y0,      \
          meth_list):
 
   # Draw a module text box
-  plot_mod_name(file, x0, y0,    \
-                module_name[0])
+  plot_mod_name(file, x0, y0,     \
+                module_name)
 
   # Draw a variable text box
-  plot_var_name(file, x0, y0,    \
+  plot_var_name(file, x0, y0,     \
                 var_list)
 
   # Draw a method text box
-  plot_meth_name(file, x0, y0,   \
+  plot_meth_name(file, x0, y0,    \
                  var_list,        \
                  meth_list)
 
@@ -82,36 +83,39 @@ def plot_mod_frame(file, x0, y0, box_width, box_height):
 #===============================================================================
 # Function to plot an empty variable box depending on list length
 #-------------------------------------------------------------------------------
-def plot_var_frame(file, x0, y0, box_width, box_height, var_list_length):
+def plot_var_frame(file, x0, y0, box_width, box_height, \
+                   var_list):
 
   file.write("2 2 0 ")
   file.write("%3d"       % THICKNESS)
   file.write(" 0 7 50 -1 -1 0.000 0 0 -1 0 0 5\n")
   file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height+var_list_length)\
+  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list))\
                                                  *XFS))
-  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height+var_list_length)\
+  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height+len(var_list))\
                                                  *XFS))
   file.write("%5d %5d\n" % ( x0           *XFS, (y0+box_height)*XFS))
 
 #===============================================================================
 # Function to plot an empty method box depending on list length
 #-------------------------------------------------------------------------------
-def plot_meth_frame(file, x0, y0, box_width, box_height, var_list_length,\
-                          meth_list_length):
+def plot_meth_frame(file, x0, y0, box_width, box_height, \
+                    var_list,                            \
+                    meth_list):
+
   file.write("2 2 0 ")
   file.write("%3d"       % THICKNESS)
   file.write(" 0 7 50 -1 -1 0.000 0 0 -1 0 0 5\n")
-  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height+var_list_length)\
+  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height+len(var_list))\
                                                                    *XFS))
-  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height+var_list_length)\
+  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list))\
                                                                    *XFS))
-  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height+var_list_length\
-                                                 +meth_list_length)*XFS))
-  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height+var_list_length\
-                                                 +meth_list_length)*XFS))
-  file.write("%5d %5d\n" % ( x0           *XFS, (y0+box_height+var_list_length)\
+  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
+                                                 +len(meth_list))*XFS))
+  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
+                                                 +len(meth_list))*XFS))
+  file.write("%5d %5d\n" % ( x0           *XFS, (y0+box_height+len(var_list))\
                                                                    *XFS))
 
 #===============================================================================
@@ -163,12 +167,12 @@ def plot_mod_name(file, x0, y0, text):
 #===============================================================================
 # Function to plot variables
 #-------------------------------------------------------------------------------
-def plot_var_text_left_cm(file, x0, y0, var_list):
+def plot_var_text_left_cm(file, x0, y0, \
+                          var_list):
 
-  var_list_length = len(var_list)
   var_list_num    = list_num(var_list)
 
-  for i in range(var_list_length):
+  for i in range(len(var_list)):
     plot_text_left_cm(file, x0, 0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5) \
                       +var_list_num[i], UBW, UBH, var_list[i])
 
@@ -177,24 +181,25 @@ def plot_var_text_left_cm(file, x0, y0, var_list):
 # Function to plot methods
 #-------------------------------------------------------------------------------
   # Plot methods
-def plot_meth_text_left_cm(x0, y0, xf, var_list, meth_list):
+def plot_meth_text_left_cm(x0, y0, xf, \
+                           var_list,   \
+                           meth_list):
 
-  var_list_length = len(var_list)
-  meth_list_length = len(meth_list)
   meth_list_num    = list_num(meth_list)
 
-  for i in range(meth_list_length):
+  for i in range(len(meth_list)):
     plot_text_left_cm(xf, x0, 0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5) \
-                      +var_list_length+meth_list_num[i], UBW, UBH,\
+                      +len(var_list)+meth_list_num[i], UBW, UBH,\
                        meth_list[i])
 
 #===============================================================================
 # Function to print variable box
 #-------------------------------------------------------------------------------
-def plot_var_name(file, x0, y0, var_list):
+def plot_var_name(file, x0, y0, \
+                  var_list):
 
   # Plot variable framing box first
-  plot_var_frame(file, x0, y0, UBW, UBH, len(var_list))
+  plot_var_frame(file, x0, y0, UBW, UBH, var_list)
 
   # Plot text
   plot_var_text_left_cm(file, x0, y0, var_list)
@@ -207,13 +212,7 @@ def plot_meth_name(file, x0, y0,      \
                    var_list,          \
                    meth_list):
 
-  var_list_length = len(var_list)
-  meth_list_length = len(meth_list)
-  meth_list_num    = list_num(meth_list)
-
  # Plot methods framing box first
-  plot_meth_frame(file, x0, y0, UBW, UBH, len(var_list),\
-                            len(meth_list))
+  plot_meth_frame(file, x0, y0, UBW, UBH, var_list, meth_list)
   # Plot text
-  plot_meth_text_left_cm(x0, y0, file, var_list, \
-                              meth_list)
+  plot_meth_text_left_cm(x0, y0, file, var_list, meth_list)

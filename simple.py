@@ -6,7 +6,6 @@ import xfig_module_box
 #===============================================================================
 # Handy constants
 #-------------------------------------------------------------------------------
-THICKNESS = 2  # box line thickness
 X0        = 1  # upper left corner position on x axis
 Y0        = 1  # upper left corner position on y axis
 
@@ -15,7 +14,7 @@ Y0        = 1  # upper left corner position on y axis
 #-------------------------------------------------------------------------------
 var_list = ["real :: xy","character :: name","integer :: r","integer:: xy"]
 meth_list = ["Allocate_Cells","Calculate","Decompose"]
-module_name = ["Const_Mod"]
+module_name = "Const_Mod"
 
 
 #===============================================================================
@@ -23,7 +22,6 @@ module_name = ["Const_Mod"]
 #-------------------------------------------------------------------------------
 
 print("Great program for extracting UML from Fortran.")
-
 
 # Open Xfig file
 
