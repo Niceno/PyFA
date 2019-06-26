@@ -3,7 +3,7 @@
 #-------------------------------------------------------------------------------
 XFS = 450              # xfig scale; xfig units for one cm
 UBH = 0.75             # unit box height
-UBW = 6                # unit box width
+UBW = 8                # unit box width
 THICKNESS = 2          # box line thickness
 FONT_SIZE = UBH * 0.5  # font size depending on box height
 

@@ -1,7 +1,9 @@
 #===============================================================================
 # Import libraries
 #-------------------------------------------------------------------------------
+import re
 import xfig_module_box
+import finder
 
 #===============================================================================
 # Handy constants
@@ -10,12 +12,14 @@ X0        = 1  # upper left corner position on x axis
 Y0        = 1  # upper left corner position on y axis
 
 #===============================================================================
-# Lists and its "constants"
+# Lists
 #-------------------------------------------------------------------------------
-var_list = ["real :: xy","character :: name","integer :: r","integer:: xy"]
-meth_list = ["Allocate_Cells","Calculate","Decompose"]
-module_name = "Const_Mod"
 
+filename = "Mesh_Mod.f90"
+
+var_list = finder.get_var(filename)
+meth_list = finder.get_meth(filename)
+module_name = finder.get_mod(filename)
 
 #===============================================================================
 # Obviously the main function
