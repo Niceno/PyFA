@@ -2,7 +2,7 @@
 # Import libraries
 #-------------------------------------------------------------------------------
 import re
-import xfig_module_box
+import xfig
 import finder
 
 #===============================================================================
@@ -19,7 +19,7 @@ filename = "Mesh_Mod.f90"
 
 var_list = finder.get_var(filename)
 meth_list = finder.get_meth(filename)
-module_name = finder.get_mod(filename)
+header_name = finder.get_header(filename)
 
 #===============================================================================
 # Obviously the main function
@@ -32,13 +32,14 @@ print("Great program for extracting UML from Fortran.")
 xf = open("flow.fig", "w")
 
 # Write header out
-xfig_module_box.write_header(xf)
+xfig.write_header(xf)
 
 # Plot module box
-xfig_module_box.plot(xf, X0, Y0,        \
-                     module_name,       \
-                     var_list,          \
-                     meth_list)
+xfig.plot(xf, X0, Y0,        \
+          header_name,       \
+          var_list,          \
+          meth_list,         \
+          filename)
 
 #End
 xf.close()

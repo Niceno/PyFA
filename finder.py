@@ -4,21 +4,7 @@
 import re
 
 #===============================================================================
-# Deletes spaces in all strings of a list
-#-------------------------------------------------------------------------------
-
-def clean_list(list_item):
-  if isinstance(list_item, list):
-    for index in range(len(list_item)):
-      if isinstance(list_item[index], list):
-        list_item[index] = clean_list(list_item[index])
-      if not isinstance(list_item[index], (int, tuple, float, list)):
-        list_item[index] = list_item[index].strip()
-
-  return list_item
-
-#===============================================================================
-# Finding module
+# Find module
 #-------------------------------------------------------------------------------
 
 def get_mod(filename):
@@ -38,12 +24,52 @@ def get_mod(filename):
   return module_name
 
 #===============================================================================
-# Finding variables
+# Find subroutine
+#-------------------------------------------------------------------------------
+
+def get_sub(filename):
+
+  subroutine = []
+  pattern = re.compile(".+?(?=subroutine)", re.IGNORECASE)
+
+  with open (filename, 'rt') as myfile:          #search for pattern
+    for line in myfile:
+      if pattern.search(line) != None:
+        subroutine.append(( line.rstrip("\n")))  # add line with pattern to list
+
+  subroutine = [s.strip() for s in subroutine if s.strip()] # remove whitespaces
+
+  if len(subroutine) != 0:                   # check if subroutine is not empty
+    sub_string = subroutine[0]
+    sub_name = re.sub("subroutine ", "", sub_string)   # return subroutine name
+  elif len(subroutine) == 0:
+    sub_name = 0                             # if it is empty return 0
+
+  return sub_name
+
+#===============================================================================
+# Find if header is module or subroutine
+#-------------------------------------------------------------------------------
+
+def get_header(filename):
+
+  sub_name = get_sub(filename)
+  module_name = get_mod(filename)
+
+  if len(module_name) != 0:      # if module_name is not empty take module_name
+    header = module_name
+  elif len(module_name) == 0:    # if module_name is empty take sub_name
+    header = sub_name
+
+  return header
+
+#===============================================================================
+# Find variables
 #-------------------------------------------------------------------------------
 
 def get_var(filename):
 
-  # finding var names
+  # find var names
 
   vars = []
   with open(filename) as file:
@@ -62,15 +88,16 @@ def get_var(filename):
   var_name_list = [":: " + suit for suit in var_name_list] # adds ":: "
                                                            # to every var
 
-  # finding var type
+
+  # find var types
 
   var_type = []
   pattern = re.compile("::", re.IGNORECASE)
 
-  with open (filename, 'rt') as myfile:                   # search for pattern
+  with open (filename, 'rt') as myfile:          # search for pattern
     for line in myfile:
       if pattern.search(line) != None:
-        var_type.append(( line.rstrip("\n")))
+        var_type.append(( line.rstrip("\n")))    # add line with pattern to list
 
   var_type = [s.strip() for s in var_type if s.strip()]   # remove whitespaces
   var_type_list = [i.split()[0] for i in var_type]        # take first word
@@ -83,9 +110,8 @@ def get_var(filename):
 
   return var_list
 
-
 #===============================================================================
-# Finding methods
+# Find methods
 #-------------------------------------------------------------------------------
 
 def get_meth(filename):
@@ -102,10 +128,25 @@ def get_meth(filename):
     for item in sublist:
       flat_list.append(item)
 
+  # check if any method is found
 
-  if flat_list == []:                                   # check if any methods
+  if flat_list == []:
     meth_list = ["No methods available"]
   else:
     meth_list = [i.split()[0] for i in flat_list]
 
   return meth_list
+
+#===============================================================================
+# Deletes spaces in all strings of a list
+#-------------------------------------------------------------------------------
+
+def clean_list(list_item):
+  if isinstance(list_item, list):
+    for index in range(len(list_item)):
+      if isinstance(list_item[index], list):
+        list_item[index] = clean_list(list_item[index])
+      if not isinstance(list_item[index], (int, tuple, float, list)):
+        list_item[index] = list_item[index].strip()
+
+  return list_item
