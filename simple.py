@@ -14,9 +14,8 @@ Y0        = 1  # upper left corner position on y axis
 #-------------------------------------------------------------------------------
 
 filename = "Eddy_Mod.f90"
+# filename = "Save_Vtk.f90"
 
-var_list = finder.get_var(filename)
-meth_list = finder.get_meth(filename)
 header_name = finder.get_header(filename)
 
 #===============================================================================
@@ -34,8 +33,6 @@ xfig.write_header(xf)
 # Plot module box
 xfig.plot(xf, X0, Y0,        \
           header_name,       \
-          var_list,          \
-          meth_list,         \
           filename)
 
 #End

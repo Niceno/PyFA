@@ -97,25 +97,27 @@ def write_header(file):
 #-------------------------------------------------------------------------------
 def plot(file, x0, y0,      \
          module_name,       \
-         var_list,          \
-         meth_list,         \
          filename):
 
   module = finder.get_mod(filename)
 
+  # Module definition has been found, hence length is greater than zero
   if len(module) != 0:
+    var_list  = finder.get_var(filename)
+    meth_list = finder.get_meth(filename)
     plot_module(file, x0, y0,          \
-             module_name,              \
-             var_list,                 \
-             meth_list,                \
-             filename)
+                module_name,           \
+                var_list,              \
+                meth_list,             \
+                filename)
 
+  # Module defintion has not been found, hence it is a subroutine
   elif len(module) == 0:
+    var_list  = finder.get_var(filename)
     plot_subroutine(file, x0, y0,      \
-             module_name,              \
-             var_list,                 \
-             meth_list,                \
-             filename)
+                    module_name,       \
+                    var_list,          \
+                    filename)
 
 #===============================================================================
 # Function to plot module box
@@ -146,13 +148,12 @@ def plot_module(file, x0, y0,      \
 # Function to plot module box
 #-------------------------------------------------------------------------------
 def plot_subroutine(file, x0, y0,      \
-         module_name,                  \
-         var_list,                     \
-         meth_list,                    \
-         filename):
+                    module_name,       \
+                    var_list,          \
+                    filename):
 
   # Draw a module text box
-  plot_mod_name(file, x0, y0,     \
+  plot_sub_name(file, x0, y0,     \
                 module_name,      \
                 filename)
 
@@ -166,19 +167,35 @@ def plot_subroutine(file, x0, y0,      \
 #===============================================================================
 # Function to plot an empty module frame
 #-------------------------------------------------------------------------------
-def plot_mod_frame(file, x0, y0, box_width, box_height, \
-                   filename):
+def plot_mod_frame(file, x0, y0, box_width, box_height):
 
   file.write("2 2 0 ")
   file.write("%3d "       % THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color(choose_color(filename)))
+  file.write("%3d "       % xfig_box_color("LtBlue"))
   file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%5d %5d"   % ( x0           *XFS,  y0            *XFS))
   file.write("%5d %5d"   % ((x0+box_width)*XFS,  y0            *XFS))
   file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
   file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%5d %5d\n" % ( x0           *XFS,  y0            *XFS))
+
+#===============================================================================
+# Function to plot an empty module frame
+#-------------------------------------------------------------------------------
+def plot_sub_frame(file, x0, y0, box_width, box_height):
+
+  file.write("2 2 0 ")
+  file.write("%3d "       % THICKNESS)
+  file.write("0")
+  file.write("%3d "       % xfig_box_color("Pink2"))
+  file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
+  file.write("%5d %5d"   % ( x0           *XFS,  y0            *XFS))
+  file.write("%5d %5d"   % ((x0+box_width)*XFS,  y0            *XFS))
+  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
+  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%5d %5d\n" % ( x0           *XFS,  y0            *XFS))
+
 
 
 #===============================================================================
@@ -261,7 +278,21 @@ def plot_mod_name(file, x0, y0, text, filename):
   box_width = choose_width(filename)
 
   # Plot module framing box first
-  plot_mod_frame(file, x0, y0, box_width, UBH, filename)
+  plot_mod_frame(file, x0, y0, box_width, UBH)
+
+  # Plot text
+  plot_text_center_cm(file, x0, y0, box_width, UBH, text)
+
+
+#===============================================================================
+# Function to print subroutine name
+#-------------------------------------------------------------------------------
+def plot_sub_name(file, x0, y0, text, filename):
+
+  box_width = choose_width(filename)
+
+  # Plot module framing box first
+  plot_sub_frame(file, x0, y0, box_width, UBH)
 
   # Plot text
   plot_text_center_cm(file, x0, y0, box_width, UBH, text)
