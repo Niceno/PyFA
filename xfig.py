@@ -2,6 +2,7 @@
 # Import libraries
 #-------------------------------------------------------------------------------
 import finder
+
 #===============================================================================
 # Handy constants
 #-------------------------------------------------------------------------------
@@ -9,6 +10,7 @@ XFS = 450              # xfig scale; xfig units for one cm
 UBH = 0.75             # unit box height
 THICKNESS = 2          # box line thickness
 FONT_SIZE = UBH * 0.5  # font size depending on box height
+
 #===============================================================================
 # Function that returns list indexes
 #-------------------------------------------------------------------------------
@@ -44,7 +46,6 @@ def xfig_box_color(name):
 #===============================================================================
 # Choose the code value of a Xfig box color depending on header type
 #-------------------------------------------------------------------------------
-
 def choose_color(filename):
 
   sub_name = finder.get_sub(filename)
@@ -56,7 +57,6 @@ def choose_color(filename):
     color = "Pink2"                  # Pink2 color for subroutine
 
   return color
-
 
 #===============================================================================
 # Function to write xfig header
@@ -194,7 +194,7 @@ def plot_text_left_cm(file, x0, y0, box_width, box_height, text):
 #-------------------------------------------------------------------------------
 def plot_mod_name(file, x0, y0, text, filename):
 
-  ubw = check_var(filename)
+  ubw = choose_width(filename)
 
   # Plot module framing box first
   plot_mod_frame(file, x0, y0, ubw, UBH, filename)
@@ -210,7 +210,7 @@ def plot_var_text_left_cm(file, x0, y0, \
                           var_list,     \
                           filename):
 
-  ubw = check_var(filename)
+  ubw = choose_width(filename)
   var_list_num    = list_num(var_list)
 
   for i in range(len(var_list)):
@@ -227,7 +227,7 @@ def plot_meth_text_left_cm(x0, y0, xf, \
                            meth_list,  \
                            filename):
 
-  ubw = check_var(filename)
+  ubw = choose_width(filename)
   meth_list_num    = list_num(meth_list)
 
   for i in range(len(meth_list)):
@@ -242,7 +242,7 @@ def plot_var_name(file, x0, y0, \
                   var_list,     \
                   filename):
 
-  ubw = check_var(filename)
+  ubw = choose_width(filename)
 
   # Plot variable framing box first
   plot_var_frame(file, x0, y0, ubw, UBH, var_list)
@@ -259,7 +259,7 @@ def plot_meth_name(file, x0, y0,      \
                    meth_list,         \
                    filename):
 
-  ubw = check_var(filename)
+  ubw = choose_width(filename)
 
  # Plot methods framing box first
   plot_meth_frame(file, x0, y0, ubw, UBH, var_list, meth_list)
@@ -269,12 +269,20 @@ def plot_meth_name(file, x0, y0,      \
 
 
 #===============================================================================
-# Find box width depending on longest variable
+# Choose box width depending on longest string
 #-------------------------------------------------------------------------------
-def check_var(filename):
+def choose_width(filename):
 
-  list = finder.get_var(filename)
-  longest_var = max(list, key=len)
-  var_width = len(longest_var) / 3.7  # 3.7 gives the best ratio for width
+  var_list = finder.get_var(filename)
+  meth_list = finder.get_meth(filename)
+  header_name = finder.get_header(filename)
+
+  var_length = max(var_list, key=len)
+  meth_length = max(meth_list, key=len)
+  header_length = max(header_name, key=len)
+
+  lengths = [len(var_length), len(meth_length), len(header_length)]
+  var_width = max(lengths)
+  var_width = len(var_length) / 3.4  # 3.4 gives the best ratio for width
 
   return var_width

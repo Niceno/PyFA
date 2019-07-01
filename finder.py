@@ -4,82 +4,80 @@
 import re
 
 #===============================================================================
-# Find module
+# Find module name
 #-------------------------------------------------------------------------------
-
 def get_mod(filename):
 
-  modules = []
+  module = []                                         # initialize module list
   pattern = re.compile(".+?(?=_Mod$)", re.IGNORECASE)
 
-  with open (filename, 'rt') as myfile:               #search for pattern
-    for line in myfile:
-      if pattern.search(line) != None:
-        modules.append(( line.rstrip("\n")))
+  with open (filename, 'rt') as myfile:               # open file
+    for line in myfile:                               # read line by line
+      if pattern.search(line) != None:                # search for pattern
+        module.append(( line.rstrip("\n")))           # add lines to list
 
-  modules = [s.strip() for s in modules if s.strip()] # remove whitespaces
-  mod_list = ' '.join(modules)                        # class into a list
+  module = [s.strip() for s in module if s.strip()]   # remove whitespaces
+  mod_list = ' '.join(module)                         # class into a list
   module_name = re.sub("module ", "", mod_list)       # remove "module "
 
   return module_name
 
 #===============================================================================
-# Find subroutine
+# Find subroutine name
 #-------------------------------------------------------------------------------
-
 def get_sub(filename):
 
-  subroutine = []
+  subroutine = []                               # initialize module list
   pattern = re.compile(".+?(?=subroutine)", re.IGNORECASE)
 
-  with open (filename, 'rt') as myfile:          #search for pattern
-    for line in myfile:
-      if pattern.search(line) != None:
-        subroutine.append(( line.rstrip("\n")))  # add line with pattern to list
+  with open (filename, 'rt') as myfile:         # open file
+    for line in myfile:                         # read line by line
+      if pattern.search(line) != None:          # search for pattern
+        subroutine.append(( line.rstrip("\n"))) # add line with pattern to list
 
   subroutine = [s.strip() for s in subroutine if s.strip()] # remove whitespaces
 
-  if len(subroutine) != 0:                   # check if subroutine is not empty
-    sub_string = subroutine[0]
+  if len(subroutine) != 0:                      # if subroutine is not empty
+    sub_string = subroutine[0]                  # take the first string
     sub_name = re.sub("subroutine ", "", sub_string)   # return subroutine name
+    sub_name = re.sub("\((.*)\)", "", sub_name)        # remove brackets ()
+
   elif len(subroutine) == 0:
-    sub_name = 0                             # if it is empty return 0
+    sub_name = 0                                # if no subroutine return 0
 
   return sub_name
 
 #===============================================================================
-# Find if header is module or subroutine
+# Decide if header is module or subroutine
 #-------------------------------------------------------------------------------
-
 def get_header(filename):
 
   sub_name = get_sub(filename)
   module_name = get_mod(filename)
 
-  if len(module_name) != 0:      # if module_name is not empty take module_name
+  if len(module_name) != 0:      # if module_name is not empty take module name
     header = module_name
-  elif len(module_name) == 0:    # if module_name is empty take sub_name
+  elif len(module_name) == 0:    # if module_name is empty take sub name
     header = sub_name
 
   return header
 
 #===============================================================================
-# Find variables
+# Find all variables
 #-------------------------------------------------------------------------------
+def get_all_var(filename):
 
-def get_var(filename):
-
-  # find var names
+  # find all var names
 
   vars = []
-  with open(filename) as file:
-    for line in file:
+  with open(filename) as file:                # open file
+    for line in file:                         # read line by line
       vars_help = re.findall("(?<=:: ).*$", line)  # looking for line with ::
       vars.append(vars_help)                  # list of lists of vars with []
-  vars2 = [x for x in vars if x != []]        # list of lists of vars without []
+  vars2 = [x for x in vars if x != []]        # remove empty lists
 
-  flat_list = []                              #create 1 list of strings of vars
-  for sublist in vars2:
+  flat_list = []                              # create a list of strings of vars
+  for sublist in vars2:                       # instead of having lists in lists
       for item in sublist:
           flat_list.append(item)
 
@@ -89,18 +87,18 @@ def get_var(filename):
                                                            # to every var
 
 
-  # find var types
+  # find all var types
 
   var_type = []
   pattern = re.compile("::", re.IGNORECASE)
 
-  with open (filename, 'rt') as myfile:          # search for pattern
-    for line in myfile:
-      if pattern.search(line) != None:
+  with open (filename, 'rt') as myfile:          # open file
+    for line in myfile:                          # read line by line
+      if pattern.search(line) != None:           # search for pattern
         var_type.append(( line.rstrip("\n")))    # add line with pattern to list
 
   var_type = [s.strip() for s in var_type if s.strip()]   # remove whitespaces
-  var_type_list = [i.split()[0] for i in var_type]        # take first word
+  var_type_list = [i.split()[0] for i in var_type]        # take first string
   var_type_list = ([s.strip(",") for s in var_type_list]) # remove ","
 
   # merge var names and var types into one var list
@@ -111,36 +109,67 @@ def get_var(filename):
   return var_list
 
 #===============================================================================
+# Find subroutine variables and choose variables to print
+#-------------------------------------------------------------------------------
+def get_var(filename):
+
+  var_list = get_all_var(filename)
+  sub_name = get_sub(filename)
+  module_name = get_mod(filename)
+
+  if len(module_name) == 0:                      # if it is subroutine
+
+    sub_var_list = []
+    with open(filename) as file:                 # open file
+      for line in file:                          # read line by line
+        meths = re.findall("\((.*)\)", line)     # looking for line with "()"
+        sub_var_list.append(meths)               # add those lines to list
+    sub_var_list2 = [x for x in sub_var_list if x != []]  # remove empty lists
+
+    flat_list = []
+    for sublist in sub_var_list2:
+      for item in sublist:
+        flat_list.append(item)
+
+    sub_var_list = flat_list[0]                  # sub variables inside of ()
+    sub_var_list = sub_var_list.split(",")       # split by "," and remove ","
+    sub_var_list = var_list[0:len(sub_var_list)] # return only sub variables
+
+  elif len(module_name) != 0:                    # if it is not subroutine
+
+    sub_var_list = var_list                      # return all variables
+
+  return sub_var_list
+
+#===============================================================================
 # Find methods
 #-------------------------------------------------------------------------------
-
 def get_meth(filename):
 
   methods = []
-  with open(filename) as file:
-    for line in file:
-      meths = re.findall("(?<=_Mod/)(.*)(?=.f90)", line)  # search for methods
-      methods.append(meths)
-  methods2 = [x for x in methods if x != []]
+  with open(filename) as file:                    # open file
+    for line in file:                             # read line by line
+      meths = re.findall("(?<=_Mod/)(.*)(?=.f90)", line) # search _Mod and .f90
+      methods.append(meths)                       # add those lines to list
+  methods2 = [x for x in methods if x != []]      # remove empty lists
 
-  flat_list = []
-  for sublist in methods2:
+  flat_meth_list = []                        # create only one list with strings
+  for sublist in methods2:                   # instead of list with lists
     for item in sublist:
-      flat_list.append(item)
+      flat_meth_list.append(item)
 
   # check if any method is found
 
-  if flat_list == []:
+  if flat_meth_list == []:
     meth_list = ["No methods available"]
   else:
-    meth_list = [i.split()[0] for i in flat_list]
+    meth_list = [i.split()[0] for i in flat_meth_list]
 
   return meth_list
 
 #===============================================================================
-# Deletes spaces in all strings of a list
+# Deletes spaces in all strings of a list (needed at one point)
 #-------------------------------------------------------------------------------
-
 def clean_list(list_item):
   if isinstance(list_item, list):
     for index in range(len(list_item)):
