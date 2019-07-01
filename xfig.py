@@ -283,6 +283,6 @@ def choose_width(filename):
 
   lengths = [len(var_length), len(meth_length), len(header_length)]
   var_width = max(lengths)
-  var_width = len(var_length) / 3.4  # 3.4 gives the best ratio for width
+  var_width = len(var_length) *0.45  #  gives the best ratio for width
 
   return var_width

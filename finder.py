@@ -40,7 +40,6 @@ def get_sub(filename):
   if len(subroutine) != 0:                      # if subroutine is not empty
     sub_string = subroutine[0]                  # take the first string
     sub_name = re.sub("subroutine ", "", sub_string)   # return subroutine name
-    sub_name = re.sub("\((.*)\)", "", sub_name)        # remove brackets ()
 
   elif len(subroutine) == 0:
     sub_name = 0                                # if no subroutine return 0
@@ -145,8 +144,10 @@ def get_var(filename):
 # Find methods
 #-------------------------------------------------------------------------------
 def get_meth(filename):
+  module_name = get_mod(filename)
 
   methods = []
+
   with open(filename) as file:                    # open file
     for line in file:                             # read line by line
       meths = re.findall("(?<=_Mod/)(.*)(?=.f90)", line) # search _Mod and .f90
@@ -159,10 +160,11 @@ def get_meth(filename):
       flat_meth_list.append(item)
 
   # check if any method is found
-
-  if flat_meth_list == []:
+  if len(module_name) == 0:
+    meth_list = [""]
+  elif flat_meth_list == []:
     meth_list = ["No methods available"]
-  else:
+  elif flat_meth_list != []:
     meth_list = [i.split()[0] for i in flat_meth_list]
 
   return meth_list
