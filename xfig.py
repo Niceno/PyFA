@@ -59,6 +59,25 @@ def choose_color(filename):
   return color
 
 #===============================================================================
+# Choose box width depending on longest string
+#-------------------------------------------------------------------------------
+def choose_width(filename):
+
+  var_list    = finder.get_var(filename)
+  meth_list   = finder.get_meth(filename)
+  header_name = finder.get_header(filename)
+
+  var_length    = max(var_list, key=len)
+  meth_length   = max(meth_list, key=len)
+  header_length = max(header_name, key=len)
+
+  lengths   = [len(var_length), len(meth_length), len(header_length)]
+  var_width = max(lengths)
+  var_width = len(var_length) *0.4  #  gives the best ratio for width
+
+  return var_width
+
+#===============================================================================
 # Function to write xfig header
 #-------------------------------------------------------------------------------
 def write_header(file):
@@ -74,12 +93,37 @@ def write_header(file):
   file.write("1200 2\n")
 
 #===============================================================================
-# Function to plot box
+# Choose which one to plot
 #-------------------------------------------------------------------------------
 def plot(file, x0, y0,      \
          module_name,       \
          var_list,          \
          meth_list,         \
+         filename):
+
+  module = finder.get_mod(filename)
+
+  if len(module) != 0:
+    plot_module(file, x0, y0,          \
+             module_name,              \
+             var_list,                 \
+             meth_list,                \
+             filename)
+
+  elif len(module) == 0:
+    plot_subroutine(file, x0, y0,      \
+             module_name,              \
+             var_list,                 \
+             meth_list,                \
+             filename)
+
+#===============================================================================
+# Function to plot module box
+#-------------------------------------------------------------------------------
+def plot_module(file, x0, y0,      \
+         module_name,              \
+         var_list,                 \
+         meth_list,                \
          filename):
 
   # Draw a module text box
@@ -97,6 +141,26 @@ def plot(file, x0, y0,      \
                  var_list,        \
                  meth_list,       \
                  filename)
+
+#===============================================================================
+# Function to plot module box
+#-------------------------------------------------------------------------------
+def plot_subroutine(file, x0, y0,      \
+         module_name,                  \
+         var_list,                     \
+         meth_list,                    \
+         filename):
+
+  # Draw a module text box
+  plot_mod_name(file, x0, y0,     \
+                module_name,      \
+                filename)
+
+ # Draw a variable text box
+  plot_var_name(file, x0, y0,     \
+                var_list,         \
+                filename)
+
 
 
 #===============================================================================
@@ -194,13 +258,13 @@ def plot_text_left_cm(file, x0, y0, box_width, box_height, text):
 #-------------------------------------------------------------------------------
 def plot_mod_name(file, x0, y0, text, filename):
 
-  ubw = choose_width(filename)
+  box_width = choose_width(filename)
 
   # Plot module framing box first
-  plot_mod_frame(file, x0, y0, ubw, UBH, filename)
+  plot_mod_frame(file, x0, y0, box_width, UBH, filename)
 
   # Plot text
-  plot_text_center_cm(file, x0, y0, ubw, UBH, text)
+  plot_text_center_cm(file, x0, y0, box_width, UBH, text)
 
 
 #===============================================================================
@@ -210,12 +274,12 @@ def plot_var_text_left_cm(file, x0, y0, \
                           var_list,     \
                           filename):
 
-  ubw = choose_width(filename)
-  var_list_num    = list_num(var_list)
+  box_width    = choose_width(filename)
+  var_list_num = list_num(var_list)
 
   for i in range(len(var_list)):
     plot_text_left_cm(file, x0, 0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5) \
-                      +var_list_num[i], ubw, UBH, var_list[i])
+                      +var_list_num[i], box_width, UBH, var_list[i])
 
 
 #===============================================================================
@@ -227,12 +291,12 @@ def plot_meth_text_left_cm(x0, y0, xf, \
                            meth_list,  \
                            filename):
 
-  ubw = choose_width(filename)
-  meth_list_num    = list_num(meth_list)
+  box_width     = choose_width(filename)
+  meth_list_num = list_num(meth_list)
 
   for i in range(len(meth_list)):
     plot_text_left_cm(xf, x0, 0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5) \
-                      +len(var_list)+meth_list_num[i], ubw, UBH,      \
+                      +len(var_list)+meth_list_num[i], box_width, UBH,      \
                        meth_list[i])
 
 #===============================================================================
@@ -242,10 +306,10 @@ def plot_var_name(file, x0, y0, \
                   var_list,     \
                   filename):
 
-  ubw = choose_width(filename)
+  box_width = choose_width(filename)
 
   # Plot variable framing box first
-  plot_var_frame(file, x0, y0, ubw, UBH, var_list)
+  plot_var_frame(file, x0, y0, box_width, UBH, var_list)
 
   # Plot text
   plot_var_text_left_cm(file, x0, y0, var_list,filename)
@@ -259,30 +323,10 @@ def plot_meth_name(file, x0, y0,      \
                    meth_list,         \
                    filename):
 
-  ubw = choose_width(filename)
+  box_width = choose_width(filename)
 
  # Plot methods framing box first
-  plot_meth_frame(file, x0, y0, ubw, UBH, var_list, meth_list)
+  plot_meth_frame(file, x0, y0, box_width, UBH, var_list, meth_list)
 
  # Plot text
   plot_meth_text_left_cm(x0, y0, file, var_list, meth_list,filename)
-
-
-#===============================================================================
-# Choose box width depending on longest string
-#-------------------------------------------------------------------------------
-def choose_width(filename):
-
-  var_list = finder.get_var(filename)
-  meth_list = finder.get_meth(filename)
-  header_name = finder.get_header(filename)
-
-  var_length = max(var_list, key=len)
-  meth_length = max(meth_list, key=len)
-  header_length = max(header_name, key=len)
-
-  lengths = [len(var_length), len(meth_length), len(header_length)]
-  var_width = max(lengths)
-  var_width = len(var_length) *0.45  #  gives the best ratio for width
-
-  return var_width

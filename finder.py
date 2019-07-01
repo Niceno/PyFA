@@ -2,13 +2,14 @@
 # Import libraries
 #-------------------------------------------------------------------------------
 import re
+import xfig
 
 #===============================================================================
 # Find module name
 #-------------------------------------------------------------------------------
 def get_mod(filename):
 
-  module = []                                         # initialize module list
+  module  = []                                        # initialize module list
   pattern = re.compile(".+?(?=_Mod$)", re.IGNORECASE)
 
   with open (filename, 'rt') as myfile:               # open file
@@ -16,9 +17,9 @@ def get_mod(filename):
       if pattern.search(line) != None:                # search for pattern
         module.append(( line.rstrip("\n")))           # add lines to list
 
-  module = [s.strip() for s in module if s.strip()]   # remove whitespaces
-  mod_list = ' '.join(module)                         # class into a list
-  module_name = re.sub("module ", "", mod_list)       # remove "module "
+  module      = [s.strip() for s in module if s.strip()] # remove whitespaces
+  mod_list    = ' '.join(module)                         # class into a list
+  module_name = re.sub("module ", "", mod_list)          # remove "module "
 
   return module_name
 
@@ -28,7 +29,7 @@ def get_mod(filename):
 def get_sub(filename):
 
   subroutine = []                               # initialize module list
-  pattern = re.compile(".+?(?=subroutine)", re.IGNORECASE)
+  pattern    = re.compile(".+?(?=subroutine)", re.IGNORECASE)
 
   with open (filename, 'rt') as myfile:         # open file
     for line in myfile:                         # read line by line
@@ -39,7 +40,7 @@ def get_sub(filename):
 
   if len(subroutine) != 0:                      # if subroutine is not empty
     sub_string = subroutine[0]                  # take the first string
-    sub_name = re.sub("subroutine ", "", sub_string)   # return subroutine name
+    sub_name   = re.sub("subroutine ", "", sub_string)     # return subroutine
 
   elif len(subroutine) == 0:
     sub_name = 0                                # if no subroutine return 0
@@ -51,7 +52,7 @@ def get_sub(filename):
 #-------------------------------------------------------------------------------
 def get_header(filename):
 
-  sub_name = get_sub(filename)
+  sub_name    = get_sub(filename)
   module_name = get_mod(filename)
 
   if len(module_name) != 0:      # if module_name is not empty take module name
@@ -89,16 +90,16 @@ def get_all_var(filename):
   # find all var types
 
   var_type = []
-  pattern = re.compile("::", re.IGNORECASE)
+  pattern  = re.compile("::", re.IGNORECASE)
 
   with open (filename, 'rt') as myfile:          # open file
     for line in myfile:                          # read line by line
       if pattern.search(line) != None:           # search for pattern
         var_type.append(( line.rstrip("\n")))    # add line with pattern to list
 
-  var_type = [s.strip() for s in var_type if s.strip()]   # remove whitespaces
-  var_type_list = [i.split()[0] for i in var_type]        # take first string
-  var_type_list = ([s.strip(",") for s in var_type_list]) # remove ","
+  var_type      = [s.strip() for s in var_type if s.strip()] # remove whitespace
+  var_type_list = [i.split()[0] for i in var_type]           # take first string
+  var_type_list = ([s.strip(",") for s in var_type_list])    # remove ","
 
   # merge var names and var types into one var list
 
@@ -112,8 +113,8 @@ def get_all_var(filename):
 #-------------------------------------------------------------------------------
 def get_var(filename):
 
-  var_list = get_all_var(filename)
-  sub_name = get_sub(filename)
+  var_list    = get_all_var(filename)
+  sub_name    = get_sub(filename)
   module_name = get_mod(filename)
 
   if len(module_name) == 0:                      # if it is subroutine

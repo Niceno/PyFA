@@ -13,7 +13,7 @@ Y0        = 1  # upper left corner position on y axis
 # Lists
 #-------------------------------------------------------------------------------
 
-filename = "Save_Vtk.f90"
+filename = "Eddy_Mod.f90"
 
 var_list = finder.get_var(filename)
 meth_list = finder.get_meth(filename)
