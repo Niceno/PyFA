@@ -44,21 +44,6 @@ def xfig_box_color(name):
     return 28
 
 #===============================================================================
-# Choose the code value of a Xfig box color depending on header type
-#-------------------------------------------------------------------------------
-def choose_color(filename):
-
-  sub_name = finder.get_sub(filename)
-  module_name = finder.get_mod(filename)
-
-  if len(module_name) != 0:
-    color = "LtBlue"                 # LtBlue color for module
-  elif len(module_name) == 0:
-    color = "Pink2"                  # Pink2 color for subroutine
-
-  return color
-
-#===============================================================================
 # Choose box width depending on longest string
 #-------------------------------------------------------------------------------
 def choose_width(filename):
@@ -96,15 +81,16 @@ def write_header(file):
 # Choose which one to plot
 #-------------------------------------------------------------------------------
 def plot(file, x0, y0,      \
-         module_name,       \
          filename):
 
-  module = finder.get_mod(filename)
+  module     = finder.get_mod(filename)       # module name
+  subroutine = finder.get_sub(filename)       # subroutine name
 
   # Module definition has been found, hence length is greater than zero
   if len(module) != 0:
     var_list  = finder.get_var(filename)
     meth_list = finder.get_meth(filename)
+    module_name = module
     plot_module(file, x0, y0,          \
                 module_name,           \
                 var_list,              \
@@ -114,6 +100,7 @@ def plot(file, x0, y0,      \
   # Module defintion has not been found, hence it is a subroutine
   elif len(module) == 0:
     var_list  = finder.get_var(filename)
+    module_name = subroutine
     plot_subroutine(file, x0, y0,      \
                     module_name,       \
                     var_list,          \

@@ -48,7 +48,7 @@ def get_sub(filename):
   return sub_name
 
 #===============================================================================
-# Decide if header is module or subroutine
+# Decide if header is module or subroutine (not needed for now)
 #-------------------------------------------------------------------------------
 def get_header(filename):
 
