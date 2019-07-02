@@ -54,11 +54,10 @@ def choose_width(filename):
 
   var_length    = max(var_list, key=len)
   meth_length   = max(meth_list, key=len)
-  header_length = max(header_name, key=len)
 
-  lengths   = [len(var_length), len(meth_length), len(header_length)]
+  lengths   = [len(var_length), len(meth_length), len(header_name)]
   var_width = max(lengths)
-  var_width = len(var_length) *0.4  #  gives the best ratio for width
+  var_width = var_width *0.32  #  gives the best ratio for width
 
   return var_width
 
@@ -71,7 +70,7 @@ def write_header(file):
   file.write("Landscape\n")
   file.write("Center\n")
   file.write("Metric\n")
-  file.write("A4\n")
+  file.write("B0\n")
   file.write("100.00\n")
   file.write("Single\n")
   file.write("-2\n")
@@ -161,11 +160,11 @@ def plot_mod_frame(file, x0, y0, box_width, box_height):
   file.write("0")
   file.write("%3d "       % xfig_box_color("LtBlue"))
   file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%5d %5d"   % ( x0           *XFS,  y0            *XFS))
-  file.write("%5d %5d"   % ((x0+box_width)*XFS,  y0            *XFS))
-  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%5d %5d\n" % ( x0           *XFS,  y0            *XFS))
+  file.write("%7d %7d"   % ( x0           *XFS,  y0            *XFS))
+  file.write("%7d %7d"   % ((x0+box_width)*XFS,  y0            *XFS))
+  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
+  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%7d %7d\n" % ( x0           *XFS,  y0            *XFS))
 
 #===============================================================================
 # Function to plot an empty module frame
@@ -177,11 +176,11 @@ def plot_sub_frame(file, x0, y0, box_width, box_height):
   file.write("0")
   file.write("%3d "       % xfig_box_color("Pink2"))
   file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%5d %5d"   % ( x0           *XFS,  y0            *XFS))
-  file.write("%5d %5d"   % ((x0+box_width)*XFS,  y0            *XFS))
-  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%5d %5d\n" % ( x0           *XFS,  y0            *XFS))
+  file.write("%7d %7d"   % ( x0           *XFS,  y0            *XFS))
+  file.write("%7d %7d"   % ((x0+box_width)*XFS,  y0            *XFS))
+  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
+  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%7d %7d\n" % ( x0           *XFS,  y0            *XFS))
 
 
 
@@ -194,13 +193,13 @@ def plot_var_frame(file, x0, y0, box_width, box_height, \
   file.write("2 2 0 ")
   file.write("%3d"       % THICKNESS)
   file.write(" 0 7 50 -1 -1 0.000 0 0 -1 0 0 5\n")
-  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list))\
+  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
+  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list))\
                                                  *XFS))
-  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height+len(var_list))\
+  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+len(var_list))\
                                                  *XFS))
-  file.write("%5d %5d\n" % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%7d %7d\n" % ( x0           *XFS, (y0+box_height)*XFS))
 
 #===============================================================================
 # Function to plot an empty method box depending on list length
@@ -212,15 +211,15 @@ def plot_meth_frame(file, x0, y0, box_width, box_height, \
   file.write("2 2 0 ")
   file.write("%3d"       % THICKNESS)
   file.write(" 0 7 50 -1 -1 0.000 0 0 -1 0 0 5\n")
-  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height+len(var_list))\
+  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+len(var_list))\
                                                                    *XFS))
-  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list))\
+  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list))\
                                                                    *XFS))
-  file.write("%5d %5d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
+  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
                                                  +len(meth_list))*XFS))
-  file.write("%5d %5d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
+  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
                                                  +len(meth_list))*XFS))
-  file.write("%5d %5d\n" % ( x0           *XFS, (y0+box_height+len(var_list))\
+  file.write("%7d %7d\n" % ( x0           *XFS, (y0+box_height+len(var_list))\
                                                                    *XFS))
 
 #===============================================================================
@@ -236,7 +235,7 @@ def plot_text_center_cm(file, x0, y0, box_width, box_height, text):
   text_height = 3                         # could be any value
   file.write("%5d" % (text_height * XFS)) # text height in xfig units
   file.write("%5d" % (text_width  * XFS)) # text width in xfig units
-  file.write("%5d %5d" % ( (x0+(box_width*0.5)) *XFS,  \
+  file.write("%7d %7d" % ( (x0+(box_width*0.5)) *XFS,  \
                            (y0+FONT_SIZE+(box_height-FONT_SIZE)*0.5)*XFS))
   file.write("%s%s\\001\n" % (" ", text))
 
@@ -253,7 +252,7 @@ def plot_text_left_cm(file, x0, y0, box_width, box_height, text):
   text_height = 3                         # could be any value
   file.write("%5d" % (text_height * XFS)) # text height in xfig units
   file.write("%5d" % (text_width  * XFS)) # text width in xfig units
-  file.write("%5d %5d" % ( (x0+          (box_height-FONT_SIZE)*0.5)*XFS,  \
+  file.write("%7d %7d" % ( (x0+          (box_height-FONT_SIZE)*0.5)*XFS,  \
                            (y0+FONT_SIZE+(box_height-FONT_SIZE)*0.5)*XFS))
   file.write("%s%s\\001\n" % (" ", text))
 
