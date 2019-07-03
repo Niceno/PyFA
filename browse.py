@@ -4,28 +4,49 @@
 from os import listdir
 from os.path import isfile, isdir, join
 import os
-
+import finder
 #===============================================================================
 # Browse through directories and subdirectories
 #-------------------------------------------------------------------------------
 
-#def directories(root):
+def check_directories(root):
 
-  #dirs = [f for f in listdir(root) if isdir (join(root, f))] # finds directories
+  # Get module files
+  mod_files = sorted(source_mods(root))
+  mod_names = []
+  mod_dirs = sorted(source_mod_dirs(root))
+  mod_file_name = sorted([sub[ : -4] for sub in mod_files])
 
-  #dirs.append(root)                                 # adds root to directories
+  # Check if module names are same as their subdirectory names
+  if mod_file_name == mod_dirs:
+    print("\nEverything is fine.\n")
 
+    for i in range(len(mod_files)):
+      mod_name = finder.get_mod(mod_files[i])
+      mod_names.append(mod_name)
+    mod_names = sorted(mod_names)
 
-  #for d in dirs:
-   # print("Enter directory %s" % d)
+    print("Module name: ", mod_names)
 
-    # List current directory
-    #files = listdir(join(root, d))        # all files and folders in directory
+  # Check if files in subdirectories match methods of their modules
+    for d in range(len(mod_names)):
+      print("\nEnter directory %s" % mod_names[d])
 
-    #for f in files:
-     # if isfile(join(root, d, f)):
-      #  print("  File: %s" % f)
+      files = listdir(join(root, mod_names[d]))
+      files = sorted([sub[ : -4] for sub in files])
+      print("Files in module directory: ",files)
 
+      methods = sorted(finder.get_only_meth(mod_files[d]))
+      print("Methods of module:         ",methods)
+
+      if files == methods:
+        print("\nSeems fine.")
+
+      else:
+        print("\nFound ERROR in module directory",mod_names[d])
+
+  else:
+    print("Module files or directories missing!")
 
 #===============================================================================
 # List of all fortran files in root

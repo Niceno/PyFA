@@ -4,13 +4,14 @@
 import xfig
 import finder
 import browse
-
 #===============================================================================
 # Lists
 #-------------------------------------------------------------------------------
 root = "/home/simcic/Development/PyFA"
 
 files = browse.source_files(root)      # list of all fortran files in root
+
+browse.check_directories(root)         # check if methods have their files
 
 x0        = xfig.x_pos(root)           # upper left corner positions on x axis
 y0        = 1                          # upper left corner positions on y axis
