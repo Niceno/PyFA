@@ -18,9 +18,14 @@ def get_mod(filename):
       if pattern.search(line) != None:                # search for pattern
         module.append(( line.rstrip("\n")))           # add lines to list
 
-  module      = [s.strip() for s in module if s.strip()] # remove whitespaces
-  mod_list    = ' '.join(module)                         # class into a list
-  module_name = re.sub("module ", "", mod_list)          # remove "module "
+  module = [s.strip() for s in module if s.strip()]   # remove whitespaces
+
+  if len(module) != 0:                      # if module is not empty
+    mod_string = module[0]                  # take the first string
+    module_name   = re.sub("module ", "", mod_string)     # return subroutine
+
+  elif len(module) == 0:
+    module_name = []                        # if no module return empty
 
   return module_name
 
@@ -169,6 +174,8 @@ def get_meth(filename):
     meth_list = ["No methods available"]
   elif flat_meth_list != []:
     meth_list = [i.split()[0] for i in flat_meth_list]
+    mod = get_mod(filename)                              # get module name
+    meth_list = [mod + "_" + x for x in meth_list]        # add module name
 
   return meth_list
 
