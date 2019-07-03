@@ -4,6 +4,7 @@
 import re
 import xfig
 import os
+
 #===============================================================================
 # Find module name
 #-------------------------------------------------------------------------------
@@ -67,7 +68,7 @@ def get_header(filename):
 #-------------------------------------------------------------------------------
 def get_all_var(filename):
 
-  # find all var names
+  # Find all var names
 
   vars = []
   with open(filename) as file:                # open file
@@ -87,7 +88,7 @@ def get_all_var(filename):
                                                            # to every var
 
 
-  # find all var types
+  # Find all var types
 
   var_type = []
   pattern  = re.compile("::", re.IGNORECASE)
@@ -160,7 +161,8 @@ def get_meth(filename):
     for item in sublist:
       flat_meth_list.append(item)
 
-  # check if any method is found
+  # Check if any method is found
+
   if len(module_name) == 0:
     meth_list = [""]
   elif flat_meth_list == []:

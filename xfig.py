@@ -2,6 +2,7 @@
 # Import libraries
 #-------------------------------------------------------------------------------
 import finder
+import browse
 
 #===============================================================================
 # Handy constants
@@ -24,7 +25,7 @@ def list_num(lista):
 #-------------------------------------------------------------------------------
 def xfig_font_code(name):
 
-  if name == "Courier":
+  if name   == "Courier":
     return 12
   elif name == "Courier-Bold":
     return 14
@@ -38,7 +39,7 @@ def xfig_font_code(name):
 #-------------------------------------------------------------------------------
 def xfig_box_color(name):
 
-  if name == "LtBlue":
+  if name   == "LtBlue":
     return 11
   elif name == "Pink2":
     return 28
@@ -60,6 +61,30 @@ def choose_width(filename):
   var_width = var_width *0.32  #  gives the best ratio for width
 
   return var_width
+
+#===============================================================================
+# Function to return list with positions on x axis
+#-------------------------------------------------------------------------------
+def x_pos(root):
+
+  files = browse.source_files(root)           # get all .f90 files
+
+  # Create list with all box widths
+
+  box_widths = [0] + []                       # initialize box_widths list
+  for i in range(len(files)):
+    box = choose_width(files[i])
+    box_widths.append(box)                    # list of box widths of all boxes
+
+  # Create new list for boxes to be parallel
+
+  sum = 0
+  box_pos = []
+  for item in box_widths:
+    sum += item + 1
+    box_pos.append(sum)
+
+  return box_pos
 
 #===============================================================================
 # Function to write xfig header
@@ -312,8 +337,8 @@ def plot_meth_text_left_cm(x0, y0, xf, \
   meth_list_num = list_num(meth_list)
 
   for i in range(len(meth_list)):
-    plot_text_left_cm(xf, x0, 0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5) \
-                      +len(var_list)+meth_list_num[i], box_width, UBH,      \
+    plot_text_left_cm(xf, x0, 0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5)   \
+                      +len(var_list)+meth_list_num[i], box_width, UBH,  \
                        meth_list[i])
 
 #===============================================================================
