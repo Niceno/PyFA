@@ -54,6 +54,29 @@ def get_sub(filename):
   return sub_name
 
 #===============================================================================
+# Find use statements
+#-------------------------------------------------------------------------------
+def get_use(filename):
+
+  use_name = []
+  pattern  = re.compile("use", re.IGNORECASE)
+
+  with open (filename, 'rt') as myfile:          # open file
+    for line in myfile:                          # read line by line
+      if pattern.search(line) != None:           # search for pattern
+        use_name.append(( line.rstrip("\n")))    # add line with pattern to list
+  use_name = [s.strip() for s in use_name if s.strip()] # remove whitespace
+  use_name_list = [i.split()[1] for i in use_name]           # take use name
+  use_name_list = ([s.strip(",") for s in use_name_list])    # remove ","
+
+  if use_name != []:
+    true_name_list = use_name  #use_name_list for only the name of module
+  else:
+    true_name_list = ["No use statements"]
+
+  return true_name_list
+
+#===============================================================================
 # Decide if header is module or subroutine (not needed for now)
 #-------------------------------------------------------------------------------
 def get_header(filename):
