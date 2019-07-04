@@ -68,11 +68,12 @@ def get_use(filename):
   use_name = [s.strip() for s in use_name if s.strip()] # remove whitespace
   use_name_list = [i.split()[1] for i in use_name]           # take use name
   use_name_list = ([s.strip(",") for s in use_name_list])    # remove ","
+  use_name_list = ["use " + x for x in use_name_list]
 
   if use_name != []:
     true_name_list = use_name  #use_name_list for only the name of module
   else:
-    true_name_list = ["No use statements"]
+    true_name_list = 0  #["No use statements"]
 
   return true_name_list
 

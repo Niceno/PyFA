@@ -7,10 +7,10 @@ import browse
 #===============================================================================
 # Handy constants
 #-------------------------------------------------------------------------------
-XFS = 450              # xfig scale; xfig units for one cm
-UBH = 0.75             # unit box height
-THICKNESS = 2          # box line thickness
-FONT_SIZE = UBH * 0.5  # font size depending on box height
+XFS       = 450              # xfig scale; xfig units for one cm
+UBH       = 0.75             # unit box height
+THICKNESS = 2                # box line thickness
+FONT_SIZE = UBH * 0.5        # font size depending on box height
 
 #===============================================================================
 # Function that returns list indexes
@@ -19,6 +19,17 @@ def list_num(lista):
 
   list_num_string = list(range(0,len(lista)))
   return list_num_string
+
+#===============================================================================
+# Function to choose use statements list length
+#-------------------------------------------------------------------------------
+def use_len(list):
+  if list != 0:
+    # Draw a use text box
+    use_list_len = len(list)
+  else:
+    use_list_len = 0
+  return use_list_len
 
 #===============================================================================
 # Return the code value of a Xfig font
@@ -111,7 +122,7 @@ def write_header(file):
   file.write("1200 2\n")
 
 #===============================================================================
-# Choose which one to plot(not done)
+# Choose which one to plot (module or subroutine)
 #-------------------------------------------------------------------------------
 def plot(file, x0, y0,      \
          filename):
@@ -159,12 +170,13 @@ def plot_module(file, x0, y0,      \
                 module_name,      \
                 filename)
 
-
-  # Draw a use text box
-  plot_use_name(file, x0, y0,     \
-                use_list,         \
-                filename)
-
+  if use_list != 0:
+    # Draw a use text box
+    plot_use_name(file, x0, y0,     \
+                  use_list,         \
+                  filename)
+  else:
+    use_list = 0
 
 
   # Draw a variable text box
@@ -181,7 +193,7 @@ def plot_module(file, x0, y0,      \
                  filename)
 
 #===============================================================================
-# Function to plot module box
+# Function to plot subroutine box
 #-------------------------------------------------------------------------------
 def plot_subroutine(file, x0, y0,      \
                     module_name,       \
@@ -194,11 +206,14 @@ def plot_subroutine(file, x0, y0,      \
                 module_name,      \
                 filename)
 
-  # Draw a use text box
-  plot_use_name(file, x0, y0,     \
-                use_list,         \
-                filename)
-
+  # Choose if use box exist
+  if use_list != 0:
+    # Draw a use text box
+    plot_use_name(file, x0, y0,     \
+                  use_list,         \
+                  filename)
+  else:
+    use_list = 0
 
  # Draw a variable text box
   plot_var_name(file, x0, y0,     \
@@ -240,19 +255,22 @@ def plot_sub_frame(file, x0, y0, box_width, box_height):
 
 
 #===============================================================================
-# Function to plot an empty use box depending on list length
+# Function to plot an empty use statements box depending on list length
 #-------------------------------------------------------------------------------
 def plot_use_frame(file, x0, y0, box_width, box_height, \
                    use_list):
+
+  use_list_len = use_len(use_list)
+
 
   file.write("2 2 0 ")
   file.write("%3d"       % THICKNESS)
   file.write(" 0 7 50 -1 -1 0.000 0 0 -1 0 0 5\n")
   file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+len(use_list)) \
+  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+use_list_len) \
                                                  *XFS))
-  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+len(use_list)) \
+  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+use_list_len) \
                                                  *XFS))
   file.write("%7d %7d\n" % ( x0           *XFS, (y0+box_height)*XFS))
 
@@ -264,15 +282,17 @@ def plot_var_frame(file, x0, y0, box_width, box_height, \
                    var_list,                            \
                    use_list):
 
+  use_list_len = use_len(use_list)
+
   file.write("2 2 0 ")
   file.write("%3d"       % THICKNESS)
   file.write(" 0 7 50 -1 -1 0.000 0 0 -1 0 0 5\n")
   file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
   file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
-                                                 +len(use_list))*XFS))
+                                                 +use_list_len)*XFS))
   file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
-                                                 +len(use_list))*XFS))
+                                                 +use_list_len)*XFS))
   file.write("%7d %7d\n" % ( x0           *XFS, (y0+box_height)*XFS))
 
 #===============================================================================
@@ -283,21 +303,24 @@ def plot_meth_frame(file, x0, y0, box_width, box_height, \
                     meth_list,                           \
                     use_list):
 
+
+  use_list_len = use_len(use_list)
+
   file.write("2 2 0 ")
   file.write("%3d"       % THICKNESS)
   file.write(" 0 7 50 -1 -1 0.000 0 0 -1 0 0 5\n")
   file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
-                                                 +len(use_list))*XFS))
+                                                 +use_list_len)*XFS))
   file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
-                                                 +len(use_list))*XFS))
+                                                 +use_list_len)*XFS))
   file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
                                                  +len(meth_list)             \
-                                                 +len(use_list))*XFS))
+                                                 +use_list_len)*XFS))
   file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
                                                  +len(meth_list)             \
-                                                 +len(use_list))*XFS))
+                                                 +use_list_len)*XFS))
   file.write("%7d %7d\n" % ( x0           *XFS, (y0+box_height+len(var_list) \
-                                                 +len(use_list))*XFS))
+                                                 +use_list_len)*XFS))
 
 #===============================================================================
 # Function to print centered frameless text
@@ -362,7 +385,7 @@ def plot_sub_name(file, x0, y0, text, filename):
 
 
 #===============================================================================
-# Function to plot use
+# Function to plot use statements
 #-------------------------------------------------------------------------------
 def plot_use_text_left_cm(file, x0, y0, \
                           use_list,     \
@@ -385,10 +408,11 @@ def plot_var_text_left_cm(file, x0, y0, \
 
   box_width    = choose_width(filename)
   var_list_num = list_num(var_list)
+  use_list_len = use_len(use_list)
 
   for i in range(len(var_list)):
     plot_text_left_cm(file, x0, (0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5)   \
-                      +len(use_list)) +var_list_num[i],                    \
+                      +use_list_len) +var_list_num[i],                     \
                       box_width, UBH, var_list[i])
 
 
@@ -405,14 +429,15 @@ def plot_meth_text_left_cm(x0, y0, xf, \
 
   box_width     = choose_width(filename)
   meth_list_num = list_num(meth_list)
+  use_list_len = use_len(use_list)
 
   for i in range(len(meth_list)):
     plot_text_left_cm(xf, x0, (0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5)   \
-                      +len(var_list)+len(use_list)+meth_list_num[i]),    \
+                      +len(var_list)+use_list_len+meth_list_num[i]),     \
                       box_width, UBH, meth_list[i])
 
 #===============================================================================
-# Function to print use box
+# Function to print use statements box
 #-------------------------------------------------------------------------------
 def plot_use_name(file, x0, y0, \
                   use_list,     \
@@ -430,8 +455,9 @@ def plot_use_name(file, x0, y0, \
 #===============================================================================
 # Function to print variable box
 #-------------------------------------------------------------------------------
-def plot_var_name(file, x0, y0, \
-                  var_list,use_list,     \
+def plot_var_name(file, x0, y0,       \
+                  var_list,           \
+                  use_list,           \
                   filename):
 
   box_width = choose_width(filename)
