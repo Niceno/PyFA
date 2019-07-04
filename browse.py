@@ -5,46 +5,47 @@ from os import listdir
 from os.path import isfile, isdir, join
 import os
 import finder
+import re
 #===============================================================================
 # Browse through directories and subdirectories
 #-------------------------------------------------------------------------------
-
 def check_directories(root):
 
   # Get module files
-  mod_files = sorted(source_mods(root))
-  mod_names = []
-  mod_dirs = sorted(source_mod_dirs(root))
-  mod_file_name = sorted([sub[ : -4] for sub in mod_files])
+  mod_files     = sorted(source_mods(root))
+  mod_names     = []
+  mod_dirs      = sorted(source_mod_dirs(root))
+  mod_file_name = sorted([re.sub(".f90$", '', i) for i in mod_files])
 
   # Check if module names are same as their subdirectory names
   if mod_file_name == mod_dirs:
-    print("\nEverything is fine.\n")
+    print("\nNo errors. Modules have their corresponding directories.\n")
 
     for i in range(len(mod_files)):
       mod_name = finder.get_mod(mod_files[i])
       mod_names.append(mod_name)
     mod_names = sorted(mod_names)
 
-    print("Module name: ", mod_names)
+    print("Modules: ", mod_names)
 
   # Check if files in subdirectories match methods of their modules
     for d in range(len(mod_names)):
-      print("\nEnter directory %s" % mod_names[d])
+      print("\nEntering directory: %s" % mod_names[d])
 
       files = listdir(join(root, mod_names[d]))
-      files = sorted([sub[ : -4] for sub in files])
+      files = sorted([re.sub(".f90$", '', i) for i in files])
       print("Files in module directory: ",files)
 
       methods = sorted(finder.get_only_meth(mod_files[d]))
       print("Methods of module:         ",methods)
 
       if files == methods:
-        print("\nSeems fine.")
+        print("\n", mod_names[d], "is looking fine.")
 
       else:
-        print("\nFound ERROR in module directory",mod_names[d])
+        print("\n Found ERROR in module directory: ",mod_names[d])
 
+  # If module names are not the same as their subdirectory names
   else:
     print("Module files or directories missing!")
 
@@ -60,11 +61,9 @@ def source_files(root):
 
   return fortran_files
 
-
 #===============================================================================
 # List of all fortran modules in root
 #-------------------------------------------------------------------------------
-
 def source_mods(root):
 
   source_mod = []
@@ -78,7 +77,6 @@ def source_mods(root):
 #===============================================================================
 # List of all fortran files except modules in root
 #-------------------------------------------------------------------------------
-
 def source_subs(root):
 
   source_sub = []
@@ -95,7 +93,6 @@ def source_subs(root):
 #===============================================================================
 # List of all _Mod directories in root
 #-------------------------------------------------------------------------------
-
 def source_mod_dirs(root):
 
   source_mod_dir = []
@@ -106,13 +103,10 @@ def source_mod_dirs(root):
 
   return source_mod_dir
 
-
 #===============================================================================
 # Prints all unused files and directories in root
 #-------------------------------------------------------------------------------
-
 def source_unused(root):
-
 
   source_mod_dir = source_mod_dirs(root)
   source_mod = source_mods(root)
@@ -133,6 +127,6 @@ def source_unused(root):
                           - set(source_unused_dir))
 
   print("\nUnused directories:\n",sorted(source_unused_dir), \
-        "\n\nUnused files:\n",sorted(source_unused_file))
+        "\n\nUnused files:\n",sorted(source_unused_file),"\n")
 
   return source_unused_file

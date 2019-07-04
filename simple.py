@@ -11,7 +11,7 @@ root = "/home/simcic/Development/PyFA"
 
 files = browse.source_files(root)      # list of all fortran files in root
 
-browse.check_directories(root)         # check if methods have their files
+#browse.check_directories(root)         # check if methods have their files
 
 x0        = xfig.x_pos(root)           # upper left corner positions on x axis
 y0        = 1                          # upper left corner positions on y axis
@@ -21,6 +21,9 @@ y0        = 1                          # upper left corner positions on y axis
 #-------------------------------------------------------------------------------
 
 print("\nGreat program for extracting UML from Fortran.")
+
+# Check directories for errors
+browse.check_directories(root)
 
 # Open Xfig file
 xf = open("flow.fig", "w")
@@ -33,7 +36,7 @@ for i in range(len(files)):
   xfig.plot(xf, x0[i], y0, files[i])
 
 # Print all unused files and subdirectories
-unused = browse.source_unused(root)
+browse.source_unused(root)
 
 #End
 xf.close()
