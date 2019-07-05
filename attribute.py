@@ -6,7 +6,7 @@ import finder
 import browse
 
 #filename = "Eddy_Mod.f90"
-filename = "Save_Vtk.f90"
+#filename = "Save_Vtk.f90"
 
 #===============================================================================
 # Check if use list is empty
@@ -50,20 +50,47 @@ class Subroutine(object):
           "\n\nVariables: ",     abc.var)
 
 #===============================================================================
-# Define what to choose
+# Define
 #-------------------------------------------------------------------------------
-module_name = finder.get_mod(filename)
+def module_class(filename):
 
-if len(module_name) != 0:
+  module_name = finder.get_mod(filename)
   use_list   = check_use(finder.get_use(filename))
   var_list   = finder.get_var(filename)
   meth_list  = finder.get_meth(filename)
-  p1 = Module(module_name, use_list, var_list, meth_list)
+  modules_list = Module(module_name, use_list, var_list, meth_list)
 
-else:
+  return modules_list
+
+
+def subroutine_class(filename):
+
   sub_name   = finder.get_sub(filename)
   use_list   = check_use(finder.get_use(filename))
   var_list   = finder.get_var(filename)
-  p1 = Subroutine(sub_name, use_list, var_list)
+  subroutine = Subroutine(sub_name, use_list, var_list)
 
-p1.print_it()
+  return subroutine
+
+#===============================================================================
+# Collecting classes
+#-------------------------------------------------------------------------------
+
+root = "/home/simcic/Development/PyFA"
+
+files = browse.source_files(root)      # list of all fortran files in root
+subroutines_list = []
+modules_list = []
+
+for i in range(len(files)):
+
+  module_name = finder.get_mod(files[i])
+
+  if module_name != []:
+    modules_list.append(module_class(files[i]))
+
+  else:
+    subroutines_list.append(subroutine_class(files[i]))
+
+print(subroutines_list[1].name)
+print(modules_list[1].name)
