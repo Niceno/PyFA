@@ -5,9 +5,6 @@ import xfig
 import finder
 import browse
 
-#filename = "Eddy_Mod.f90"
-#filename = "Save_Vtk.f90"
-
 #===============================================================================
 # Check if use list is empty
 #-------------------------------------------------------------------------------
@@ -54,10 +51,10 @@ class Subroutine(object):
 #-------------------------------------------------------------------------------
 def module_class(filename):
 
-  module_name = finder.get_mod(filename)
-  use_list   = check_use(finder.get_use(filename))
-  var_list   = finder.get_var(filename)
-  meth_list  = finder.get_meth(filename)
+  module_name  = finder.get_mod(filename)
+  use_list     = check_use(finder.get_use(filename))
+  var_list     = finder.get_var(filename)
+  meth_list    = finder.get_meth(filename)
   modules_list = Module(module_name, use_list, var_list, meth_list)
 
   return modules_list
@@ -73,12 +70,12 @@ def subroutine_class(filename):
   return subroutine
 
 #===============================================================================
-# Collecting classes
+# Collecting classes into lists
 #-------------------------------------------------------------------------------
 
 root = "/home/simcic/Development/PyFA"
 
-files = browse.source_files(root)      # list of all fortran files in root
+files = browse.source_files(root)        # list of all fortran files in root
 subroutines_list = []
 modules_list = []
 
