@@ -121,14 +121,14 @@ def mod_lvl(modules_list):
         for k in range(len(mod_use_list)):      # for every use in module
           mod_lvl.append(find_level(modules_list,mod_use_list[k])) # find level
 
-        mod_lvl = max(mod_lvl)      # take the biggest used module level from list
+        mod_lvl = max(mod_lvl)   # take the biggest used module level from list
         modules_list[i].level = mod_lvl + 1     # add 1 level to max level
   return modules_list
 
 #===============================================================================
 # Determining levels of subroutines (iterate 5 times)
 #-------------------------------------------------------------------------------
-def sub_lvl(subrutines_list,modules_list):
+def sub_lvl(subroutines_list,modules_list):
   n = 0
   while n<5:
     n += 1
@@ -141,40 +141,6 @@ def sub_lvl(subrutines_list,modules_list):
         for k in range(len(sub_use_list)):        # for every use in subroutine
           sub_lvl.append(find_level(modules_list,sub_use_list[k])) # find level
 
-        sub_lvl = max(sub_lvl)         # take the biggest used sub level from list
+        sub_lvl = max(sub_lvl)      # take the biggest used sub level from list
         subroutines_list[i].level = sub_lvl + 1  # add 1 level to max level
   return subroutines_list
-
-#===============================================================================
-# Collecting classes into lists
-#-------------------------------------------------------------------------------
-root = "/home/simcic/Development/Synthetic-Eddies"
-
-files = browse.source_files(root)         # list of all fortran files in root
-subroutines_list = []                     # initialize list
-modules_list     = []                     # initialize list
-
-for i in range(len(files)):
-  module_name = finder.get_mod(files[i])  # find all modules from imported files
-
-# If it is module then append to modules list
-  if module_name != []:
-    modules_list.append(module_class(files[i]))
-
-# If it isn't module then append to subroutines list
-  else:
-    subroutines_list.append(subroutine_class(files[i]))
-
-
-# Determine levels
-mod_list = mod_lvl(modules_list)
-sub_list = sub_lvl(subroutines_list,modules_list)
-
-# Printing mods and subs
-for i in range(len(mod_list)):
-  print("\nModule name: ", mod_list[i].name, "\nModules used: ", \
-      mod_list[i].use, "\nLevel: ", mod_list[i].level)
-
-for i in range(len(sub_list)):
-  print("\nSubroutine name: ", sub_list[i].name, "\nModules used: ", \
-        sub_list[i].use, "\nLevel: ", sub_list[i].level)
