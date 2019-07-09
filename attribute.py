@@ -144,3 +144,44 @@ def sub_lvl(subroutines_list,modules_list):
         sub_lvl = max(sub_lvl)      # take the biggest used sub level from list
         subroutines_list[i].level = sub_lvl + 1  # add 1 level to max level
   return subroutines_list
+
+
+#===============================================================================
+# Print subs and mods and their levels
+#-------------------------------------------------------------------------------
+def mod_list_fun(files):
+  modules_list = []
+  for i in range(len(files)):
+    module_name = finder.get_mod(files[i]) #find all modules from imported files
+
+    if module_name != []:
+      modules_list.append(module_class(files[i]))
+  mod_list = mod_lvl(modules_list)
+  return mod_list
+
+def sub_list_fun(files):
+  modules_list = []
+  subroutines_list = []
+
+  for i in range(len(files)):
+    module_name = finder.get_mod(files[i]) #find all modules from imported files
+    modules_list = mod_list_fun(files)
+    if module_name == []:
+      subroutines_list.append(subroutine_class(files[i]))
+  sub_list = sub_lvl(subroutines_list,modules_list)
+  return sub_list
+
+#===============================================================================
+# Print subs and mods and their levels
+#-------------------------------------------------------------------------------
+def print_levels(mod_list,sub_list):
+
+  for i in range(len(mod_list)):
+    print("\nModule name: ", mod_list[i].name,        \
+          "\nLevel: ", mod_list[i].level,             \
+          "\nModules used: ", mod_list[i].use)        \
+
+  for i in range(len(sub_list)):
+    print("\nSubroutine name: ", sub_list[i].name,    \
+          "\nLevel: ", sub_list[i].level,             \
+          "\nModules used: ", sub_list[i].use)        \
