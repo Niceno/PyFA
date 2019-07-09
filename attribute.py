@@ -106,6 +106,46 @@ def find_biggest(list):
   return lvl
 
 #===============================================================================
+# Determining levels of modules  (iterate 5 times)
+#-------------------------------------------------------------------------------
+def mod_lvl(modules_list):
+  n = 0
+  while n<5:
+    n += 1
+
+    for i in range(len(modules_list)):
+
+      if modules_list[i].use != "None":         # if there are use statements
+        mod_use_list = modules_list[i].use      # get use list of modules
+        mod_lvl = []
+        for k in range(len(mod_use_list)):      # for every use in module
+          mod_lvl.append(find_level(modules_list,mod_use_list[k])) # find level
+
+        mod_lvl = max(mod_lvl)      # take the biggest used module level from list
+        modules_list[i].level = mod_lvl + 1     # add 1 level to max level
+  return modules_list
+
+#===============================================================================
+# Determining levels of subroutines (iterate 5 times)
+#-------------------------------------------------------------------------------
+def sub_lvl(subrutines_list,modules_list):
+  n = 0
+  while n<5:
+    n += 1
+
+    for i in range(len(subroutines_list)):
+
+      if subroutines_list[i].use != "None":       # if there are use statements
+        sub_use_list = subroutines_list[i].use    # get use list of subroutines
+        sub_lvl = []
+        for k in range(len(sub_use_list)):        # for every use in subroutine
+          sub_lvl.append(find_level(modules_list,sub_use_list[k])) # find level
+
+        sub_lvl = max(sub_lvl)         # take the biggest used sub level from list
+        subroutines_list[i].level = sub_lvl + 1  # add 1 level to max level
+  return subroutines_list
+
+#===============================================================================
 # Collecting classes into lists
 #-------------------------------------------------------------------------------
 root = "/home/simcic/Development/Synthetic-Eddies"
@@ -125,45 +165,16 @@ for i in range(len(files)):
   else:
     subroutines_list.append(subroutine_class(files[i]))
 
-#===============================================================================
-# Determining levels of modules and subroutines (iterate 5 times)
-#-------------------------------------------------------------------------------
-n = 0
-while n<5:
-  n += 1
 
-  # Determine levels of all modules
-
-  for i in range(len(modules_list)):
-
-    if modules_list[i].use != "None":         # if there are use statements
-      mod_use_list = modules_list[i].use      # get use list of modules
-      mod_lvl = []
-      for k in range(len(mod_use_list)):      # for every use in module
-        mod_lvl.append(find_level(modules_list,mod_use_list[k])) # find level
-
-      mod_lvl = max(mod_lvl)      # take the biggest used module level from list
-      modules_list[i].level = mod_lvl + 1     # add 1 level to max level
-
-  # Determine levels of all subroutines
-
-  for i in range(len(subroutines_list)):
-
-    if subroutines_list[i].use != "None":       # if there are use statements
-      sub_use_list = subroutines_list[i].use    # get use list of subroutines
-      sub_lvl = []
-      for k in range(len(sub_use_list)):        # for every use in subroutine
-        sub_lvl.append(find_level(modules_list,sub_use_list[k])) # find level
-
-      sub_lvl = max(sub_lvl)         # take the biggest used sub level from list
-      subroutines_list[i].level = sub_lvl + 1  # add 1 level to max level
+# Determine levels
+mod_list = mod_lvl(modules_list)
+sub_list = sub_lvl(subroutines_list,modules_list)
 
 # Printing mods and subs
+for i in range(len(mod_list)):
+  print("\nModule name: ", mod_list[i].name, "\nModules used: ", \
+      mod_list[i].use, "\nLevel: ", mod_list[i].level)
 
-for i in range(len(modules_list)):
-  print("\nModule name: ", modules_list[i].name, "\nModules used: ", \
-      modules_list[i].use, "\nLevel: ", modules_list[i].level)
-
-for i in range(len(subroutines_list)):
-  print("\nSubroutine name: ", subroutines_list[i].name, "\nModules used: ", \
-        subroutines_list[i].use, "\nLevel: ", subroutines_list[i].level)
+for i in range(len(sub_list)):
+  print("\nSubroutine name: ", sub_list[i].name, "\nModules used: ", \
+        sub_list[i].use, "\nLevel: ", sub_list[i].level)
