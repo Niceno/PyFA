@@ -94,12 +94,21 @@ def subroutine_class(filename):
 #===============================================================================
 # Finding current level of module
 #-------------------------------------------------------------------------------
-def find_level(modules_list,name):
-  for i in range(len(modules_list)):
-    if modules_list[i].name == name:
-      lvl = modules_list[i].level
+def find_level(list,name):
+  for i in range(len(list)):
+    if list[i].name == name:
+      lvl = list[i].level
   return lvl
-
+#===============================================================================
+# Finding biggest level of list
+#-------------------------------------------------------------------------------
+def find_biggest(list):
+  lvls = []
+  for i in range(len(list)):
+    lvl = list[i].level
+    lvls.append(lvl)
+  lvl = get_max(lvls)
+  return lvl
 #===============================================================================
 # Collecting classes into lists
 #-------------------------------------------------------------------------------
@@ -121,21 +130,45 @@ for i in range(len(files)):
     subroutines_list.append(subroutine_class(files[i]))
 
 #===============================================================================
-# Determining levels of modules (not working for now)
+# Determining levels of modules (iterate 5 times)
 #-------------------------------------------------------------------------------
+n = 0
+while n<5:
+  n += 1
 
-for i in range(len(modules_list)):
+  for i in range(len(modules_list)):
 
-  if modules_list[i].use != "None":     # if there are use statements in module
-    use_list = modules_list[i].use      # get them
-    lvl = []
-    for k in range(len(use_list)):      # for every use in module
-      lvl.append(find_level(modules_list,use_list[k])) # find used module level
+    if modules_list[i].use != "None":    # if there are use statements in module
+      mod_use_list = modules_list[i].use      # get use list of modules
+      mod_lvl = []
+      for k in range(len(mod_use_list)):      # for every use in module
+        mod_lvl.append(find_level(modules_list,mod_use_list[k])) # find used module level
 
-    lvl = max(lvl)                    # take the biggest module level from list
-    modules_list[i].level = lvl + 1   # stopped here
-    print(use_list)
+      mod_lvl = max(mod_lvl)      # take the biggest used module level from list
+      modules_list[i].level = mod_lvl + 1     # add 1 level to max level
 
+  for i in range(len(subroutines_list)):
+
+    if subroutines_list[i].use != "None":     # if there are use statements in module
+      sub_use_list = subroutines_list[i].use      # get use list of subroutines
+      sub_lvl = []
+      for k in range(len(sub_use_list)):      # for every use in subroutine
+        sub_lvl.append(find_level(modules_list,sub_use_list[k])) # find used sub level
+
+      sub_lvl = max(sub_lvl)         # take the biggest used sub level from list
+      subroutines_list[i].level = sub_lvl + 1  # add 1 level to max level
+
+print("\nSubroutine name: ", subroutines_list[0].name, "\nModules used: ",   \
+      subroutines_list[0].use, "\nLevel: ", subroutines_list[0].level)
+
+print("\nSubroutine name: ", subroutines_list[1].name, "\nModules used: ",   \
+      subroutines_list[1].use, "\nLevel: ", subroutines_list[1].level)
+
+print("\nSubroutine name: ", subroutines_list[2].name, "\nModules used: ",   \
+      subroutines_list[2].use, "\nLevel: ", subroutines_list[2].level)
+
+print("\nModule name: ", modules_list[1].name, "\nModules used: ",   \
+      modules_list[1].use, "\nLevel: ", modules_list[1].level)
 
 print("\nModule name: ", modules_list[2].name, "\nModules used: ",   \
       modules_list[2].use, "\nLevel: ", modules_list[2].level)
