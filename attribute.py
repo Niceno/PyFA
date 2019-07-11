@@ -142,7 +142,7 @@ def sub_lvl(subroutines_list,modules_list):
           sub_lvl.append(find_level(modules_list,sub_use_list[k])) # find level
 
         sub_lvl = max(sub_lvl)      # take the biggest used sub level from list
-        subroutines_list[i].level = sub_lvl + 1  # add 1 level to max level
+        subroutines_list[i].level = sub_lvl + 1   # add 1 level to max level
   return subroutines_list
 
 

@@ -11,6 +11,7 @@ import attribute
 root  = "/home/simcic/Development/Synthetic-Eddies"
 
 files = browse.source_files(root)      # list of all fortran files in root
+file_path = browse.source_paths(root)  # list of all paths to fortran files
 
 x0    = xfig.x_pos(root)               # upper left corner positions on x axis
 y0    = 1                              # upper left corner positions on y axis
@@ -23,7 +24,7 @@ mod_list = attribute.mod_list_fun(files)
 sub_list = attribute.sub_list_fun(files)
 
 # Printing mods and subs and their levels
-attribute.print_levels(mod_list,sub_list)
+#attribute.print_levels(mod_list,sub_list)
 
 #===============================================================================
 # Obviously the main function
