@@ -26,6 +26,7 @@ def get_mod(filename):
 
   elif len(module) == 0:
     module_name = []                        # if no module return empty
+ # elif module == ""
 
   return module_name
 
@@ -54,12 +55,26 @@ def get_sub(filename):
   return sub_name
 
 #===============================================================================
+# Decide if header is module or subroutine
+#-------------------------------------------------------------------------------
+def get_header(filename):
+
+  sub_name    = get_sub(filename)
+  module_name = get_mod(filename)
+  if sub_name != 0:      # if module_name is not empty take module name
+    header = sub_name
+  elif sub_name == 0:    # if module_name is empty take sub name
+    header = module_name
+
+  return header
+
+#===============================================================================
 # Find use statements
 #-------------------------------------------------------------------------------
 def get_use(filename):
 
   use_name = []
-  pattern  = re.compile("use", re.IGNORECASE)
+  pattern  = re.compile("(use)\s", re.IGNORECASE)
 
   with open (filename, 'rt') as myfile:          # open file
     for line in myfile:                          # read line by line
@@ -76,20 +91,6 @@ def get_use(filename):
     true_name_list = 0  #["No use statements"]
 
   return true_name_list
-
-#===============================================================================
-# Decide if header is module or subroutine
-#-------------------------------------------------------------------------------
-def get_header(filename):
-
-  sub_name    = get_sub(filename)
-  module_name = get_mod(filename)
-  if sub_name != 0:      # if module_name is not empty take module name
-    header = sub_name
-  elif sub_name == 0:    # if module_name is empty take sub name
-    header = module_name
-
-  return header
 
 #===============================================================================
 # Find all variables
