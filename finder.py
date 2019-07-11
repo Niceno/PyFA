@@ -20,13 +20,12 @@ def get_mod(filename):
 
   module = [s.strip() for s in module if s.strip()]   # remove whitespaces
 
-  if len(module) != 0:                      # if module is not empty
-    mod_string = module[0]                  # take the first string
-    module_name   = re.sub("module ", "", mod_string)     # return subroutine
+  if len(module) != 0:                                # if module is not empty
+    mod_string  = module[0]                           # take the first string
+    module_name = re.sub("module ", "", mod_string)   # return subroutine
 
   elif len(module) == 0:
-    module_name = []                        # if no module return empty
- # elif module == ""
+    module_name = []                                # if no module return empty
 
   return module_name
 

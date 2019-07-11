@@ -153,13 +153,13 @@ def sub_lvl(subroutines_list,files):
 
 
 #===============================================================================
-# Print subs and mods and their levels
+# Functions for appending subs and mods in their lists
 #-------------------------------------------------------------------------------
 def mod_list_fun(files):
   modules_list = []
   for i in range(len(files)):
-    module_name = finder.get_mod(files[i]) #find all modules from imported files
-    sub_name = finder.get_sub(files[i])
+    module_name = finder.get_mod(files[i]) #find modules from imported files
+    sub_name = finder.get_sub(files[i])    #find subroutines from imported files
     if sub_name == 0:
       modules_list.append(module_class(files[i]))
   mod_list = mod_lvl(modules_list)
@@ -170,9 +170,9 @@ def sub_list_fun(files):
   subroutines_list = []
 
   for i in range(len(files)):
-    module_name = finder.get_mod(files[i]) #find all modules from imported files
+    module_name = finder.get_mod(files[i]) #find modules from imported files
+    sub_name = finder.get_sub(files[i])    #find subroutines from imported files
     modules_list = mod_list_fun(files)
-    sub_name = finder.get_sub(files[i])
     if sub_name != 0:
       subroutines_list.append(subroutine_class(files[i]))
   sub_list = sub_lvl(subroutines_list,files)

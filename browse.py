@@ -73,6 +73,7 @@ def source_paths(root):
       if file.endswith(".f90"):
         paths = os.path.join(root, file)
         fortran_files.append(paths)
+
   return fortran_files
 
 #===============================================================================
@@ -123,11 +124,11 @@ def source_mod_dirs(root):
 def source_unused(root):
 
   source_mod_dir = source_mod_dirs(root)
-  source_mod = source_mods(root)
-  source_sub = source_subs(root)
+  source_mod     = source_mods(root)
+  source_sub     = source_subs(root)
 
 
-  directories = [f for f in listdir(root) if isdir (join(root, f))]
+  directories       = [f for f in listdir(root) if isdir (join(root, f))]
   source_unused_dir = list(set(directories) - set(source_mod_dir))
 
   source_unused_file = []

@@ -10,7 +10,6 @@ import attribute
 #-------------------------------------------------------------------------------
 root  = "/home/simcic/Development/Synthetic-Eddies"
 
-files = browse.source_files(root)      # list of all fortran files in root
 file_path = browse.source_paths(root)  # list of all paths to fortran files
 
 x0    = xfig.x_pos(file_path)          # upper left corner positions on x axis
@@ -33,7 +32,7 @@ attribute.print_levels(mod_list,sub_list)
 print("\nGreat program for extracting UML from Fortran.")
 
 # Check directories for errors
-# browse.check_directories(root)
+#browse.check_directories(root)
 
 # Open Xfig file
 xf = open("flow.fig", "w")

@@ -3,7 +3,7 @@
 #-------------------------------------------------------------------------------
 import finder
 import browse
-
+import attribute
 #===============================================================================
 # Handy constants
 #-------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ def choose_width(filename):
   return var_width
 
 #===============================================================================
-# Function to return list with positions on x axis
+# Function to return list with positions on x axis(without strategy for now)
 #-------------------------------------------------------------------------------
 def x_pos(files):
 
@@ -145,7 +145,7 @@ def plot(file, x0, y0,      \
 
   # Module defintion has not been found, hence it is a subroutine
   elif subroutine != 0:
-    var_list  = finder.get_var(filename)
+    var_list    = finder.get_var(filename)
     module_name = subroutine
     plot_subroutine(file, x0, y0,      \
                     module_name,       \
@@ -427,7 +427,7 @@ def plot_meth_text_left_cm(x0, y0, xf, \
 
   box_width     = choose_width(filename)
   meth_list_num = list_num(meth_list)
-  use_list_len = use_len(use_list)
+  use_list_len  = use_len(use_list)
 
   for i in range(len(meth_list)):
     plot_text_left_cm(xf, x0, (0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5)   \
