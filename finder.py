@@ -78,17 +78,16 @@ def get_use(filename):
   return true_name_list
 
 #===============================================================================
-# Decide if header is module or subroutine (not needed for now)
+# Decide if header is module or subroutine
 #-------------------------------------------------------------------------------
 def get_header(filename):
 
   sub_name    = get_sub(filename)
   module_name = get_mod(filename)
-
-  if len(module_name) != 0:      # if module_name is not empty take module name
-    header = module_name
-  elif len(module_name) == 0:    # if module_name is empty take sub name
+  if sub_name != 0:      # if module_name is not empty take module name
     header = sub_name
+  elif sub_name == 0:    # if module_name is empty take sub name
+    header = module_name
 
   return header
 

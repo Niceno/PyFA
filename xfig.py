@@ -85,9 +85,7 @@ def choose_width(filename):
 #===============================================================================
 # Function to return list with positions on x axis
 #-------------------------------------------------------------------------------
-def x_pos(root):
-
-  files = browse.source_files(root)           # get all .f90 files
+def x_pos(files):
 
   # Create list with all box widths
 
@@ -132,7 +130,7 @@ def plot(file, x0, y0,      \
   use_list   = finder.get_use(filename)       # use list
 
   # Module definition has been found, hence length is greater than zero
-  if len(module) != 0:
+  if subroutine == 0:
     var_list  = finder.get_var(filename)
     meth_list = finder.get_meth(filename)
     use_list  = finder.get_use(filename)
@@ -146,7 +144,7 @@ def plot(file, x0, y0,      \
                 filename)
 
   # Module defintion has not been found, hence it is a subroutine
-  elif len(module) == 0:
+  elif subroutine != 0:
     var_list  = finder.get_var(filename)
     module_name = subroutine
     plot_subroutine(file, x0, y0,      \
