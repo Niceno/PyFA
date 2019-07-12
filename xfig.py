@@ -87,7 +87,7 @@ def choose_width(filename):
   return var_width
 
 #===============================================================================
-# Function to return list with positions on x axis(without strategy for now)
+# Function to return list with positions on x axis
 #-------------------------------------------------------------------------------
 def x_pos(files):
 
@@ -129,35 +129,35 @@ def write_header(file):
 def plot(file, x0, y0,      \
          filename):
 
-
   if filename.type == "Module":
     mod_name = filename.name                  # module name
     sub_name = 0
+
   elif filename.type == "Subroutine":
     sub_name = filename.name
     mod_name = 0
 
-#  use_list   = filename.use(filename)       # use list
-
   # Module definition has been found, hence length is greater than zero
   if sub_name == 0:
-    var_list  = filename.var
-    meth_list = filename.meth
-    use_list  = filename.use
+    var_list    = filename.var
+    meth_list   = filename.meth
+    use_list    = filename.use
     module_name = mod_name
+    if (mod_name != []):
 
-    plot_module(file, x0, y0,          \
-                module_name,           \
-                var_list,              \
-                meth_list,             \
-                use_list,              \
-                filename)
+      plot_module(file, x0, y0,          \
+                  module_name,           \
+                  var_list,              \
+                  meth_list,             \
+                  use_list,              \
+                  filename)
 
   # Module defintion has not been found, hence it is a subroutine
   elif sub_name != 0:
     var_list    = filename.var
     use_list    = filename.use
     module_name = sub_name
+
     plot_subroutine(file, x0, y0,      \
                     module_name,       \
                     var_list,          \

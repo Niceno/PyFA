@@ -4,12 +4,11 @@
 import xfig
 import finder
 import browse
-
 #===============================================================================
 # Define module class
 #-------------------------------------------------------------------------------
 class Module(object):
-  def __init__(module, name, use, var, meth, level, x0,type):
+  def __init__(module, type, name, use, var, meth, level, x0):
     module.name  = name
     module.use   = use
     module.var   = var
@@ -17,6 +16,7 @@ class Module(object):
     module.level = level
     module.x0    = x0
     module.type  = type
+
   def print_it(abc):
     print("\nModule name: ", abc.name,     \
           "\n\nUse : ",      abc.use,      \
@@ -30,14 +30,15 @@ class Module(object):
 # Define subroutine class
 #-------------------------------------------------------------------------------
 class Subroutine(object):
-  def __init__(subroutine, name, use, var, level, x0,type,meth):
+  def __init__(subroutine, type, name, use, var, meth, level, x0):
     subroutine.name  = name
     subroutine.use   = use
     subroutine.var   = var
+    subroutine.meth  = meth
     subroutine.level = level
     subroutine.x0    = x0
     subroutine.type  = type
-    subroutine.meth  = meth
+
   def print_it(abc):
     print("\nSubroutine name: ", abc.name, \
           "\n\nUse : ",          abc.use,  \
@@ -58,45 +59,48 @@ def check_use(list):
   return use_list
 
 #===============================================================================
-# Import attributes from fortran file and return filled in class
+# Import attributes from fortran files to module
 #-------------------------------------------------------------------------------
 def module_class(filename):
 
+  type         = "Module"
   module_name  = finder.get_mod(filename)
   use_list     = check_use(finder.get_use(filename))
   var_list     = finder.get_var(filename)
   meth_list    = finder.get_meth(filename)
   level        = 0
   x0           = 1
-  type         = "Module"
 
-  if use_list != "None":
-    use_list = [i.split()[1] for i in use_list]    # only take name of used
-    use_list = ([s.strip(",") for s in use_list])  # modules without other info
+  module = Module(type,         \
+                  module_name,  \
+                  use_list,     \
+                  var_list,     \
+                  meth_list,    \
+                  level,        \
+                  x0)
+  return module
 
-  modules = Module(module_name, use_list, var_list, meth_list, level, x0, type)
-
-  return modules
-
-
+#===============================================================================
+# Import attributes from fortran files to subroutine
+#-------------------------------------------------------------------------------
 def subroutine_class(filename):
 
+  type       = "Subroutine"
   sub_name   = finder.get_sub(filename)
   use_list   = check_use(finder.get_use(filename))
   var_list   = finder.get_var(filename)
+  meth_list  = 0
   level      = 0
   x0         = 1
-  type       = "Subroutine"
-  meth       = 0
 
-  if use_list != "None":
-    use_list = [i.split()[1] for i in use_list]    # only take name of used
-    use_list = ([s.strip(",") for s in use_list])  # modules without other info
-
-  subroutine = Subroutine(sub_name, use_list, var_list, level, x0, type, meth)
-
+  subroutine = Subroutine(type,       \
+                          sub_name,   \
+                          use_list,   \
+                          var_list,   \
+                          meth_list,  \
+                          level,      \
+                          x0)
   return subroutine
-
 
 #===============================================================================
 # Finding biggest level of list (not needed for now)
@@ -130,9 +134,15 @@ def mod_lvl(modules_list):
 
       if modules_list[i].use != "None":         # if there are use statements
         mod_use_list = modules_list[i].use      # get use list of modules
-        mod_lvl = []
+        mod_use_list = [i.split()[1] for i in mod_use_list]    # only take name
+        mod_use_list = ([s.strip(",") for s in mod_use_list])  # modules without
+                                                               # ˄˄ other info
+        mod_lvl      = []
         for k in range(len(mod_use_list)):      # for every use in module
-          mod_lvl.append(find_level(modules_list,mod_use_list[k])) # find level
+          for z in range(len(modules_list)):
+            if modules_list[z].name == mod_use_list[k]:
+              lvl = modules_list[z].level
+              mod_lvl.append(lvl) # find level
 
         mod_lvl = max(mod_lvl)   # take the biggest used module level from list
 
@@ -152,17 +162,19 @@ def sub_lvl(subroutines_list,files):
 
       if subroutines_list[i].use != "None":       # if there are use statements
         sub_use_list = subroutines_list[i].use    # get use list of subroutines
-        sub_lvl = []
+        sub_use_list = [i.split()[1] for i in sub_use_list]    # only take name
+        sub_use_list = ([s.strip(",") for s in sub_use_list])  # modules without
+                                                               # ˄˄  other info
+        sub_lvl      = []
         for k in range(len(sub_use_list)):        # for every use in subroutine
           for z in range(len(modules_list)):
             if modules_list[z].name == sub_use_list[k]:
               lvl = modules_list[z].level
-              sub_lvl.append(lvl) # find level
+              sub_lvl.append(lvl)   # find level
 
         sub_lvl = max(sub_lvl)      # take the biggest used sub level from list
         subroutines_list[i].level = sub_lvl + 1   # add 1 level to max level
   return subroutines_list
-
 
 #===============================================================================
 # Functions for appending subs and mods in their lists
@@ -190,29 +202,27 @@ def sub_list_fun(files):
   sub_list = sub_lvl(subroutines_list,files)
 
   return sub_list
-#===============================================================================
-# Update x positions
-#-------------------------------------------------------------------------------
-#def update_x_pos(file):
-
-
-
-
-
 
 #===============================================================================
 # Print subs and mods and their levels
 #-------------------------------------------------------------------------------
-def print_levels(mod_list,sub_list):
+def print_levels(file_list):
 
-  for i in range(len(mod_list)):
-    print("\nModule name: ", mod_list[i].name,        \
-          "\nType: ", mod_list[i].type,               \
-          "\nLevel: ", mod_list[i].level,             \
-          "\nModules used: ", mod_list[i].use)        \
+  for i in range(len(file_list)):
+    print("\nName: ", file_list[i].name,           \
+          "\nType: ", file_list[i].type,           \
+          "\nModules used: ", file_list[i].use,    \
+          "\nLevel: ", file_list[i].level)
 
-  for i in range(len(sub_list)):
-    print("\nSubroutine name: ", sub_list[i].name,    \
-          "\nType: ", sub_list[i].type,               \
-          "\nLevel: ", sub_list[i].level,             \
-          "\nModules used: ", sub_list[i].use)        \
+
+#===============================================================================
+# Remove empty files from list (such as programs and others)
+#-------------------------------------------------------------------------------
+def remove_empty(file_list):
+  i = 0
+  while i<len(file_list):
+      if file_list[i].name == [] :
+          del file_list[i]
+      else:
+          i+=1
+  return file_list
