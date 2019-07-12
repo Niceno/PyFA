@@ -60,15 +60,19 @@ def xfig_box_color(name):
 #-------------------------------------------------------------------------------
 def choose_width(filename):
 
-  var_list    = finder.get_var(filename)
-  meth_list   = finder.get_meth(filename)
-  header_name = finder.get_header(filename)
-  use_list    = finder.get_use(filename)
+  var_list    = filename.var
+  meth_list   = filename.meth
+  header_name = filename.name
+  use_list    = filename.use
 
   if use_list == 0:
     use_list = ["0"]
   else:
     use_list = use_list
+  if meth_list == 0:
+    meth_list = ["0"]
+  else:
+    meth_list = meth_list
 
   var_length    = max(var_list, key=len)
   meth_length   = max(meth_list, key=len)
@@ -125,16 +129,22 @@ def write_header(file):
 def plot(file, x0, y0,      \
          filename):
 
-  module     = finder.get_mod(filename)       # module name
-  subroutine = finder.get_sub(filename)       # subroutine name
-  use_list   = finder.get_use(filename)       # use list
+
+  if filename.type == "Module":
+    mod_name = filename.name                  # module name
+    sub_name = 0
+  elif filename.type == "Subroutine":
+    sub_name = filename.name
+    mod_name = 0
+
+#  use_list   = filename.use(filename)       # use list
 
   # Module definition has been found, hence length is greater than zero
-  if subroutine == 0:
-    var_list  = finder.get_var(filename)
-    meth_list = finder.get_meth(filename)
-    use_list  = finder.get_use(filename)
-    module_name = module
+  if sub_name == 0:
+    var_list  = filename.var
+    meth_list = filename.meth
+    use_list  = filename.use
+    module_name = mod_name
 
     plot_module(file, x0, y0,          \
                 module_name,           \
@@ -144,9 +154,10 @@ def plot(file, x0, y0,      \
                 filename)
 
   # Module defintion has not been found, hence it is a subroutine
-  elif subroutine != 0:
-    var_list    = finder.get_var(filename)
-    module_name = subroutine
+  elif sub_name != 0:
+    var_list    = filename.var
+    use_list    = filename.use
+    module_name = sub_name
     plot_subroutine(file, x0, y0,      \
                     module_name,       \
                     var_list,          \
@@ -168,7 +179,7 @@ def plot_module(file, x0, y0,      \
                 module_name,      \
                 filename)
 
-  if use_list != 0:
+  if use_list != "None":
     # Draw a use text box
     plot_use_name(file, x0, y0,     \
                   use_list,         \
@@ -205,7 +216,7 @@ def plot_subroutine(file, x0, y0,      \
                 filename)
 
   # Choose if use box exist
-  if use_list != 0:
+  if use_list != "None":
     # Draw a use text box
     plot_use_name(file, x0, y0,     \
                   use_list,         \

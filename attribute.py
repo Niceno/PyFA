@@ -9,35 +9,42 @@ import browse
 # Define module class
 #-------------------------------------------------------------------------------
 class Module(object):
-  def __init__(module, name, use, var, meth, level):
+  def __init__(module, name, use, var, meth, level, x0,type):
     module.name  = name
     module.use   = use
     module.var   = var
     module.meth  = meth
     module.level = level
-
+    module.x0    = x0
+    module.type  = type
   def print_it(abc):
     print("\nModule name: ", abc.name,     \
           "\n\nUse : ",      abc.use,      \
           "\n\nVariables: ", abc.var,      \
           "\n\nMethods: ",   abc.meth,     \
-          "\n\nLevel: ",     abc.level)
+          "\n\nLevel: ",     abc.level,    \
+          "\n\nType: ",      abc.type,     \
+          "\n\nx0: ",        abc.x0        )
 
 #===============================================================================
 # Define subroutine class
 #-------------------------------------------------------------------------------
 class Subroutine(object):
-  def __init__(subroutine, name, use, var, level):
+  def __init__(subroutine, name, use, var, level, x0,type,meth):
     subroutine.name  = name
     subroutine.use   = use
     subroutine.var   = var
     subroutine.level = level
-
+    subroutine.x0    = x0
+    subroutine.type  = type
+    subroutine.meth  = meth
   def print_it(abc):
     print("\nSubroutine name: ", abc.name, \
           "\n\nUse : ",          abc.use,  \
           "\n\nVariables: ",     abc.var,  \
-          "\n\nLevel: ",         abc.level)
+          "\n\nLevel: ",         abc.level,\
+          "\n\nType: ",          abc.type, \
+          "\n\nx0: ",            abc.x0    )
 
 #===============================================================================
 # Check if use list is empty
@@ -60,12 +67,14 @@ def module_class(filename):
   var_list     = finder.get_var(filename)
   meth_list    = finder.get_meth(filename)
   level        = 0
+  x0           = 1
+  type         = "Module"
 
   if use_list != "None":
     use_list = [i.split()[1] for i in use_list]    # only take name of used
     use_list = ([s.strip(",") for s in use_list])  # modules without other info
 
-  modules = Module(module_name, use_list, var_list, meth_list, level)
+  modules = Module(module_name, use_list, var_list, meth_list, level, x0, type)
 
   return modules
 
@@ -76,12 +85,15 @@ def subroutine_class(filename):
   use_list   = check_use(finder.get_use(filename))
   var_list   = finder.get_var(filename)
   level      = 0
+  x0         = 1
+  type       = "Subroutine"
+  meth       = 0
 
   if use_list != "None":
     use_list = [i.split()[1] for i in use_list]    # only take name of used
     use_list = ([s.strip(",") for s in use_list])  # modules without other info
 
-  subroutine = Subroutine(sub_name, use_list, var_list, level)
+  subroutine = Subroutine(sub_name, use_list, var_list, level, x0, type, meth)
 
   return subroutine
 
@@ -178,6 +190,15 @@ def sub_list_fun(files):
   sub_list = sub_lvl(subroutines_list,files)
 
   return sub_list
+#===============================================================================
+# Update x positions
+#-------------------------------------------------------------------------------
+#def update_x_pos(file):
+
+
+
+
+
 
 #===============================================================================
 # Print subs and mods and their levels
@@ -186,10 +207,12 @@ def print_levels(mod_list,sub_list):
 
   for i in range(len(mod_list)):
     print("\nModule name: ", mod_list[i].name,        \
+          "\nType: ", mod_list[i].type,               \
           "\nLevel: ", mod_list[i].level,             \
           "\nModules used: ", mod_list[i].use)        \
 
   for i in range(len(sub_list)):
     print("\nSubroutine name: ", sub_list[i].name,    \
+          "\nType: ", sub_list[i].type,               \
           "\nLevel: ", sub_list[i].level,             \
           "\nModules used: ", sub_list[i].use)        \

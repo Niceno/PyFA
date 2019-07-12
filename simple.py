@@ -8,19 +8,23 @@ import attribute
 #===============================================================================
 # Lists
 #-------------------------------------------------------------------------------
-root  = "/home/simcic/Development/Synthetic-Eddies"
+root  = "/home/simcic/Development/PyFA"
 
 file_path = browse.source_paths(root)  # list of all paths to fortran files
 
-x0    = xfig.x_pos(file_path)          # upper left corner positions on x axis
+mod_list = attribute.mod_list_fun(file_path)   # list of all mod classes
+sub_list = attribute.sub_list_fun(file_path)   # list of all sub classes
+file_list = [*mod_list,*sub_list]              # list of all classes(mod + sub)
+
+x0    = xfig.x_pos(file_list)          # upper left corner positions on x axis
 y0    = 1                              # upper left corner positions on y axis
 
-#===============================================================================
-# Collecting classes into lists
-#-------------------------------------------------------------------------------
+for i in range(len(file_list)):
+  file_list[i].x0 = i*14
 
-mod_list = attribute.mod_list_fun(file_path)
-sub_list = attribute.sub_list_fun(file_path)
+
+
+
 
 # Printing mods and subs and their levels
 attribute.print_levels(mod_list,sub_list)
@@ -41,8 +45,8 @@ xf = open("flow.fig", "w")
 xfig.write_header(xf)
 
 # Plot all fortran files in root
-for i in range(len(file_path)):
-  xfig.plot(xf, x0[i], y0, file_path[i])
+for i in range(len(file_list)):
+  xfig.plot(xf, file_list[i].x0, file_list[i].level*10, file_list[i])
 
 # Print all unused files and subdirectories
 #browse.source_unused(root)
