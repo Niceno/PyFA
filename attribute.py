@@ -8,7 +8,7 @@ import browse
 # Define module class
 #-------------------------------------------------------------------------------
 class Module(object):
-  def __init__(module, type, name, use, var, meth, level, x0, x1):
+  def __init__(module, type, name, use, var, meth, level, x0, x1, y0, y1):
     module.name  = name
     module.use   = use
     module.var   = var
@@ -16,6 +16,8 @@ class Module(object):
     module.level = level
     module.x0    = x0
     module.x1    = x1
+    module.y0    = y0
+    module.y1    = y1
     module.type  = type
 
   def print_it(abc):
@@ -26,14 +28,16 @@ class Module(object):
           "\n\nLevel: ",     abc.level,    \
           "\n\nType: ",      abc.type,     \
           "\n\nx0: ",        abc.x0,       \
-          "\n\nx1: ",        abc.x1        )
+          "\n\nx1: ",        abc.x1,       \
+          "\n\ny0: ",        abc.y0,       \
+          "\n\ny1: ",        abc.y1        )
 
 
 #===============================================================================
 # Define subroutine class
 #-------------------------------------------------------------------------------
 class Subroutine(object):
-  def __init__(subroutine, type, name, use, var, meth, level, x0, x1):
+  def __init__(subroutine, type, name, use, var, meth, level, x0, x1, y0, y1):
     subroutine.name  = name
     subroutine.use   = use
     subroutine.var   = var
@@ -41,6 +45,8 @@ class Subroutine(object):
     subroutine.level = level
     subroutine.x0    = x0
     subroutine.x1    = x1
+    subroutine.y0    = y0
+    subroutine.y1    = y1
     subroutine.type  = type
 
   def print_it(abc):
@@ -50,7 +56,9 @@ class Subroutine(object):
           "\n\nLevel: ",         abc.level,\
           "\n\nType: ",          abc.type, \
           "\n\nx0: ",            abc.x0,   \
-          "\n\nx1: ",            abc.x1    )
+          "\n\nx1: ",            abc.x1,   \
+          "\n\ny0: ",            abc.y0,   \
+          "\n\ny1: ",            abc.y1    )
 
 #===============================================================================
 # Check if use list is empty
@@ -76,6 +84,8 @@ def module_class(filename):
   level        = 0
   x0           = 1
   x1           = 0
+  y0           = 0
+  y1           = 0
 
   module = Module(type,         \
                   module_name,  \
@@ -84,7 +94,10 @@ def module_class(filename):
                   meth_list,    \
                   level,        \
                   x0,           \
-                  x1)
+                  x1,           \
+                  y0,           \
+                  y1)
+
   return module
 
 #===============================================================================
@@ -100,6 +113,8 @@ def subroutine_class(filename):
   level      = 0
   x0         = 1
   x1         = 0
+  y0         = 0
+  y1         = 0
 
   subroutine = Subroutine(type,       \
                           sub_name,   \
@@ -107,8 +122,11 @@ def subroutine_class(filename):
                           var_list,   \
                           meth_list,  \
                           level,      \
-                          x0,           \
-                          x1)
+                          x0,         \
+                          x1,         \
+                          y0,         \
+                          y1)
+
   return subroutine
 
 #===============================================================================
@@ -242,3 +260,21 @@ def remove_empty(file_list):
       else:
           i+=1
   return file_list
+
+#===============================================================================
+# Find y1 coordinate
+#-------------------------------------------------------------------------------
+def find_y1(file):
+  UBH          = 0.75
+  use_list_len = xfig.use_len(file.use)
+  var_list     = file.var
+  meth_list    = file.meth
+
+  if var_list == 0:
+    var_list = []
+  if meth_list == 0:
+    meth_list = []
+
+  y1 = file.y0 + UBH + len(var_list) + len(meth_list) + use_list_len
+
+  return y1

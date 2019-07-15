@@ -145,6 +145,7 @@ def plot(file, x0, y0,      \
     meth_list   = filename.meth
     use_list    = filename.use
     module_name = mod_name
+
     if var_list != []:
       if (mod_name != []):
 
@@ -160,6 +161,7 @@ def plot(file, x0, y0,      \
     var_list    = filename.var
     use_list    = filename.use
     module_name = sub_name
+
     if var_list != []:
       plot_subroutine(file, x0, y0,      \
                     module_name,       \
@@ -274,7 +276,6 @@ def plot_use_frame(file, x0, y0, box_width, box_height, \
 
   use_list_len = use_len(use_list)
 
-
   file.write("2 2 0 ")
   file.write("%3d"       % THICKNESS)
   file.write(" 0 7 50 -1 -1 0.000 0 0 -1 0 0 5\n")
@@ -314,7 +315,6 @@ def plot_meth_frame(file, x0, y0, box_width, box_height, \
                     var_list,                            \
                     meth_list,                           \
                     use_list):
-
 
   use_list_len = use_len(use_list)
 

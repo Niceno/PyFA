@@ -8,8 +8,8 @@ import attribute
 #===============================================================================
 # Lists
 #-------------------------------------------------------------------------------
-root  = "/home/simcic/Development/T-Flows/Sources/Generate"
-#root  = "/home/simcic/Development/PyFA"
+#root  = "/home/simcic/Development/T-Flows/Sources/IvanTest"
+root  = "/home/simcic/Development/Synthetic-Eddies"
 
 file_path  = browse.source_paths(root)         # list of paths to all .f90 files
 
@@ -41,10 +41,13 @@ for i in range(len(file_list)):
 
   file_list[i].x0 = x_position[i]                       # update x0
   file_list[i].x1 = xfig.choose_width(file_list[i])     # update x1
-  xfig.plot(xf, file_list[i].x0, (file_list[i].level*2)+1, file_list[i])
+  file_list[i].y0 = (file_list[i].level*2)+1            # update y0
+  file_list[i].y1 = attribute.find_y1(file_list[i])     # update y1
+
+  xfig.plot(xf, file_list[i].x0, file_list[i].y0, file_list[i])
 
 """
-# Plot spine between boxes
+# Plot spline between boxes
 
 for i in range(len(file_list)-1):
 

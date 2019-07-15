@@ -154,7 +154,6 @@ def get_var(filename):
         meths = re.findall("\((.*)\)", line)     # looking for line with "()"
         sub_var_list.append(meths)               # add those lines to list
     sub_var_list2 = [x for x in sub_var_list if x != []]  # remove empty lists
-
     flat_list = []
     for sublist in sub_var_list2:
       for item in sublist:
