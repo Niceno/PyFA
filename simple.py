@@ -38,9 +38,22 @@ xfig.write_header(xf)
 
 # Plot all fortran files in root
 for i in range(len(file_list)):
-  file_list[i].x0 = x_position[i]     # update x0
+
+  file_list[i].x0 = x_position[i]                       # update x0
+  file_list[i].x1 = xfig.choose_width(file_list[i])     # update x1
+
   xfig.plot(xf, file_list[i].x0, (file_list[i].level*2)+1, file_list[i])
 
+"""
+# Plot spine between boxes
+
+for i in range(len(file_list)-1):
+
+  xfig.plot_spline(xf, file_list[i].x0+ file_list[i].x1, \
+                    (file_list[i].level*2)+1,          \
+                     file_list[i+1].x0,                  \
+                    (file_list[i+1].level*2)+1)
+"""
 # Print all unused files and subdirectories
 #browse.source_unused(root)
 

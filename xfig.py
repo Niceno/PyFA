@@ -364,6 +364,18 @@ def plot_text_left_cm(file, x0, y0, box_width, box_height, text):
   file.write("%7d %7d" % ( (x0+          (box_height-FONT_SIZE)*0.5)*XFS,  \
                            (y0+FONT_SIZE+(box_height-FONT_SIZE)*0.5)*XFS))
   file.write("%s%s\\001\n" % (" ", text))
+#===============================================================================
+# Function to print spline
+#-------------------------------------------------------------------------------
+def plot_spline(file, x0, y0, x1, y1):
+
+  file.write("3 0 0 2 0 7 45 -1 -1 0.000 0 1 0 2")   # 2 is number of points
+  file.write("\n 1 1 1.00 90.00 120.00")             # arrow settings
+  file.write("\n%7d %7d" % ( (x0) *XFS,  \
+                             (y0)*XFS))
+  file.write("%7d %7d" %   ( (x1) *XFS,  \
+                             (y1)*XFS))
+  file.write("\n0.000 0.000\n")
 
 #===============================================================================
 # Function to print module name

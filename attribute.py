@@ -8,13 +8,14 @@ import browse
 # Define module class
 #-------------------------------------------------------------------------------
 class Module(object):
-  def __init__(module, type, name, use, var, meth, level, x0):
+  def __init__(module, type, name, use, var, meth, level, x0, x1):
     module.name  = name
     module.use   = use
     module.var   = var
     module.meth  = meth
     module.level = level
     module.x0    = x0
+    module.x1    = x1
     module.type  = type
 
   def print_it(abc):
@@ -24,19 +25,22 @@ class Module(object):
           "\n\nMethods: ",   abc.meth,     \
           "\n\nLevel: ",     abc.level,    \
           "\n\nType: ",      abc.type,     \
-          "\n\nx0: ",        abc.x0        )
+          "\n\nx0: ",        abc.x0,       \
+          "\n\nx1: ",        abc.x1        )
+
 
 #===============================================================================
 # Define subroutine class
 #-------------------------------------------------------------------------------
 class Subroutine(object):
-  def __init__(subroutine, type, name, use, var, meth, level, x0):
+  def __init__(subroutine, type, name, use, var, meth, level, x0, x1):
     subroutine.name  = name
     subroutine.use   = use
     subroutine.var   = var
     subroutine.meth  = meth
     subroutine.level = level
     subroutine.x0    = x0
+    subroutine.x1    = x1
     subroutine.type  = type
 
   def print_it(abc):
@@ -45,7 +49,8 @@ class Subroutine(object):
           "\n\nVariables: ",     abc.var,  \
           "\n\nLevel: ",         abc.level,\
           "\n\nType: ",          abc.type, \
-          "\n\nx0: ",            abc.x0    )
+          "\n\nx0: ",            abc.x0,   \
+          "\n\nx1: ",            abc.x1    )
 
 #===============================================================================
 # Check if use list is empty
@@ -70,6 +75,7 @@ def module_class(filename):
   meth_list    = finder.get_meth(filename)
   level        = 0
   x0           = 1
+  x1           = 0
 
   module = Module(type,         \
                   module_name,  \
@@ -77,7 +83,8 @@ def module_class(filename):
                   var_list,     \
                   meth_list,    \
                   level,        \
-                  x0)
+                  x0,           \
+                  x1)
   return module
 
 #===============================================================================
@@ -92,6 +99,7 @@ def subroutine_class(filename):
   meth_list  = 0
   level      = 0
   x0         = 1
+  x1         = 0
 
   subroutine = Subroutine(type,       \
                           sub_name,   \
@@ -99,7 +107,8 @@ def subroutine_class(filename):
                           var_list,   \
                           meth_list,  \
                           level,      \
-                          x0)
+                          x0,           \
+                          x1)
   return subroutine
 
 #===============================================================================
