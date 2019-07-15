@@ -73,6 +73,8 @@ def choose_width(filename):
     meth_list = ["0"]
   else:
     meth_list = meth_list
+  if var_list == []:
+    var_list = ["0"]
 
   var_length    = max(var_list, key=len)
   meth_length   = max(meth_list, key=len)
@@ -143,9 +145,10 @@ def plot(file, x0, y0,      \
     meth_list   = filename.meth
     use_list    = filename.use
     module_name = mod_name
-    if (mod_name != []):
+    if var_list != []:
+      if (mod_name != []):
 
-      plot_module(file, x0, y0,          \
+        plot_module(file, x0, y0,          \
                   module_name,           \
                   var_list,              \
                   meth_list,             \
@@ -157,8 +160,8 @@ def plot(file, x0, y0,      \
     var_list    = filename.var
     use_list    = filename.use
     module_name = sub_name
-
-    plot_subroutine(file, x0, y0,      \
+    if var_list != []:
+      plot_subroutine(file, x0, y0,      \
                     module_name,       \
                     var_list,          \
                     use_list,          \

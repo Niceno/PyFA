@@ -8,7 +8,8 @@ import attribute
 #===============================================================================
 # Lists
 #-------------------------------------------------------------------------------
-root  = "/home/simcic/Development/PyFA"
+root  = "/home/simcic/Development/T-Flows/Sources/Generate"
+#root  = "/home/simcic/Development/PyFA"
 
 file_path  = browse.source_paths(root)         # list of paths to all .f90 files
 
@@ -19,8 +20,7 @@ file_list  = attribute.remove_empty(file_list) # remove empty files from list
 x_position = xfig.x_pos(file_list)             # list of all x positions
 
 # Printing mods and subs and their levels
-attribute.print_levels(file_list)
-
+#attribute.print_levels(file_list)
 #===============================================================================
 # Obviously the main function
 #-------------------------------------------------------------------------------
@@ -41,7 +41,6 @@ for i in range(len(file_list)):
 
   file_list[i].x0 = x_position[i]                       # update x0
   file_list[i].x1 = xfig.choose_width(file_list[i])     # update x1
-
   xfig.plot(xf, file_list[i].x0, (file_list[i].level*2)+1, file_list[i])
 
 """
@@ -50,9 +49,9 @@ for i in range(len(file_list)):
 for i in range(len(file_list)-1):
 
   xfig.plot_spline(xf, file_list[i].x0+ file_list[i].x1, \
-                    (file_list[i].level*2)+1,          \
-                     file_list[i+1].x0,                  \
-                    (file_list[i+1].level*2)+1)
+                      (file_list[i].level*2)+1,          \
+                       file_list[i+1].x0,                \
+                      (file_list[i+1].level*2)+1)
 """
 # Print all unused files and subdirectories
 #browse.source_unused(root)

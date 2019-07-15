@@ -152,7 +152,10 @@ def mod_lvl(modules_list):
             if modules_list[z].name == mod_use_list[k]:
               lvl = modules_list[z].level
               mod_lvl.append(lvl) # find level
-
+        if mod_lvl == []:
+          mod_lvl = [0]
+        else:
+          mod_lvl = mod_lvl
         mod_lvl = max(mod_lvl)   # take the biggest used module level from list
 
         modules_list[i].level = mod_lvl + 1     # add 1 level to max level
@@ -180,6 +183,10 @@ def sub_lvl(subroutines_list,files):
             if modules_list[z].name == sub_use_list[k]:
               lvl = modules_list[z].level
               sub_lvl.append(lvl)   # find level
+        if sub_lvl == []:
+          sub_lvl = [0]
+        else:
+          sub_lvl = sub_lvl
 
         sub_lvl = max(sub_lvl)      # take the biggest used sub level from list
         subroutines_list[i].level = sub_lvl + 1   # add 1 level to max level
