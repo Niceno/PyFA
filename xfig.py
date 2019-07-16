@@ -84,7 +84,7 @@ def choose_width(filename):
                len(header_name),len(use_length)]
 
   var_width = max(lengths)
-  var_width = var_width *0.32  #  gives the best ratio for width
+  var_width = var_width *0.32  # gives the best ratio for width
 
   return var_width
 
@@ -94,14 +94,12 @@ def choose_width(filename):
 def x_pos(files):
 
   # Create list with all box widths
-
   box_widths = [0] + []                       # initialize box_widths list
   for i in range(len(files)):
     box = choose_width(files[i])
     box_widths.append(box)                    # list of box widths of all boxes
 
   # Create new list for boxes to be parallel
-
   sum = 0
   box_pos = []
   for item in box_widths:

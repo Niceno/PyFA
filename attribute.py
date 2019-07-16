@@ -137,7 +137,7 @@ def find_biggest(list):
   for i in range(len(list)):
     lvl = list[i].level
     lvls.append(lvl)
-  lvl = get_max(lvls)
+  lvl = max(lvls)
   return lvl
 
 #===============================================================================
@@ -248,7 +248,6 @@ def print_levels(file_list):
           "\nModules used: ", file_list[i].use,    \
           "\nLevel: ", file_list[i].level)
 
-
 #===============================================================================
 # Remove empty files from list (such as programs and others)
 #-------------------------------------------------------------------------------
@@ -280,3 +279,78 @@ def find_y1(file):
   y1 = file.y0 + UBH + len(var_list) + len(meth_list) + len(use_list)
 
   return y1
+
+#===============================================================================
+# Find the biggest box at certain level
+#-------------------------------------------------------------------------------
+def find_lvl_height(file_list,level):
+  heights = []
+  for i in range(len(file_list)):
+    if file_list[i].level == level:
+      height = file_list[i].y1 - file_list[i].y0
+      heights.append(height)
+  return heights
+
+#===============================================================================
+# Updating list attributes
+#-------------------------------------------------------------------------------
+def update(file_list):
+  for i in range(len(file_list)):
+
+    file_list[i].x0 = xfig.x_pos(file_list)[i]            # update x0
+    file_list[i].x1 = xfig.choose_width(file_list[i])     # update x1
+    file_list[i].y0 = (file_list[i].level*2)+1            # update y0
+    file_list[i].y1 = find_y1(file_list[i])               # update y1
+
+  return file_list
+
+#===============================================================================
+# List with heights of levels
+#-------------------------------------------------------------------------------
+def lvl_height(file_list):
+  heights_list = [0]
+  biggest_lvl  = find_biggest(file_list)
+  for i in range(biggest_lvl):
+    heights = max(find_lvl_height(file_list,i))
+    heights_list.append(heights)
+
+  return heights_list
+
+#===============================================================================
+# Updating y coordinates (arranging by levels)
+#-------------------------------------------------------------------------------
+def arrange_by_level(file_list):
+  lvl_heights = lvl_height(file_list)
+
+  for i in range(len(file_list)):
+    for l in range(len(lvl_heights)):
+      if file_list[i].level == l:
+        file_list[i].y0 = file_list[i].y0 + sum(lvl_heights[0:l+1])
+        file_list[i].y1 = file_list[i].y1 + sum(lvl_heights[0:l+1])
+
+#===============================================================================
+# Function for creating lists of classes with same level
+#-------------------------------------------------------------------------------
+def lvl_list(file_list,lvl):
+  list = []
+  for i in range(len(file_list)):
+    if file_list[i].level == lvl:
+      list.append(file_list[i])
+  for i in range(len(list)):
+    list[i].x0 = xfig.x_pos(list)[i]
+
+  return list
+
+#===============================================================================
+# Function for putting all classes together again
+#-------------------------------------------------------------------------------
+def lvl_file_list(file_list):
+  lvl_lista = []
+  lvl_num = len(lvl_height(file_list))
+
+  for i in range(lvl_num):
+    lvl = lvl_list(file_list,i)
+    lvl_lista.append(lvl)
+  flat_list = [item for sublist in lvl_lista for item in sublist]
+
+  return flat_list
