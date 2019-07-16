@@ -44,6 +44,10 @@ for i in range(len(file_list)):
   file_list[i].y0 = (file_list[i].level*2)+1            # update y0
   file_list[i].y1 = attribute.find_y1(file_list[i])     # update y1
 
+  heights = []
+  height = file_list[i].y1 - file_list[i].y0
+  heights.append(height)
+
   xfig.plot(xf, file_list[i].x0, file_list[i].y0, file_list[i])
 
 """
@@ -52,9 +56,9 @@ for i in range(len(file_list)):
 for i in range(len(file_list)-1):
 
   xfig.plot_spline(xf, file_list[i].x0+ file_list[i].x1, \
-                      (file_list[i].level*2)+1,          \
+                       (file_list[i].y0+file_list[i].y1)/2,          \
                        file_list[i+1].x0,                \
-                      (file_list[i+1].level*2)+1)
+                       (file_list[i+1].y1+file_list[i+1].y0)/2)
 """
 # Print all unused files and subdirectories
 #browse.source_unused(root)

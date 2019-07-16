@@ -266,15 +266,17 @@ def remove_empty(file_list):
 #-------------------------------------------------------------------------------
 def find_y1(file):
   UBH          = 0.75
-  use_list_len = xfig.use_len(file.use)
+  use_list     = file.use
   var_list     = file.var
   meth_list    = file.meth
 
+  if use_list == "None":
+    use_list = []
   if var_list == 0:
     var_list = []
   if meth_list == 0:
     meth_list = []
 
-  y1 = file.y0 + UBH + len(var_list) + len(meth_list) + use_list_len
+  y1 = file.y0 + UBH + len(var_list) + len(meth_list) + len(use_list)
 
   return y1
