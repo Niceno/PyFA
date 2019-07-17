@@ -48,6 +48,10 @@ def get_sub(filename):
     sub_string = subroutine[0]                  # take the first string
     sub_name   = re.sub("subroutine ", "", sub_string)     # return subroutine
 
+    if sub_name.endswith("&"):
+    #  sub_name =  sub_name[:-len("  &")]
+      sub_name = sub_name + ")"
+
   elif len(subroutine) == 0:
     sub_name = 0                                # if no subroutine return 0
 
@@ -73,13 +77,17 @@ def get_header(filename):
 def get_use(filename):
 
   use_name = []
+
   pattern  = re.compile("(use)\s", re.IGNORECASE)
 
   with open (filename, 'rt') as myfile:          # open file
     for line in myfile:                          # read line by line
       if pattern.search(line) != None:           # search for pattern
         use_name.append(( line.rstrip("\n")))    # add line with pattern to list
+
   use_name = [s.strip() for s in use_name if s.strip()] # remove whitespace
+
+  # If you only want to take name of use statement without "type" or "only"
   use_name_list = [i.split()[1] for i in use_name]           # take use name
   use_name_list = ([s.strip(",") for s in use_name_list])    # remove ","
   use_name_list = ["use " + x for x in use_name_list]
@@ -91,8 +99,8 @@ def get_use(filename):
     string = string.split('!')[0]
     use_list.append(string)
 
-  if use_name != []:
-    true_name_list = use_list  #use_name_list for only the name of module
+  if use_name != []:                # use_name for whole line
+    true_name_list = use_name_list  # use_name_list - only the name
   else:
     true_name_list = 0  #["No use statements"]
 
@@ -121,6 +129,11 @@ def get_all_var(filename):
   var_name_list = clean_list(var_name_list)                # deletes spaces
   var_name_list = [":: " + suit for suit in var_name_list] # adds ":: "
                                                            # to every var
+  var_name_list2 = []
+  for i in range(len(var_name_list)):
+    string = var_name_list[i]
+    string = string.split('!')[0]
+    var_name_list2.append(string)
 
 
   # Find all var types
@@ -139,7 +152,7 @@ def get_all_var(filename):
 
   # merge var names and var types into one var list
 
-  var_list = [var_type_list[i] + var_name_list[i] \
+  var_list = [var_type_list[i] + var_name_list2[i] \
                     for i in range(len(var_type_list))]
 
   return var_list
@@ -151,27 +164,21 @@ def get_var(filename):
 
   var_list    = get_all_var(filename)
   sub_name    = get_sub(filename)
-  module_name = get_mod(filename)
 
-  if len(module_name) == 0:                      # if it is subroutine
+  if sub_name != 0:                              # if it is subroutine
 
     sub_var_list = []
-    with open(filename) as file:                 # open file
-      for line in file:                          # read line by line
-        meths = re.findall("\((.*)\)", line)     # looking for line with "()"
-        sub_var_list.append(meths)               # add those lines to list
-    sub_var_list2 = [x for x in sub_var_list if x != []]  # remove empty lists
-    flat_list = []
-    for sublist in sub_var_list2:
-      for item in sublist:
-        flat_list.append(item)
+    result = re.search("\((.*)\)", sub_name)
+    if result:
+      sub_var_list = result.group(0)
 
-    sub_var_list = flat_list[0]                  # sub variables inside of ()
-    sub_var_list = sub_var_list.split(",")       # split by "," and remove ","
-    sub_var_list = var_list[0:len(sub_var_list)] # return only sub variables
+    if isinstance(sub_var_list, list):
+      sub_var_list = var_list
+    else:
+      sub_var_list = sub_var_list.split(",")       # split by "," and remove ","
+      sub_var_list = var_list[0:len(sub_var_list)] # return only sub variables
 
-  elif len(module_name) != 0:                    # if it is not subroutine
-
+  else:                                          # if it is not subroutine
     sub_var_list = var_list                      # return all variables
 
   return sub_var_list

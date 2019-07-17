@@ -354,3 +354,16 @@ def lvl_file_list(file_list):
   flat_list = [item for sublist in lvl_lista for item in sublist]
 
   return flat_list
+
+#===============================================================================
+# Function for creating complete and updated file list
+#-------------------------------------------------------------------------------
+def get_file_list(file_path):
+  mod_list   = mod_list_fun(file_path) # list of all mod classes
+  sub_list   = sub_list_fun(file_path) # list of all sub classes
+  file_list  = [*mod_list,*sub_list]             # list of all classes(mod + sub)
+  file_list  = remove_empty(file_list) # remove empty files from list
+  file_list  = update(file_list)       # updating coordinates
+  arrange_by_level(file_list)          # arranging by level
+  file_list = lvl_file_list(file_list) # put it together
+  return file_list
