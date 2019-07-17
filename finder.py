@@ -84,8 +84,15 @@ def get_use(filename):
   use_name_list = ([s.strip(",") for s in use_name_list])    # remove ","
   use_name_list = ["use " + x for x in use_name_list]
 
+  # Solve problem with having "!" in strings
+  use_list = []
+  for i in range(len(use_name)):
+    string = use_name[i]
+    string = string.split('!')[0]
+    use_list.append(string)
+
   if use_name != []:
-    true_name_list = use_name  #use_name_list for only the name of module
+    true_name_list = use_list  #use_name_list for only the name of module
   else:
     true_name_list = 0  #["No use statements"]
 

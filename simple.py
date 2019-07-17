@@ -8,8 +8,8 @@ import attribute
 #===============================================================================
 # Lists
 #-------------------------------------------------------------------------------
-#root  = "/home/simcic/Development/T-Flows/Sources/IvanTest"
-root  = "/home/simcic/Development/Synthetic-Eddies"
+root  = "/home/simcic/Development/T-Flows/Sources/IvanTest"
+#root  = "/home/simcic/Development/Synthetic-Eddies"
 #root  = "/home/simcic/Development/PyFA"
 
 file_path  = browse.source_paths(root)         # list of paths to all .f90 files
@@ -29,7 +29,7 @@ file_list = attribute.lvl_file_list(file_list) # put it together
 print("\nGreat program for extracting UML from Fortran.\n")
 
 # Printing mods and subs and their levels
-#attribute.print_levels(file_list)
+attribute.print_levels(file_list)
 
 # Check directories for errors
 #browse.check_directories(root)
