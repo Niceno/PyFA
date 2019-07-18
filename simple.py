@@ -35,13 +35,14 @@ xf = open("flow.fig", "w")
 # Write header out
 xfig.write_header(xf)
 
-attribute.plot_all_mod_spline(xf,file_list)
 # Plot all fortran files starting from root
 for i in range(len(file_list)):
   xfig.plot(xf, file_list[i].x0, file_list[i].y0, file_list[i])
 
+print(file_list[5].name,"X0: ",file_list[5].x0,"X1: ",file_list[5].x1,"Y0: ",file_list[5].y0,"Y1: ",file_list[5].y1)
 # Plot spline between 2 boxes
 #xfig.plot_spline(xf, file_list[1],file_list[2])
-#attribute.plot_all_mod_spline(xf,file_path,file_list)
+attribute.plot_all_mod_spline(xf,file_list)
+
 #End
 xf.close()

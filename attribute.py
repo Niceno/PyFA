@@ -366,14 +366,15 @@ def get_file_list(file_path):
   file_list  = update(file_list)       # updating coordinates
   arrange_by_level(file_list)          # arranging by level
   file_list = lvl_file_list(file_list) # put it together
+  for i in range(len(file_list)):
+    file_list[i].x1 = file_list[i].x1 +  file_list[i].x0 
   return file_list
-"""
 #===============================================================================
-# Function for creating complete and updated file list
+# Function for creating spline connections
 #-------------------------------------------------------------------------------
 def plot_all_mod_spline(xf,file_list):
   uses = []
-  mods = []                             # list of all modules in lists
+  mods = []
   for i in range(len(file_list)):
     if file_list[i].type == "Module":
       mods.append(file_list[i])
@@ -381,4 +382,13 @@ def plot_all_mod_spline(xf,file_list):
   for i in range(len(file_list)):
     if file_list[i].use != "None":
       uses.append(file_list[i])
-"""
+
+  for i in range(len(uses)):
+    use = uses[i].use
+    for k in range(len(use)):
+      used = use[k]
+      used = used.strip("use ")
+      for m in range(len(mods)):
+        if used == mods[m].name:
+      #    print(uses[i].name," is using: ",mods[m].name)
+          xfig.plot_spline(xf, mods[m],uses[i])
