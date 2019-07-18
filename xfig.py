@@ -368,7 +368,12 @@ def plot_text_left_cm(file, x0, y0, box_width, box_height, text):
 #===============================================================================
 # Function to print spline
 #-------------------------------------------------------------------------------
-def plot_spline(file, x0, y0, x1, y1):
+def plot_spline(file, box1, box2):
+
+  x0 =  box1.x0 + box1.x1
+  y0 =  (box1.y0 + box1.y1)/2
+  x1 =  box2.x0
+  y1 =  (box2.y1+box2.y0)/2
 
   file.write("3 0 0 2 0 7 45 -1 -1 0.000 0 1 0 2")   # 2 is number of points
   file.write("\n 1 1 1.00 90.00 120.00")             # arrow settings

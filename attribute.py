@@ -49,16 +49,16 @@ class Subroutine(object):
     subroutine.y1    = y1
     subroutine.type  = type
 
-  def print_it(abc):
-    print("\nSubroutine name: ", abc.name, \
-          "\n\nUse : ",          abc.use,  \
-          "\n\nVariables: ",     abc.var,  \
-          "\n\nLevel: ",         abc.level,\
-          "\n\nType: ",          abc.type, \
-          "\n\nx0: ",            abc.x0,   \
-          "\n\nx1: ",            abc.x1,   \
-          "\n\ny0: ",            abc.y0,   \
-          "\n\ny1: ",            abc.y1    )
+def print_it(abc):
+  print("\nName: ",            abc.name, \
+        "\n\nUse : ",          abc.use,  \
+        "\n\nVariables: ",     abc.var,  \
+        "\n\nLevel: ",         abc.level,\
+        "\n\nType: ",          abc.type, \
+        "\n\nx0: ",            abc.x0,   \
+        "\n\nx1: ",            abc.x1,   \
+        "\n\ny0: ",            abc.y0,   \
+        "\n\ny1: ",            abc.y1    )
 
 #===============================================================================
 # Check if use list is empty
@@ -361,9 +361,24 @@ def lvl_file_list(file_list):
 def get_file_list(file_path):
   mod_list   = mod_list_fun(file_path) # list of all mod classes
   sub_list   = sub_list_fun(file_path) # list of all sub classes
-  file_list  = [*mod_list,*sub_list]             # list of all classes(mod + sub)
+  file_list  = [*mod_list,*sub_list]   # list of all classes(mod + sub)
   file_list  = remove_empty(file_list) # remove empty files from list
   file_list  = update(file_list)       # updating coordinates
   arrange_by_level(file_list)          # arranging by level
   file_list = lvl_file_list(file_list) # put it together
   return file_list
+"""
+#===============================================================================
+# Function for creating complete and updated file list
+#-------------------------------------------------------------------------------
+def plot_all_mod_spline(xf,file_list):
+  uses = []
+  mods = []                             # list of all modules in lists
+  for i in range(len(file_list)):
+    if file_list[i].type == "Module":
+      mods.append(file_list[i])
+
+  for i in range(len(file_list)):
+    if file_list[i].use != "None":
+      uses.append(file_list[i])
+"""
