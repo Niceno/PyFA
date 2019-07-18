@@ -375,18 +375,23 @@ def plot_spline(file, box1, box2):
  # x1 =  box2.x0
  # y1 =  (box2.y1+box2.y0)/2
 
-  x0 =  (box1.x0 + box1.x1)/2
-  y0 =  box1.y1
-  x1 =  (box2.x0 + box2.x1)/2
-  y1 =  box2.y0
+  x0 = (box1.x0 + box1.x1)/2
+  y0 = box1.y1
+  x2 = (box2.x0 + box2.x1)/2
+  y2 = box2.y0
+  x1 = (x2 + x0)/2
+  y1 = (y2 + y0)/2
 
-  file.write("3 0 0 2 0 7 45 -1 -1 0.000 0 1 0 2")   # 2 is number of points
+
+  file.write("3 0 0 2 0 7 55 -1 -1 0.000 0 1 0 3")   # 2 is number of points
   file.write("\n 1 1 1.00 90.00 120.00")             # arrow settings
   file.write("\n%7d %7d" % ( (x0) *XFS,  \
                              (y0)*XFS))
   file.write("%7d %7d" %   ( (x1) *XFS,  \
                              (y1)*XFS))
-  file.write("\n0.000 0.000\n")
+  file.write("%7d %7d" %   ( (x2) *XFS,  \
+                           (y2)*XFS))
+  file.write("\n 0.000 1.000 0.000\n")
 
 #===============================================================================
 # Function to print module name

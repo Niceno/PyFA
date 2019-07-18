@@ -78,12 +78,15 @@ def get_use(filename):
 
   use_name = []
 
-  pattern  = re.compile("(use)\s", re.IGNORECASE)
+  pattern   = re.compile("(use)\s", re.IGNORECASE)
+  pattern2  = re.compile("use.*&", re.IGNORECASE)
 
   with open (filename, 'rt') as myfile:          # open file
     for line in myfile:                          # read line by line
       if pattern.search(line) != None:           # search for pattern
         use_name.append(( line.rstrip("\n")))    # add line with pattern to list
+      if pattern2.search(line) != None:
+        print("Found")
 
   use_name = [s.strip() for s in use_name if s.strip()] # remove whitespace
 
