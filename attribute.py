@@ -9,6 +9,7 @@ import browse
 #-------------------------------------------------------------------------------
 class Module(object):
   def __init__(module, type, name, use, var, meth, level, x0, x1, y0, y1):
+
     module.name  = name
     module.use   = use
     module.var   = var
@@ -38,6 +39,7 @@ class Module(object):
 #-------------------------------------------------------------------------------
 class Subroutine(object):
   def __init__(subroutine, type, name, use, var, meth, level, x0, x1, y0, y1):
+
     subroutine.name  = name
     subroutine.use   = use
     subroutine.var   = var
@@ -130,7 +132,7 @@ def subroutine_class(filename):
   return subroutine
 
 #===============================================================================
-# Finding biggest level of list (not needed for now)
+# Finding biggest level of list
 #-------------------------------------------------------------------------------
 def find_biggest(list):
   lvls = []
@@ -167,15 +169,14 @@ def mod_lvl(modules_list):
         mod_lvl      = []
         for k in range(len(mod_use_list)):      # for every use in module
           for z in range(len(modules_list)):
-            if modules_list[z].name == mod_use_list[k]:
+            if modules_list[z].name == mod_use_list[k]: # if module matches use
               lvl = modules_list[z].level
-              mod_lvl.append(lvl) # find level
-        if mod_lvl == []:
+              mod_lvl.append(lvl) # add level
+        if mod_lvl == []:         # if mod_lvl is empty, level is 0
           mod_lvl = [0]
         else:
           mod_lvl = mod_lvl
         mod_lvl = max(mod_lvl)   # take the biggest used module level from list
-
         modules_list[i].level = mod_lvl + 1     # add 1 level to max level
   return modules_list
 
@@ -198,10 +199,10 @@ def sub_lvl(subroutines_list,files):
         sub_lvl      = []
         for k in range(len(sub_use_list)):        # for every use in subroutine
           for z in range(len(modules_list)):
-            if modules_list[z].name == sub_use_list[k]:
+            if modules_list[z].name == sub_use_list[k]: # if module matches use
               lvl = modules_list[z].level
-              sub_lvl.append(lvl)   # find level
-        if sub_lvl == []:
+              sub_lvl.append(lvl)   # add level
+        if sub_lvl == []:           # if sub_lvl is empty, level is 0
           sub_lvl = [0]
         else:
           sub_lvl = sub_lvl
@@ -211,27 +212,28 @@ def sub_lvl(subroutines_list,files):
   return subroutines_list
 
 #===============================================================================
-# Functions for appending subs and mods in their lists
+# Function for appending mods in list (list with only modules)
 #-------------------------------------------------------------------------------
 def mod_list_fun(files):
   modules_list = []
+
   for i in range(len(files)):
     module_name = finder.get_mod(files[i]) #find modules from imported files
     sub_name = finder.get_sub(files[i])    #find subroutines from imported files
-    if sub_name == 0:
+    if sub_name == 0:                      # if it is module then append to list
       modules_list.append(module_class(files[i]))
   mod_list = mod_lvl(modules_list)
   return mod_list
 
+#===============================================================================
+# Function for appending subs in list (list with only subroutines)
+#-------------------------------------------------------------------------------
 def sub_list_fun(files):
-  modules_list = []
   subroutines_list = []
 
   for i in range(len(files)):
-    module_name = finder.get_mod(files[i]) #find modules from imported files
-    sub_name = finder.get_sub(files[i])    #find subroutines from imported files
-    modules_list = mod_list_fun(files)
-    if sub_name != 0:
+    sub_name = finder.get_sub(files[i])   # find subroutines from imported files
+    if sub_name != 0:                     # if it subroutine then append to list
       subroutines_list.append(subroutine_class(files[i]))
   sub_list = sub_lvl(subroutines_list,files)
 
@@ -381,7 +383,7 @@ def plot_all_mod_spline(xf,file_list):
     if file_list[i].type == "Module":
       mods.append(file_list[i])
 
-  # Getting list with objects with use statements
+  # Getting list with objects that have use statements
   for i in range(len(file_list)):
     if file_list[i].use != "None":
       uses.append(file_list[i])

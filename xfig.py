@@ -366,7 +366,7 @@ def plot_text_left_cm(file, x0, y0, box_width, box_height, text):
                            (y0+FONT_SIZE+(box_height-FONT_SIZE)*0.5)*XFS))
   file.write("%s%s\\001\n" % (" ", text))
 #===============================================================================
-# Function to print spline
+# Function to print spline (with 3 coordinates)
 #-------------------------------------------------------------------------------
 def plot_spline(file, box1, box2):
 
@@ -377,13 +377,15 @@ def plot_spline(file, box1, box2):
 
   x0 = (box1.x0 + box1.x1)/2
   y0 = box1.y1
+
   x2 = (box2.x0 + box2.x1)/2
   y2 = box2.y0
+
   x1 = (x2 + x0)/2
   y1 = (y2 + y0)/2
 
 
-  file.write("3 0 0 2 0 7 55 -1 -1 0.000 0 1 0 3")   # 2 is number of points
+  file.write("3 0 0 2 0 7 55 -1 -1 0.000 0 1 0 3")   # 3 is number of points
   file.write("\n 1 1 1.00 90.00 120.00")             # arrow settings
   file.write("\n%7d %7d" % ( (x0) *XFS,  \
                              (y0)*XFS))

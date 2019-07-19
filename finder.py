@@ -77,17 +77,20 @@ def get_header(filename):
 def get_use(filename):
 
   use_name = []
+  next_lines = []
 
   pattern   = re.compile("(use)\s", re.IGNORECASE)
-  pattern2  = re.compile("use.*&", re.IGNORECASE)
+#  pattern2  = re.compile("^(  use)(.*)(only)(.*)(&)$", re.IGNORECASE)
+#  pattern3  = re.compile("(.*)(&)$", re.IGNORECASE)
 
   with open (filename, 'rt') as myfile:          # open file
     for line in myfile:                          # read line by line
       if pattern.search(line) != None:           # search for pattern
         use_name.append(( line.rstrip("\n")))    # add line with pattern to list
-      if pattern2.search(line) != None:
-        print("Found")
-
+ #     if pattern2.search(line) != None:
+ #       next_line = next(myfile)
+ #       use_name.append(next_line)
+ # print(use_name)
   use_name = [s.strip() for s in use_name if s.strip()] # remove whitespace
 
   # If you only want to take name of use statement without "type" or "only"
@@ -156,7 +159,7 @@ def get_all_var(filename):
   # merge var names and var types into one var list
 
   var_list = [var_type_list[i] + var_name_list2[i] \
-                    for i in range(len(var_type_list))]
+             for i in range(len(var_type_list))]
 
   return var_list
 
@@ -168,7 +171,7 @@ def get_var(filename):
   var_list    = get_all_var(filename)
   sub_name    = get_sub(filename)
 
-  if sub_name != 0:                              # if it is subroutine
+  if sub_name != 0:                                # if it is subroutine
 
     sub_var_list = []
     result = re.search("\((.*)\)", sub_name)
@@ -181,8 +184,8 @@ def get_var(filename):
       sub_var_list = sub_var_list.split(",")       # split by "," and remove ","
       sub_var_list = var_list[0:len(sub_var_list)] # return only sub variables
 
-  else:                                          # if it is not subroutine
-    sub_var_list = var_list                      # return all variables
+  else:                                            # if it is not subroutine
+    sub_var_list = var_list                        # return all variables
 
   return sub_var_list
 
