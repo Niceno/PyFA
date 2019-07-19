@@ -36,11 +36,7 @@ xf = open("flow.fig", "w")
 xfig.write_header(xf)
 
 # Plot all fortran files starting from root
-for i in range(len(file_list)):
-  xfig.plot(xf, file_list[i].x0, file_list[i].y0, file_list[i])
-
-# Plot splines
-attribute.plot_all_mod_spline(xf,file_list)
+xfig.plot_all(xf,file_list)
 
 #End
 xf.close()

@@ -87,11 +87,12 @@ def get_use(filename):
     for line in myfile:                          # read line by line
       if pattern.search(line) != None:           # search for pattern
         use_name.append(( line.rstrip("\n")))    # add line with pattern to list
- #     if pattern2.search(line) != None:
- #       next_line = next(myfile)
- #       use_name.append(next_line)
- # print(use_name)
+#      if pattern2.search(line) != None:
+#        next_line = "use" + next(myfile)
+#        use_name.append(next_line)
+
   use_name = [s.strip() for s in use_name if s.strip()] # remove whitespace
+#  print(use_name)
 
   # If you only want to take name of use statement without "type" or "only"
   use_name_list = [i.split()[1] for i in use_name]           # take use name
@@ -106,9 +107,9 @@ def get_use(filename):
     use_list.append(string)
 
   if use_name != []:                # use_name for whole line
-    true_name_list = use_name_list  # use_name_list - only the name
+    true_name_list = use_name_list  # use_name_list - take only name
   else:
-    true_name_list = 0  #["No use statements"]
+    true_name_list = 0
 
   return true_name_list
 

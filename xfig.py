@@ -124,6 +124,19 @@ def write_header(file):
   file.write("1200 2\n")
 
 #===============================================================================
+# Plot everything from list
+#-------------------------------------------------------------------------------
+def plot_all(xf,file_list):
+
+  # Plot boxes
+  for i in range(len(file_list)):
+    plot(xf, file_list[i].x0, file_list[i].y0, file_list[i])
+
+  # Plot splines
+  attribute.plot_all_mod_spline(xf,file_list)
+
+
+#===============================================================================
 # Choose which one to plot (module or subroutine)
 #-------------------------------------------------------------------------------
 def plot(file, x0, y0,      \
