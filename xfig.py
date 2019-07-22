@@ -54,6 +54,8 @@ def xfig_box_color(name):
     return 11
   elif name == "Pink2":
     return 28
+  elif name == "White":
+    return 7
 
 #===============================================================================
 # Choose box width depending on longest string
@@ -74,7 +76,7 @@ def choose_width(filename):
   else:
     meth_list = meth_list
   if var_list == []:
-    var_list = ["0"]
+    var_list = ["No variables"]
 
   var_length    = max(var_list, key=len)
   meth_length   = max(meth_list, key=len)
@@ -155,12 +157,15 @@ def plot(file, x0, y0,      \
     var_list    = filename.var
     meth_list   = filename.meth
     use_list    = filename.use
+
+    if var_list == []:
+      var_list = ["No variables"]
+
     module_name = mod_name
 
-    if var_list != []:
-      if (mod_name != []):
+    if (mod_name != []):
 
-        plot_module(file, x0, y0,          \
+      plot_module(file, x0, y0,          \
                   module_name,           \
                   var_list,              \
                   meth_list,             \
@@ -288,8 +293,10 @@ def plot_use_frame(file, x0, y0, box_width, box_height, \
   use_list_len = use_len(use_list)
 
   file.write("2 2 0 ")
-  file.write("%3d"       % THICKNESS)
-  file.write(" 0 7 50 -1 -1 0.000 0 0 -1 0 0 5\n")
+  file.write("%3d "       % THICKNESS)
+  file.write("0")
+  file.write("%3d "       % xfig_box_color("White"))
+  file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
   file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+use_list_len) \
@@ -309,8 +316,10 @@ def plot_var_frame(file, x0, y0, box_width, box_height, \
   use_list_len = use_len(use_list)
 
   file.write("2 2 0 ")
-  file.write("%3d"       % THICKNESS)
-  file.write(" 0 7 50 -1 -1 0.000 0 0 -1 0 0 5\n")
+  file.write("%3d "       % THICKNESS)
+  file.write("0")
+  file.write("%3d "       % xfig_box_color("White"))
+  file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
   file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
@@ -330,8 +339,10 @@ def plot_meth_frame(file, x0, y0, box_width, box_height, \
   use_list_len = use_len(use_list)
 
   file.write("2 2 0 ")
-  file.write("%3d"       % THICKNESS)
-  file.write(" 0 7 50 -1 -1 0.000 0 0 -1 0 0 5\n")
+  file.write("%3d "       % THICKNESS)
+  file.write("0")
+  file.write("%3d "       % xfig_box_color("White"))
+  file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
                                                  +use_list_len)*XFS))
   file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
@@ -389,19 +400,20 @@ def plot_spline(file, box1, box2):
  # y1 =  (box2.y1+box2.y0)/2
 
   # First coordinate
-  x0 = (box1.x0 + box1.x1)/2
-  y0 = box1.y1
+  x0 = box1.x1
+  y0 = (box1.y0 + box1.y1)/2
 
   # Last coordinate
-  x3 = (box2.x0 + box2.x1)/2
-  y3 = box2.y0
+  x3 = box2.x0
+  y3 = (box2.y1+box2.y0)/2
 
+  # Second coordinate
+  x1 = x0 + 1
+  y1 = y0
 
-  x1 = x0
-  y1 = y0 + 1
-
-  x2 = x3
-  y2 = y3 - 1
+  # Third coordinate
+  x2 = x3 - 1
+  y2 = y3
 
 
   file.write("3 0 0 2 0 7 55 -1 -1 0.000 0 1 0 4")   # 4 is number of points

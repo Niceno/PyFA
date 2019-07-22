@@ -248,6 +248,8 @@ def print_levels(file_list):
     print("\nName: ", file_list[i].name,           \
           "\nType: ", file_list[i].type,           \
           "\nModules used: ", file_list[i].use,    \
+          "\nVariables: ", file_list[i].var,       \
+          "\nMethods: ", file_list[i].meth,        \
           "\nLevel: ", file_list[i].level)
 
 #===============================================================================

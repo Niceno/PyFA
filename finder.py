@@ -77,11 +77,11 @@ def get_header(filename):
 def get_use(filename):
 
   use_name = []
-  next_lines = []
+#  next_lines = []
 
   pattern   = re.compile("(use)\s", re.IGNORECASE)
 #  pattern2  = re.compile("^(  use)(.*)(only)(.*)(&)$", re.IGNORECASE)
-#  pattern3  = re.compile("(.*)(&)$", re.IGNORECASE)
+  pattern3  = re.compile("(.*)(&)$", re.IGNORECASE)
 
   with open (filename, 'rt') as myfile:          # open file
     for line in myfile:                          # read line by line
@@ -89,7 +89,12 @@ def get_use(filename):
         use_name.append(( line.rstrip("\n")))    # add line with pattern to list
 #      if pattern2.search(line) != None:
 #        next_line = "use" + next(myfile)
+#        print(next_line)
 #        use_name.append(next_line)
+#        if next_line.endswith("&"):
+#          print("Found")
+#          next_line2 = "use" + next(myfile)
+#          use_name.append(next_line2)
 
   use_name = [s.strip() for s in use_name if s.strip()] # remove whitespace
 #  print(use_name)
