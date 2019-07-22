@@ -8,18 +8,20 @@ import browse
 # Define module class
 #-------------------------------------------------------------------------------
 class Module(object):
-  def __init__(module, type, name, use, var, meth, level, x0, x1, y0, y1):
-
-    module.name  = name
-    module.use   = use
-    module.var   = var
-    module.meth  = meth
-    module.level = level
-    module.x0    = x0
-    module.x1    = x1
-    module.y0    = y0
-    module.y1    = y1
-    module.type  = type
+  def __init__(module, type, name, use, var, meth,\
+               level, x0, x1, y0, y1, width, height):
+    module.name   = name
+    module.use    = use
+    module.var    = var
+    module.meth   = meth
+    module.level  = level
+    module.x0     = x0
+    module.x1     = x1
+    module.y0     = y0
+    module.y1     = y1
+    module.type   = type
+    module.width  = width
+    module.height = height
 
   def print_it(abc):
     print("\nModule name: ", abc.name,     \
@@ -31,36 +33,45 @@ class Module(object):
           "\n\nx0: ",        abc.x0,       \
           "\n\nx1: ",        abc.x1,       \
           "\n\ny0: ",        abc.y0,       \
-          "\n\ny1: ",        abc.y1        )
+          "\n\ny1: ",        abc.y1,       \
+          "\n\nWidth: ",     abc.width,    \
+          "\n\nHeight: ",    abc.height    )
+
+
 
 
 #===============================================================================
 # Define subroutine class
 #-------------------------------------------------------------------------------
 class Subroutine(object):
-  def __init__(subroutine, type, name, use, var, meth, level, x0, x1, y0, y1):
+  def __init__(subroutine, type, name, use, var, meth,\
+               level, x0, x1, y0, y1, width, height):
 
-    subroutine.name  = name
-    subroutine.use   = use
-    subroutine.var   = var
-    subroutine.meth  = meth
-    subroutine.level = level
-    subroutine.x0    = x0
-    subroutine.x1    = x1
-    subroutine.y0    = y0
-    subroutine.y1    = y1
-    subroutine.type  = type
+    subroutine.name    = name
+    subroutine.use     = use
+    subroutine.var     = var
+    subroutine.meth    = meth
+    subroutine.level   = level
+    subroutine.x0      = x0
+    subroutine.x1      = x1
+    subroutine.y0      = y0
+    subroutine.y1      = y1
+    subroutine.type    = type
+    subroutine.width   = width
+    subroutine.height  = height
 
 def print_it(abc):
-  print("\nName: ",            abc.name, \
-        "\n\nUse : ",          abc.use,  \
-        "\n\nVariables: ",     abc.var,  \
-        "\n\nLevel: ",         abc.level,\
-        "\n\nType: ",          abc.type, \
-        "\n\nx0: ",            abc.x0,   \
-        "\n\nx1: ",            abc.x1,   \
-        "\n\ny0: ",            abc.y0,   \
-        "\n\ny1: ",            abc.y1    )
+  print("\nName: ",            abc.name,     \
+        "\n\nUse : ",          abc.use,      \
+        "\n\nVariables: ",     abc.var,      \
+        "\n\nLevel: ",         abc.level,    \
+        "\n\nType: ",          abc.type,     \
+        "\n\nx0: ",            abc.x0,       \
+        "\n\nx1: ",            abc.x1,       \
+        "\n\ny0: ",            abc.y0,       \
+        "\n\ny1: ",            abc.y1,        \
+        "\n\nWidth: ",         abc.width,    \
+        "\n\nHeight: ",        abc.height    )
 
 #===============================================================================
 # Check if use list is empty
@@ -88,6 +99,9 @@ def module_class(filename):
   x1           = 0
   y0           = 0
   y1           = 0
+  width        = 0
+  height       = 0
+
 
   module = Module(type,         \
                   module_name,  \
@@ -98,7 +112,9 @@ def module_class(filename):
                   x0,           \
                   x1,           \
                   y0,           \
-                  y1)
+                  y1,           \
+                  width,        \
+                  height)
 
   return module
 
@@ -117,6 +133,9 @@ def subroutine_class(filename):
   x1         = 0
   y0         = 0
   y1         = 0
+  width      = 0
+  height     = 0
+
 
   subroutine = Subroutine(type,       \
                           sub_name,   \
@@ -127,8 +146,9 @@ def subroutine_class(filename):
                           x0,         \
                           x1,         \
                           y0,         \
-                          y1)
-
+                          y1,         \
+                          width,      \
+                          height)
   return subroutine
 
 #===============================================================================
@@ -245,12 +265,14 @@ def sub_list_fun(files):
 def print_levels(file_list):
 
   for i in range(len(file_list)):
-    print("\nName: ", file_list[i].name,           \
-          "\nType: ", file_list[i].type,           \
-          "\nModules used: ", file_list[i].use,    \
-          "\nVariables: ", file_list[i].var,       \
-          "\nMethods: ", file_list[i].meth,        \
-          "\nLevel: ", file_list[i].level)
+    print("\nName: ",         file_list[i].name,     \
+          "\nType: ",         file_list[i].type,     \
+          "\nModules used: ", file_list[i].use,      \
+          "\nVariables: ",    file_list[i].var,      \
+          "\nMethods: ",      file_list[i].meth,     \
+          "\nWidth: ",        file_list[i].width,    \
+          "\nHeight: ",       file_list[i].height,   \
+          "\nLevel: ",        file_list[i].level)
 
 #===============================================================================
 # Remove empty files from list (such as programs and others)
@@ -301,10 +323,10 @@ def find_lvl_height(file_list,level):
 def update(file_list):
   for i in range(len(file_list)):
 
-    file_list[i].x0 = xfig.x_pos(file_list)[i]            # update x0
-    file_list[i].x1 = xfig.choose_width(file_list[i])     # update x1
-    file_list[i].y0 = (file_list[i].level*2)+1            # update y0
-    file_list[i].y1 = find_y1(file_list[i])               # update y1
+    file_list[i].x0     = xfig.x_pos(file_list)[i]            # update x0
+    file_list[i].x1     = xfig.choose_width(file_list[i])     # update x1
+    file_list[i].y0     = (file_list[i].level*2)+1            # update y0
+    file_list[i].y1     = find_y1(file_list[i])               # update y1
 
   return file_list
 
@@ -360,6 +382,25 @@ def lvl_file_list(file_list):
   return flat_list
 
 #===============================================================================
+# Function for x positioning (depending on biggest width of all)
+#-------------------------------------------------------------------------------
+def find_lvl_width(file_list,level):
+  widths = []
+  for i in range(len(file_list)):
+    if file_list[i].level == level:
+      width = file_list[i].width
+      widths.append(width)
+  return widths
+
+def max_lvl_width(file_list):
+  widths_list = []
+  biggest_lvl  = find_biggest(file_list)
+  for i in range(biggest_lvl+1):
+    widths = max(find_lvl_width(file_list,i))
+    widths_list.append(widths)
+
+  return widths_list
+#===============================================================================
 # Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
 def get_file_list(file_path):
@@ -370,8 +411,12 @@ def get_file_list(file_path):
   file_list  = update(file_list)       # updating coordinates
   arrange_by_level(file_list)          # arranging by level
   file_list = lvl_file_list(file_list) # put it together
+
   for i in range(len(file_list)):
     file_list[i].x1 = file_list[i].x1 +  file_list[i].x0
+    file_list[i].width  = file_list[i].x1 - file_list[i].x0
+    file_list[i].height = file_list[i].y1 -file_list[i].y0
+
   return file_list
 #===============================================================================
 # Function for creating spline connections
