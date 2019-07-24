@@ -91,26 +91,6 @@ def choose_width(filename):
   return var_width
 
 #===============================================================================
-# Function to return list with positions on x axis
-#-------------------------------------------------------------------------------
-def x_pos(files):
-
-  # Create list with all box widths
-  box_widths = [0] + []                       # initialize box_widths list
-  for i in range(len(files)):
-    box = choose_width(files[i])
-    box_widths.append(box)                    # list of box widths of all boxes
-
-  # Create new list for boxes to be parallel
-  sum = 0
-  box_pos = []
-  for item in box_widths:
-    sum += item + 1
-    box_pos.append(sum)
-
-  return box_pos
-
-#===============================================================================
 # Function to write xfig header
 #-------------------------------------------------------------------------------
 def write_header(file):
@@ -136,7 +116,6 @@ def plot_all(xf,file_list):
 
   # Plot splines
   attribute.plot_all_mod_spline(xf,file_list)
-
 
 #===============================================================================
 # Choose which one to plot (module or subroutine)
@@ -403,11 +382,11 @@ def plot_spline(file, box1, box2):
   y4 = (box2.y1+box2.y0)/2
 
   # Second coordinate
-  x2 = x1 + 1.5
+  x2 = x1 + 3
   y2 = y1
 
   # Third coordinate
-  x3 = x4 - 1.5
+  x3 = x4 - 3
   y3 = y4
 
 
