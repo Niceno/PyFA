@@ -69,7 +69,7 @@ def print_it(abc):
         "\n\nx0: ",            abc.x0,       \
         "\n\nx1: ",            abc.x1,       \
         "\n\ny0: ",            abc.y0,       \
-        "\n\ny1: ",            abc.y1,        \
+        "\n\ny1: ",            abc.y1,       \
         "\n\nWidth: ",         abc.width,    \
         "\n\nHeight: ",        abc.height    )
 
@@ -211,7 +211,7 @@ def mod_lvl(modules_list):
           mod_lvl = [0]
         else:
           mod_lvl = mod_lvl
-        mod_lvl = max(mod_lvl)   # take the biggest used module level from list
+        mod_lvl = max(mod_lvl)    # take the biggest used module level from list
         modules_list[i].level = mod_lvl + 1     # add 1 level to max level
   return modules_list
 
@@ -385,7 +385,7 @@ def lvl_list(file_list,lvl):
   return list
 
 #===============================================================================
-# Function for putting all classes together again
+# Function for putting all classes together again in list
 #-------------------------------------------------------------------------------
 def lvl_file_list(file_list):
   lvl_lista = []
@@ -464,7 +464,7 @@ def plot_all_mod_spline(xf,file_list):
 # Function for creating grid
 #-------------------------------------------------------------------------------
 def create_grid(file_list):
-  width   = max_width(file_list) + 2              # height of each spot
+  width   = max_width(file_list)  + 2             # height of each spot
   height  = max_height(file_list) + 2             # width of each spot
   lvl_num = find_biggest(file_list)               # max level
 
@@ -479,12 +479,12 @@ def create_grid(file_list):
     width_list.append(widths)
 
   # List with heights
-  for i in range(lvl_num+1):
+  for i in range(lvl_num + 1):
     heights = height * i
     height_list.append(heights)
 
   # List of lists of levels
-  for i in range(lvl_num+1):
+  for i in range(lvl_num + 1):
     lvl = lvl_list(file_list,i)
     lvl_lista.append(lvl)
 
@@ -501,6 +501,33 @@ def create_grid(file_list):
 
   return updated_list
 
+#===============================================================================
+# Function for generating grid coordinates (not in use)
+#-------------------------------------------------------------------------------
+def grid(file_list,row,column):
+  width   = max_width(file_list)  + 2             # height of each spot
+  height  = max_height(file_list) + 2             # width of each spot
+  lvl_num = find_biggest(file_list)               # max level
+
+  width_list   = []
+  height_list  = []
+  lvl_lista    = []
+  updated_list = []
+
+  # List with widths
+  for i in range(len(file_list)):
+    widths = width * i
+    width_list.append(widths)
+
+  # List with heights
+  for i in range(lvl_num + 1):
+    heights = height * i
+    height_list.append(heights)
+
+  x = width_list[row]
+  y = height_list[column]
+
+  return (x,y)
 #===============================================================================
 # Function for creating complete and updated file list
 #-------------------------------------------------------------------------------

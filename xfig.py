@@ -381,11 +381,11 @@ def plot_spline(file, box1, box2):
   y4 = (box2.y1+box2.y0)/2
 
   # Second coordinate
-  x2 = x1 + 3
+  x2 = x1 + 2
   y2 = y1
 
   # Third coordinate
-  x3 = x4 - 3
+  x3 = x4 - 2
   y3 = y4
 
   file.write("3 0 0 2 0 7 55 -1 -1 0.000 0 1 0 4")   # 4 is number of points
