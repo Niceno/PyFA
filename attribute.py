@@ -152,6 +152,21 @@ def subroutine_class(filename):
   return subroutine
 
 #===============================================================================
+# Print sub and mod information
+#-------------------------------------------------------------------------------
+def print_levels(file_list):
+
+  for i in range(len(file_list)):
+    print("\nName: ",         file_list[i].name,     \
+          "\nType: ",         file_list[i].type,     \
+          "\nModules used: ", file_list[i].use,      \
+          "\nVariables: ",    file_list[i].var,      \
+          "\nMethods: ",      file_list[i].meth,     \
+          "\nWidth: ",        file_list[i].width,    \
+          "\nHeight: ",       file_list[i].height,   \
+          "\nLevel: ",        file_list[i].level)
+
+#===============================================================================
 # Finding biggest level of list
 #-------------------------------------------------------------------------------
 def find_biggest(list):
@@ -260,21 +275,6 @@ def sub_list_fun(files):
   return sub_list
 
 #===============================================================================
-# Print subs and mods and their levels
-#-------------------------------------------------------------------------------
-def print_levels(file_list):
-
-  for i in range(len(file_list)):
-    print("\nName: ",         file_list[i].name,     \
-          "\nType: ",         file_list[i].type,     \
-          "\nModules used: ", file_list[i].use,      \
-          "\nVariables: ",    file_list[i].var,      \
-          "\nMethods: ",      file_list[i].meth,     \
-          "\nWidth: ",        file_list[i].width,    \
-          "\nHeight: ",       file_list[i].height,   \
-          "\nLevel: ",        file_list[i].level)
-
-#===============================================================================
 # Remove empty files from list (such as programs and others)
 #-------------------------------------------------------------------------------
 def remove_empty(file_list):
@@ -323,7 +323,7 @@ def find_lvl_height(file_list,level):
 def update(file_list):
   for i in range(len(file_list)):
 
-    file_list[i].x0     = x_pos(file_list)[i]      # update x0
+    file_list[i].x0     = x_pos(file_list)[i]                 # update x0
     file_list[i].x1     = xfig.choose_width(file_list[i])     # update x1
     file_list[i].y0     = (file_list[i].level*2)+1            # update y0
     file_list[i].y1     = find_y1(file_list[i])               # update y1
@@ -380,41 +380,9 @@ def lvl_list(file_list,lvl):
   for i in range(len(file_list)):
     if file_list[i].level == lvl:
       list.append(file_list[i])
-
   for i in range(len(list)):
-
     list[i].x0 = x_pos(list)[i]
-
   return list
-
-#===============================================================================
-# Functions for positioning
-#-------------------------------------------------------------------------------
-def find_lvl_width(file_list,level):
-  widths = []
-  for i in range(len(file_list)):
-    if file_list[i].level == level:
-      width = file_list[i].width
-      widths.append(width)
-  return widths
-
-def max_width(file_list):
-  widths_list = []
-  for i in range(len(file_list)):
-    widths = file_list[i].x1 - file_list[i].x0
-    widths_list.append(widths)
-
-  max_width = max(widths_list)
-  return max_width
-
-def max_height(file_list):
-  heights_list = []
-  for i in range(len(file_list)):
-    heights = file_list[i].y1 - file_list[i].y0
-    heights_list.append(heights)
-
-  max_height = max(heights_list)
-  return max_height
 
 #===============================================================================
 # Function for putting all classes together again
@@ -429,6 +397,41 @@ def lvl_file_list(file_list):
   flat_list = [item for sublist in lvl_lista for item in sublist]
 
   return flat_list
+
+#===============================================================================
+# Function for finding max width of level
+#-------------------------------------------------------------------------------
+def find_lvl_width(file_list,level):
+  widths = []
+  for i in range(len(file_list)):
+    if file_list[i].level == level:
+      width = file_list[i].width
+      widths.append(width)
+  return widths
+
+#===============================================================================
+# Function for finding max width of all files
+#-------------------------------------------------------------------------------
+def max_width(file_list):
+  widths_list = []
+  for i in range(len(file_list)):
+    widths = file_list[i].x1 - file_list[i].x0
+    widths_list.append(widths)
+
+  max_width = max(widths_list)
+  return max_width
+
+#===============================================================================
+# Function for finding max height of all files
+#-------------------------------------------------------------------------------
+def max_height(file_list):
+  heights_list = []
+  for i in range(len(file_list)):
+    heights = file_list[i].y1 - file_list[i].y0
+    heights_list.append(heights)
+
+  max_height = max(heights_list)
+  return max_height
 
 #===============================================================================
 # Function for creating spline connections
@@ -455,8 +458,48 @@ def plot_all_mod_spline(xf,file_list):
       used = used.strip("use ")
       for m in range(len(mods)):
         if used == mods[m].name:
-      # print(uses[i].name," is using: ",mods[m].name)
           xfig.plot_spline(xf, mods[m],uses[i])
+
+#===============================================================================
+# Function for creating grid
+#-------------------------------------------------------------------------------
+def create_grid(file_list):
+  width   = max_width(file_list) + 2              # height of each spot
+  height  = max_height(file_list) + 2             # width of each spot
+  lvl_num = find_biggest(file_list)               # max level
+
+  width_list   = []
+  height_list  = []
+  lvl_lista    = []
+  updated_list = []
+
+  # List with widths
+  for i in range(len(file_list)):
+    widths = width * i
+    width_list.append(widths)
+
+  # List with heights
+  for i in range(lvl_num+1):
+    heights = height * i
+    height_list.append(heights)
+
+  # List of lists of levels
+  for i in range(lvl_num+1):
+    lvl = lvl_list(file_list,i)
+    lvl_lista.append(lvl)
+
+  # Assign values to coordinates
+  for i in range(len(lvl_lista)):
+    lista = lvl_lista[i]
+    for l in range(len(lvl_lista[i])):
+      lista[l].x0 = width_list[l]
+      lista[l].y0 = height_list[i]
+      lista[l].x1 = lista[l].x0 + lista[l].width
+      lista[l].y1 = lista[l].y0 + lista[l].height
+
+      updated_list.append(lista[l])
+
+  return updated_list
 
 #===============================================================================
 # Function for creating complete and updated file list
@@ -470,46 +513,10 @@ def get_file_list(file_path):
   arrange_by_level(file_list)          # arranging by level
   file_list = lvl_file_list(file_list) # put it together
 
-  for i in range(len(file_list)):
+  for i in range(len(file_list)):      # assign these values
     file_list[i].x1     = file_list[i].x1 + file_list[i].x0
     file_list[i].width  = file_list[i].x1 - file_list[i].x0
     file_list[i].height = file_list[i].y1 - file_list[i].y0
 
-  file_list = create_grid(file_list)
+  file_list = create_grid(file_list)   # plot it with "grid"
   return file_list
-
-#===============================================================================
-# Function for creating grid
-#-------------------------------------------------------------------------------
-def create_grid(file_list):
-  width   = max_width(file_list) + 2
-  height  = max_height(file_list) + 2
-  lvl_num = find_biggest(file_list)
-
-  width_list   = []
-  height_list  = []
-  lvl_lista    = []
-  updated_list = []
-  for i in range(len(file_list)):
-    widths = width * i
-    width_list.append(widths)
-
-  for i in range(lvl_num+1):
-    heights = height * i
-    height_list.append(heights)
-
-  for i in range(lvl_num+1):
-    lvl = lvl_list(file_list,i)
-    lvl_lista.append(lvl)
-
-  for i in range(len(lvl_lista)):
-    lista = lvl_lista[i]
-    for l in range(len(lvl_lista[i])):
-      lista[l].x0 = width_list[l]
-      lista[l].y0 = height_list[i]
-      lista[l].x1 = lista[l].x0 + lista[l].width
-      lista[l].y1 = lista[l].y0 + lista[l].height
-
-      updated_list.append(lista[l])
-
-  return updated_list

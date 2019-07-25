@@ -262,7 +262,6 @@ def plot_sub_frame(file, x0, y0, box_width, box_height):
   file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%7d %7d\n" % ( x0           *XFS,  y0            *XFS))
 
-
 #===============================================================================
 # Function to plot an empty use statements box depending on list length
 #-------------------------------------------------------------------------------
@@ -283,7 +282,6 @@ def plot_use_frame(file, x0, y0, box_width, box_height, \
   file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+use_list_len) \
                                                  *XFS))
   file.write("%7d %7d\n" % ( x0           *XFS, (y0+box_height)*XFS))
-
 
 #===============================================================================
 # Function to plot an empty variable box depending on list length
@@ -368,6 +366,7 @@ def plot_text_left_cm(file, x0, y0, box_width, box_height, text):
   file.write("%7d %7d" % ( (x0+          (box_height-FONT_SIZE)*0.5)*XFS,  \
                            (y0+FONT_SIZE+(box_height-FONT_SIZE)*0.5)*XFS))
   file.write("%s%s\\001\n" % (" ", text))
+
 #===============================================================================
 # Function to print spline (with 4 coordinates)
 #-------------------------------------------------------------------------------
@@ -388,7 +387,6 @@ def plot_spline(file, box1, box2):
   # Third coordinate
   x3 = x4 - 3
   y3 = y4
-
 
   file.write("3 0 0 2 0 7 55 -1 -1 0.000 0 1 0 4")   # 4 is number of points
   file.write("\n 1 1 1.00 90.00 120.00")             # arrow settings
@@ -416,7 +414,6 @@ def plot_mod_name(file, x0, y0, text, filename):
   # Plot text
   plot_text_center_cm(file, x0, y0, box_width, UBH, text)
 
-
 #===============================================================================
 # Function to print subroutine name
 #-------------------------------------------------------------------------------
@@ -429,7 +426,6 @@ def plot_sub_name(file, x0, y0, text, filename):
 
   # Plot text
   plot_text_center_cm(file, x0, y0, box_width, UBH, text)
-
 
 #===============================================================================
 # Function to plot use statements
@@ -461,8 +457,6 @@ def plot_var_text_left_cm(file, x0, y0, \
     plot_text_left_cm(file, x0, (0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5)   \
                       +use_list_len) +var_list_num[i],                     \
                       box_width, UBH, var_list[i])
-
-
 
 #===============================================================================
 # Function to plot methods
