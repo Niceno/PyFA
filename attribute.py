@@ -37,9 +37,6 @@ class Module(object):
           "\n\nWidth: ",     abc.width,    \
           "\n\nHeight: ",    abc.height    )
 
-
-
-
 #===============================================================================
 # Define subroutine class
 #-------------------------------------------------------------------------------
@@ -102,7 +99,6 @@ def module_class(filename):
   width        = 0
   height       = 0
 
-
   module = Module(type,         \
                   module_name,  \
                   use_list,     \
@@ -135,7 +131,6 @@ def subroutine_class(filename):
   y1         = 0
   width      = 0
   height     = 0
-
 
   subroutine = Subroutine(type,       \
                           sub_name,   \
@@ -479,12 +474,12 @@ def create_grid(file_list):
     width_list.append(widths)
 
   # List with heights
-  for i in range(lvl_num + 1):
+  for i in range(lvl_num + 2):
     heights = height * i
     height_list.append(heights)
 
   # List of lists of levels
-  for i in range(lvl_num + 1):
+  for i in range(lvl_num + 2):
     lvl = lvl_list(file_list,i)
     lvl_lista.append(lvl)
 
@@ -492,8 +487,14 @@ def create_grid(file_list):
   for i in range(len(lvl_lista)):
     lista = lvl_lista[i]
     for l in range(len(lvl_lista[i])):
-      lista[l].x0 = width_list[l]
-      lista[l].y0 = height_list[i]
+      lista[l].x0 = ((width_list[l]          \
+                    + width_list[l+1])/2)    \
+                    - (lista[l].width/2)
+
+      lista[l].y0 = ((height_list[i]         \
+                    + height_list[i+1])/2)   \
+                    - (lista[l].height/2)
+
       lista[l].x1 = lista[l].x0 + lista[l].width
       lista[l].y1 = lista[l].y0 + lista[l].height
 
