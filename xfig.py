@@ -368,7 +368,7 @@ def plot_text_left_cm(file, x0, y0, box_width, box_height, text):
   file.write("%s%s\\001\n" % (" ", text))
 
 #===============================================================================
-# Function to print spline (with 4 coordinates)
+# Function to print spline (with 6 coordinates)
 #-------------------------------------------------------------------------------
 def plot_spline(file, box1, box2):
 
@@ -377,29 +377,41 @@ def plot_spline(file, box1, box2):
   y1 = (box1.y0 + box1.y1)/2
 
   # Last coordinate
-  x4 = box2.x0
-  y4 = (box2.y1+box2.y0)/2
+  x6 = box2.x0
+  y6 = (box2.y1+box2.y0)/2
 
   # Second coordinate
   x2 = x1 + 2
   y2 = y1
 
   # Third coordinate
-  x3 = x4 - 2
-  y3 = y4
+  x3 = box1.x1 + 3
+  y3 = box1.y1
 
-  file.write("3 0 0 2 0 7 55 -1 -1 0.000 0 1 0 4")   # 4 is number of points
+  # Fourth coordinate
+  x4 = box2.x0 - 3
+  y4 = box2.y0
+
+  # Fifth coordinate
+  x5 = x6 - 2
+  y5 = y6
+
+  file.write("3 2 0 2 0 7 55 -1 -1 0.000 0 1 0 6")   # 6 is number of points
   file.write("\n 1 1 1.00 90.00 120.00")             # arrow settings
   file.write("\n%7d %7d" % ( (x1) *XFS,  \
                              (y1)*XFS))
   file.write("%7d %7d" %   ( (x2) *XFS,  \
                              (y2)*XFS))
   file.write("%7d %7d" %   ( (x3) *XFS,  \
-                           (y3)*XFS))
+                             (y3)*XFS))
   file.write("%7d %7d" %   ( (x4) *XFS,  \
-                           (y4)*XFS))
+                             (y4)*XFS))
+  file.write("%7d %7d" %   ( (x5) *XFS,  \
+                           (y5)*XFS))
+  file.write("%7d %7d" %   ( (x6) *XFS,  \
+                           (y6)*XFS))
 
-  file.write("\n 0.000 1.000 1.000 0.000\n")
+  file.write("\n 0.000 1.000 1.000 1.000 1.000 0.000\n")
 
 #===============================================================================
 # Function to print module name

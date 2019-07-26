@@ -459,8 +459,8 @@ def plot_all_mod_spline(xf,file_list):
 # Function for creating grid
 #-------------------------------------------------------------------------------
 def create_grid(file_list):
-  width   = max_width(file_list)  + 2             # height of each spot
-  height  = max_height(file_list) + 2             # width of each spot
+  width   = max_width(file_list)  + 2             # height of each grid spot
+  height  = max_height(file_list) + 2             # width of each grid spot
   lvl_num = find_biggest(file_list)               # max level
 
   width_list   = []
@@ -468,12 +468,12 @@ def create_grid(file_list):
   lvl_lista    = []
   updated_list = []
 
-  # List with widths
+  # List with widths (columns)
   for i in range(len(file_list)):
     widths = width * i
     width_list.append(widths)
 
-  # List with heights
+  # List with heights (rows)
   for i in range(lvl_num + 2):
     heights = height * i
     height_list.append(heights)
@@ -529,6 +529,7 @@ def grid(file_list,row,column):
   y = height_list[column]
 
   return (x,y)
+
 #===============================================================================
 # Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
