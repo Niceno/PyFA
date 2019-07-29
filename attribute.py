@@ -516,12 +516,12 @@ def grid(file_list,row,column):
   updated_list = []
 
   # List with widths
-  for i in range(len(file_list)):
+  for i in range(len(file_list)+10):
     widths = width * i
     width_list.append(widths)
 
   # List with heights
-  for i in range(lvl_num + 1):
+  for i in range(lvl_num + 10):
     heights = height * i
     height_list.append(heights)
 
@@ -548,4 +548,43 @@ def get_file_list(file_path):
     file_list[i].height = file_list[i].y1 - file_list[i].y0
 
   file_list = create_grid(file_list)   # plot it with "grid"
+
+  #update_box(file_list,"Eddy_Mod",0,10)
   return file_list
+
+#===============================================================================
+# Function for updating only 1 box by row and column
+#-------------------------------------------------------------------------------
+def update_box(file_list, name, row, column):
+
+  width   = max_width(file_list)  + 2             # height of each grid spot
+  height  = max_height(file_list) + 2             # width of each grid spot
+  lvl_num = find_biggest(file_list)               # max level
+
+  width_list   = []
+  height_list  = []
+  lvl_lista    = []
+  updated_list = []
+
+  # List with widths (columns)
+  for i in range(len(file_list)+10):
+    widths = width * i
+    width_list.append(widths)
+
+  # List with heights (rows)
+  for i in range(lvl_num + 10):
+    heights = height * i
+    height_list.append(heights)
+
+  for i in range(len(file_list)):      # assign these values
+    if name == file_list[i].name:
+      file_list[i].x0 = ((width_list[column]          \
+                      + width_list[column+1])/2)    \
+                      - (file_list[i].width/2)
+
+      file_list[i].y0 = ((height_list[row]         \
+                    + height_list[row+1])/2)   \
+                    - (file_list[i].height/2)
+
+      file_list[i].x1 = file_list[i].x0 + file_list[i].width
+      file_list[i].y1 = file_list[i].y0 + file_list[i].height
