@@ -11,8 +11,10 @@ import attribute
 #root  = "/home/simcic/Development/T-Flows/Sources/IvanTest"
 root  = "/home/simcic/Development/Synthetic-Eddies"
 
-file_path = browse.source_paths(root)             # list of paths to all .f90
-file_list = attribute.get_file_list(file_path)    # list of all .f90 files
+file_paths = browse.source_paths(root)             # list of paths to all .f90
+#file_paths = browse.remove_path(file_paths,"/home/simcic/Development/Synthetic-Eddies/Prof_Mod")
+
+file_list = attribute.get_file_list(file_paths)    # list of all .f90 files
 
 #===============================================================================
 # Obviously the main function
