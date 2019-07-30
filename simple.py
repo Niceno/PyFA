@@ -27,7 +27,7 @@ print("\nGreat program for extracting UML from Fortran.\n")
 # Check directories for errors
 #browse.check_directories(root)
 # Print all unused files and subdirectories
-#browse.source_unused(root)
+browse.source_unused(root)
 
 # Open Xfig file
 xf = open("flow.fig", "w")

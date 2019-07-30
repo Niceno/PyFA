@@ -13,14 +13,16 @@ def check_directories(root):
 
   # Get module files
   mod_files     = sorted(source_mods(root))
+  mod_files     = ["/home/simcic/Development/Synthetic-Eddies/"+ s for s in mod_files]
   mod_names     = []
   mod_dirs      = sorted(source_mod_dirs(root))
+  mod_dirs     = ["/home/simcic/Development/Synthetic-Eddies/"+ s for s in mod_dirs]
+
   mod_file_name = sorted([re.sub(".f90$", '', i) for i in mod_files])
 
   # Check if module names are same as their subdirectory names
   if mod_file_name == mod_dirs:
     print("\nNo errors. Modules have their corresponding directories.\n")
-
     for i in range(len(mod_files)):
       mod_name = finder.get_mod(mod_files[i])
       mod_names.append(mod_name)
@@ -98,7 +100,7 @@ def source_subs(root):
   source_mod = source_mods(root)
 
   for f_name in os.listdir(root):
-    if f_name.endswith(".f90"):                   # looks for all .f90 files
+    if f_name.endswith(".f90"):                     # looks for all .f90 files
       source_sub.append(f_name)
 
   source_sub = list(set(source_sub) - set(source_mod))  # removes _Mod.f90
