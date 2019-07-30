@@ -486,9 +486,9 @@ def create_grid(file_list):
   # Assign values to coordinates
   for i in range(len(lvl_lista)):
     lista = lvl_lista[i]
-    for l in range(len(lvl_lista[i])):
-      lista[l].x0 = ((width_list[l]          \
-                    + width_list[l+1])/2)    \
+    for l in range(len(lvl_lista[i])): # v===== remove i to start normally
+      lista[l].x0 = ((width_list[l+i]          \
+                    + width_list[l+1+i])/2)    \
                     - (lista[l].width/2)
 
       lista[l].y0 = ((height_list[i]         \
