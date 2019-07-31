@@ -182,11 +182,11 @@ def find_level(list,name):
   return lvl
 
 #===============================================================================
-# Determining levels of modules  (iterate 5 times)
+# Determining levels of modules  (iterate 8 times)
 #-------------------------------------------------------------------------------
 def mod_lvl(modules_list):
   n = 0
-  while n<5:
+  while n<8:
     n += 1
 
     for i in range(len(modules_list)):
@@ -211,12 +211,12 @@ def mod_lvl(modules_list):
   return modules_list
 
 #===============================================================================
-# Determining levels of subroutines (iterate 5 times)
+# Determining levels of subroutines (iterate 8 times)
 #-------------------------------------------------------------------------------
 def sub_lvl(subroutines_list,files):
   n = 0
   modules_list = mod_list_fun(files)
-  while n<5:
+  while n<8:
     n += 1
 
     for i in range(len(subroutines_list)):

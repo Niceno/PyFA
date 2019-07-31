@@ -13,11 +13,12 @@ def check_directories(root):
 
   # Get module files
   mod_files     = sorted(source_mods(root))
-  mod_files     = ["/home/simcic/Development/Synthetic-Eddies/"+ s for s in mod_files]
+  mod_files     = ["/home/simcic/Development/Synthetic-Eddies/"    \
+                   + s for s in mod_files]
   mod_names     = []
   mod_dirs      = sorted(source_mod_dirs(root))
-  mod_dirs     = ["/home/simcic/Development/Synthetic-Eddies/"+ s for s in mod_dirs]
-
+  mod_dirs      = ["/home/simcic/Development/Synthetic-Eddies/"    \
+                  + s for s in mod_dirs]
   mod_file_name = sorted([re.sub(".f90$", '', i) for i in mod_files])
 
   # Check if module names are same as their subdirectory names
@@ -158,3 +159,12 @@ def remove_path(file_paths,path):
   new_list = [x for x in file_paths if not x.startswith(path)]
 
   return new_list
+
+#===============================================================================
+# Function to check all directories and unused files
+#-------------------------------------------------------------------------------
+def check_all(root):
+# Check directories for errors
+  check_directories(root)
+# Print all unused files and subdirectories
+  source_unused(root)

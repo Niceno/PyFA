@@ -25,10 +25,9 @@ print("\nGreat program for extracting UML from Fortran.\n")
 
 # Printing mods and subs and their levels
 #attribute.print_levels(file_list)
+
 # Check directories for errors
-#browse.check_directories(root)
-# Print all unused files and subdirectories
-#browse.source_unused(root)
+#browse.check_all(root)
 
 # Open Xfig file
 xf = open("flow.fig", "w")
