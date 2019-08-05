@@ -461,7 +461,7 @@ def plot_all_mod_spline(xf,file_list):
 def create_grid(file_list):
   width   = max_width(file_list)  + 2             # height of each grid spot
   height  = max_height(file_list) + 2             # width of each grid spot
-  lvl_num = find_biggest(file_list)               # max level
+  max_lvl = find_biggest(file_list)               # max level
 
   width_list   = []
   height_list  = []
@@ -474,12 +474,12 @@ def create_grid(file_list):
     width_list.append(widths)
 
   # List with heights (rows)
-  for i in range(lvl_num + 2):
+  for i in range(max_lvl + 2):
     heights = height * i
     height_list.append(heights)
 
   # List of lists of levels
-  for i in range(lvl_num + 2):
+  for i in range(max_lvl + 2):
     lvl = lvl_list(file_list,i)
     lvl_lista.append(lvl)
 
@@ -509,7 +509,7 @@ def create_grid(file_list):
 def grid(file_list,row,column):
   width   = max_width(file_list)  + 2             # height of each spot
   height  = max_height(file_list) + 2             # width of each spot
-  lvl_num = find_biggest(file_list)               # max level
+  max_lvl = find_biggest(file_list)               # max level
 
   width_list   = []
   height_list  = []
@@ -517,12 +517,12 @@ def grid(file_list,row,column):
   updated_list = []
 
   # List with widths
-  for i in range(len(file_list)+10):
+  for i in range(len(file_list) + 10):
     widths = width * i
     width_list.append(widths)
 
   # List with heights
-  for i in range(lvl_num + 10):
+  for i in range(max_lvl + 10):
     heights = height * i
     height_list.append(heights)
 
@@ -538,7 +538,7 @@ def update_box_pos(file_list, name, column, row):
 
   width   = max_width(file_list)  + 2             # height of each grid spot
   height  = max_height(file_list) + 2             # width of each grid spot
-  lvl_num = find_biggest(file_list)               # max level
+  max_lvl = find_biggest(file_list)               # max level
 
   width_list   = []
   height_list  = []
@@ -551,7 +551,7 @@ def update_box_pos(file_list, name, column, row):
     width_list.append(widths)
 
   # List with heights (rows)
-  for i in range(lvl_num + 10):
+  for i in range(max_lvl + 10):
     heights = height * i
     height_list.append(heights)
 

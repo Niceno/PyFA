@@ -240,11 +240,11 @@ def plot_mod_frame(file, x0, y0, box_width, box_height):
   file.write("0")
   file.write("%3d "       % xfig_box_color("LtBlue"))
   file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%7d %7d"   % ( x0           *XFS,  y0            *XFS))
-  file.write("%7d %7d"   % ((x0+box_width)*XFS,  y0            *XFS))
-  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%7d %7d\n" % ( x0           *XFS,  y0            *XFS))
+  file.write("%9d %9d"   % ( x0           *XFS,  y0            *XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*XFS,  y0            *XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d\n" % ( x0           *XFS,  y0            *XFS))
 
 #===============================================================================
 # Function to plot an empty module frame
@@ -256,11 +256,11 @@ def plot_sub_frame(file, x0, y0, box_width, box_height):
   file.write("0")
   file.write("%3d "       % xfig_box_color("Pink2"))
   file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%7d %7d"   % ( x0           *XFS,  y0            *XFS))
-  file.write("%7d %7d"   % ((x0+box_width)*XFS,  y0            *XFS))
-  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%7d %7d\n" % ( x0           *XFS,  y0            *XFS))
+  file.write("%9d %9d"   % ( x0           *XFS,  y0            *XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*XFS,  y0            *XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d\n" % ( x0           *XFS,  y0            *XFS))
 
 #===============================================================================
 # Function to plot an empty use statements box depending on list length
@@ -275,13 +275,13 @@ def plot_use_frame(file, x0, y0, box_width, box_height, \
   file.write("0")
   file.write("%3d "       % xfig_box_color("White"))
   file.write("46 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+use_list_len) \
+  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height+use_list_len) \
                                                  *XFS))
-  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+use_list_len) \
+  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height+use_list_len) \
                                                  *XFS))
-  file.write("%7d %7d\n" % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height)*XFS))
 
 #===============================================================================
 # Function to plot an empty variable box depending on list length
@@ -297,13 +297,13 @@ def plot_var_frame(file, x0, y0, box_width, box_height, \
   file.write("0")
   file.write("%3d "       % xfig_box_color("White"))
   file.write("48 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
+  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
                                                  +use_list_len)*XFS))
-  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
+  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
                                                  +use_list_len)*XFS))
-  file.write("%7d %7d\n" % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height)*XFS))
 
 #===============================================================================
 # Function to plot an empty method box depending on list length
@@ -320,17 +320,17 @@ def plot_meth_frame(file, x0, y0, box_width, box_height, \
   file.write("0")
   file.write("%3d "       % xfig_box_color("White"))
   file.write("47 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
+  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
                                                  +use_list_len)*XFS))
-  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
+  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
                                                  +use_list_len)*XFS))
-  file.write("%7d %7d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
+  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
                                                  +len(meth_list)             \
                                                  +use_list_len)*XFS))
-  file.write("%7d %7d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
+  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
                                                  +len(meth_list)             \
                                                  +use_list_len)*XFS))
-  file.write("%7d %7d\n" % ( x0           *XFS, (y0+box_height+len(var_list) \
+  file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height+len(var_list) \
                                                  +use_list_len)*XFS))
 
 #===============================================================================
@@ -344,9 +344,9 @@ def plot_text_center_cm(file, x0, y0, box_width, box_height, text):
   file.write(" 0.0000 4 ")
   text_width  = 3                         # could be any value
   text_height = 3                         # could be any value
-  file.write("%5d" % (text_height * XFS)) # text height in xfig units
-  file.write("%5d" % (text_width  * XFS)) # text width in xfig units
-  file.write("%7d %7d" % ( (x0+(box_width*0.5)) *XFS,  \
+  file.write("%9d" % (text_height * XFS)) # text height in xfig units
+  file.write("%9d" % (text_width  * XFS)) # text width in xfig units
+  file.write("%9d %9d" % ( (x0+(box_width*0.5)) *XFS,  \
                            (y0+FONT_SIZE+(box_height-FONT_SIZE)*0.5)*XFS))
   file.write("%s%s\\001\n" % (" ", text))
 
@@ -361,9 +361,9 @@ def plot_text_left_cm(file, x0, y0, box_width, box_height, text):
   file.write(" 0.0000 4 ")
   text_width  = 3                         # could be any value
   text_height = 3                         # could be any value
-  file.write("%5d" % (text_height * XFS)) # text height in xfig units
-  file.write("%5d" % (text_width  * XFS)) # text width in xfig units
-  file.write("%7d %7d" % ( (x0+          (box_height-FONT_SIZE)*0.5)*XFS,  \
+  file.write("%9d" % (text_height * XFS)) # text height in xfig units
+  file.write("%9d" % (text_width  * XFS)) # text width in xfig units
+  file.write("%9d %9d" % ( (x0+          (box_height-FONT_SIZE)*0.5)*XFS,  \
                            (y0+FONT_SIZE+(box_height-FONT_SIZE)*0.5)*XFS))
   file.write("%s%s\\001\n" % (" ", text))
 
@@ -399,17 +399,17 @@ def plot_spline(file, box1, box2):
   file.write("3 2 0 2 0 7 55 -1 -1 0.000 0 1 0 6")   # 6 --> number of points
   file.write("\n 1 1 1.00 90.00 120.00")             # arrow settings
 
-  file.write("\n%7d %7d" % ( (x1) *XFS,  \
+  file.write("\n%9d %9d" % ( (x1) *XFS,  \
                              (y1)*XFS))
-  file.write("%7d %7d" %   ( (x2) *XFS,  \
+  file.write("%9d %9d" %   ( (x2) *XFS,  \
                              (y2)*XFS))
-  file.write("%7d %7d" %   ( (x3) *XFS,  \
+  file.write("%9d %9d" %   ( (x3) *XFS,  \
                              (y3)*XFS))
-  file.write("%7d %7d" %   ( (x4) *XFS,  \
+  file.write("%9d %9d" %   ( (x4) *XFS,  \
                              (y4)*XFS))
-  file.write("%7d %7d" %   ( (x5) *XFS,  \
+  file.write("%9d %9d" %   ( (x5) *XFS,  \
                              (y5)*XFS))
-  file.write("%7d %7d" %   ( (x6) *XFS,  \
+  file.write("%9d %9d" %   ( (x6) *XFS,  \
                              (y6)*XFS))
 
   file.write("\n 0.000 1.000 1.000 1.000 1.000 0.000\n")

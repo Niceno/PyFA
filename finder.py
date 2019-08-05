@@ -16,7 +16,8 @@ def get_mod(filename):
   with open (filename, 'rt') as myfile:               # open file
     for line in myfile:                               # read line by line
       if pattern.search(line) != None:                # search for pattern
-        module.append(( line.rstrip("\n")))           # add lines to list
+        if not line.startswith("!"):                  # skip line start with "!"
+          module.append(( line.rstrip("\n")))         # add lines to list
 
   module = [s.strip() for s in module if s.strip()]   # remove whitespaces
 
@@ -40,7 +41,8 @@ def get_sub(filename):
   with open (filename, 'rt') as myfile:         # open file
     for line in myfile:                         # read line by line
       if pattern.search(line) != None:          # search for pattern
-        subroutine.append(( line.rstrip("\n"))) # add line with pattern to list
+        if not line.startswith("!"):            # skip line starting with "!"
+          subroutine.append(( line.rstrip("\n"))) # add line with pattern to list
 
   subroutine = [s.strip() for s in subroutine if s.strip()] # remove whitespaces
 
@@ -81,12 +83,14 @@ def get_use(filename):
 
   pattern   = re.compile("(use)\s", re.IGNORECASE)
 #  pattern2  = re.compile("^(  use)(.*)(only)(.*)(&)$", re.IGNORECASE)
-  pattern3  = re.compile("(.*)(&)$", re.IGNORECASE)
+#  pattern3  = re.compile("(.*)(&)$", re.IGNORECASE)
 
   with open (filename, 'rt') as myfile:          # open file
     for line in myfile:                          # read line by line
       if pattern.search(line) != None:           # search for pattern
-        use_name.append(( line.rstrip("\n")))    # add line with pattern to list
+        if not line.startswith("!"):             # skip line starting with "!"
+          use_name.append(( line.rstrip("\n")))  # add line with pattern to list
+
 #      if pattern2.search(line) != None:
 #        next_line = "use" + next(myfile)
 #        print(next_line)
@@ -156,7 +160,8 @@ def get_all_var(filename):
   with open (filename, 'rt') as myfile:          # open file
     for line in myfile:                          # read line by line
       if pattern.search(line) != None:           # search for pattern
-        var_type.append(( line.rstrip("\n")))    # add line with pattern to list
+        if not line.startswith("!"):             # skip line starting with "!"
+          var_type.append(( line.rstrip("\n")))  # add line with pattern to list
 
   var_type      = [s.strip() for s in var_type if s.strip()] # remove whitespace
   var_type_list = [i.split()[0] for i in var_type]           # take first string
