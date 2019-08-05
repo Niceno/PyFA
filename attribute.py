@@ -384,7 +384,7 @@ def lvl_list(file_list,lvl):
 #-------------------------------------------------------------------------------
 def lvl_file_list(file_list):
   lvl_lista = []
-  lvl_num = len(lvl_height(file_list))
+  lvl_num   = len(lvl_height(file_list))
 
   for i in range(lvl_num+1):
     lvl = lvl_list(file_list,i)
@@ -469,7 +469,7 @@ def create_grid(file_list):
   updated_list = []
 
   # List with widths (columns)
-  for i in range(len(file_list)):
+  for i in range(len(file_list) + 2):
     widths = width * i
     width_list.append(widths)
 
@@ -486,13 +486,14 @@ def create_grid(file_list):
   # Assign values to coordinates
   for i in range(len(lvl_lista)):
     lista = lvl_lista[i]
-    for l in range(len(lvl_lista[i])): # v===== remove i to start normally
+    for l in range(len(lvl_lista[i])): # v===== remove i to start columns at 0
+
       lista[l].x0 = ((width_list[l+i]          \
                     + width_list[l+1+i])/2)    \
                     - (lista[l].width/2)
 
-      lista[l].y0 = ((height_list[i]         \
-                    + height_list[i+1])/2)   \
+      lista[l].y0 = ((height_list[i]           \
+                    + height_list[i+1])/2)     \
                     - (lista[l].height/2)
 
       lista[l].x1 = lista[l].x0 + lista[l].width
@@ -556,35 +557,43 @@ def update_box_pos(file_list, name, column, row):
 
   for i in range(len(file_list)):      # assign these values
     if name == file_list[i].name:
-      file_list[i].x0 = ((width_list[column]      \
-                      + width_list[column+1])/2)  \
-                      - (file_list[i].width/2)
+      file_list[i].x0 = ((width_list[column]        \
+                      +   width_list[column+1])/2)  \
+                      -  (file_list[i].width/2)
 
-      file_list[i].y0 = ((height_list[row]        \
-                      + height_list[row+1])/2)    \
-                      - (file_list[i].height/2)
+      file_list[i].y0 = ((height_list[row]          \
+                      +   height_list[row+1])/2)    \
+                      -  (file_list[i].height/2)
 
       file_list[i].x1 = file_list[i].x0 + file_list[i].width
       file_list[i].y1 = file_list[i].y0 + file_list[i].height
 
 #===============================================================================
-# Function for creating complete and updated file list
+# Function for assigning values to x1,width and height
 #-------------------------------------------------------------------------------
-def get_file_list(file_path):
-  mod_list   = mod_list_fun(file_path) # list of all mod classes
-  sub_list   = sub_list_fun(file_path) # list of all sub classes
-  file_list  = [*mod_list,*sub_list]   # list of all classes(mod + sub)
-  file_list  = remove_empty(file_list) # remove empty files from list
-  file_list  = update(file_list)       # updating coordinates
-  arrange_by_level(file_list)          # arranging by level
-  file_list = lvl_file_list(file_list) # put it together
+def assign_values(file_list):
 
-  for i in range(len(file_list)):      # assign these values
+  for i in range(len(file_list)):
     file_list[i].x1     = file_list[i].x1 + file_list[i].x0
     file_list[i].width  = file_list[i].x1 - file_list[i].x0
     file_list[i].height = file_list[i].y1 - file_list[i].y0
 
-  file_list = create_grid(file_list)   # plot it with "grid"
-  #update_box_pos(file_list,"Eddy_Mod",10,0)
+  return file_list
+
+#===============================================================================
+# Function for creating complete and updated file list
+#-------------------------------------------------------------------------------
+def get_file_list(file_path):
+  mod_list   = mod_list_fun(file_path)     # list of all mod classes
+  sub_list   = sub_list_fun(file_path)     # list of all sub classes
+  file_list  = [*mod_list,*sub_list]       # list of all classes(mod + sub)
+  file_list  = remove_empty(file_list)     # remove empty files from list
+  file_list  = update(file_list)           # updating coordinates
+  arrange_by_level(file_list)              # arranging by levels
+  file_list  = lvl_file_list(file_list)    # put it together in list
+  file_list  = assign_values(file_list)    # assign x1,height and width
+  file_list  = create_grid(file_list)      # plot it with "grid" on
+
+  #update_box_pos(file_list,"Eddy_Mod",10,0) # change place in grid (column,row)
 
   return file_list

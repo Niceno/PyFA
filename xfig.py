@@ -396,8 +396,9 @@ def plot_spline(file, box1, box2):
   x5 = x6 - 2
   y5 = y6
 
-  file.write("3 2 0 2 0 7 55 -1 -1 0.000 0 1 0 6")   # 6 is number of points
+  file.write("3 2 0 2 0 7 55 -1 -1 0.000 0 1 0 6")   # 6 --> number of points
   file.write("\n 1 1 1.00 90.00 120.00")             # arrow settings
+
   file.write("\n%7d %7d" % ( (x1) *XFS,  \
                              (y1)*XFS))
   file.write("%7d %7d" %   ( (x2) *XFS,  \
@@ -407,9 +408,9 @@ def plot_spline(file, box1, box2):
   file.write("%7d %7d" %   ( (x4) *XFS,  \
                              (y4)*XFS))
   file.write("%7d %7d" %   ( (x5) *XFS,  \
-                           (y5)*XFS))
+                             (y5)*XFS))
   file.write("%7d %7d" %   ( (x6) *XFS,  \
-                           (y6)*XFS))
+                             (y6)*XFS))
 
   file.write("\n 0.000 1.000 1.000 1.000 1.000 0.000\n")
 

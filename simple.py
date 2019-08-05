@@ -12,6 +12,7 @@ import attribute
 root  = "/home/simcic/Development/Synthetic-Eddies"
 
 file_paths = browse.source_paths(root)             # list of paths to all .f90
+
 #file_paths = browse.remove_path(file_paths,\
 #            "/home/simcic/Development/Synthetic-Eddies/Prof_Mod")
 
