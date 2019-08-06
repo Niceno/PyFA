@@ -8,7 +8,7 @@ import browse
 # Define module class
 #-------------------------------------------------------------------------------
 class Module(object):
-  def __init__(module, type, name, use, var, meth,\
+  def __init__(module, type, name, use, var, meth,      \
                level, x0, x1, y0, y1, width, height):
     module.name   = name
     module.use    = use
@@ -41,7 +41,7 @@ class Module(object):
 # Define subroutine class
 #-------------------------------------------------------------------------------
 class Subroutine(object):
-  def __init__(subroutine, type, name, use, var, meth,\
+  def __init__(subroutine, type, name, use, var, meth,     \
                level, x0, x1, y0, y1, width, height):
 
     subroutine.name    = name
@@ -71,6 +71,40 @@ def print_it(abc):
         "\n\nHeight: ",        abc.height    )
 
 #===============================================================================
+# Define function class
+#-------------------------------------------------------------------------------
+class Function(object):
+  def __init__(function, type, name, use, var, meth,     \
+               level, x0, x1, y0, y1, width, height):
+
+    function.name    = name
+    function.use     = use
+    function.var     = var
+    function.meth    = meth
+    function.level   = level
+    function.x0      = x0
+    function.x1      = x1
+    function.y0      = y0
+    function.y1      = y1
+    function.type    = type
+    function.width   = width
+    function.height  = height
+
+def print_it(abc):
+  print("\nName: ",            abc.name,     \
+        "\n\nUse : ",          abc.use,      \
+        "\n\nVariables: ",     abc.var,      \
+        "\n\nLevel: ",         abc.level,    \
+        "\n\nType: ",          abc.type,     \
+        "\n\nx0: ",            abc.x0,       \
+        "\n\nx1: ",            abc.x1,       \
+        "\n\ny0: ",            abc.y0,       \
+        "\n\ny1: ",            abc.y1,       \
+        "\n\nWidth: ",         abc.width,    \
+        "\n\nHeight: ",        abc.height    )
+
+
+#===============================================================================
 # Check if use list is empty
 #-------------------------------------------------------------------------------
 def check_use(list):
@@ -82,7 +116,7 @@ def check_use(list):
   return use_list
 
 #===============================================================================
-# Import attributes from fortran files to module
+# Import attributes from fortran files to module object
 #-------------------------------------------------------------------------------
 def module_class(filename):
 
@@ -115,7 +149,7 @@ def module_class(filename):
   return module
 
 #===============================================================================
-# Import attributes from fortran files to subroutine
+# Import attributes from fortran files to subroutine object
 #-------------------------------------------------------------------------------
 def subroutine_class(filename):
 
@@ -147,7 +181,39 @@ def subroutine_class(filename):
   return subroutine
 
 #===============================================================================
-# Print sub and mod information
+# Import attributes from fortran files to function
+#-------------------------------------------------------------------------------
+def function_class(filename):
+
+  type       = "Function"
+  sub_name   = finder.get_fun(filename)
+  use_list   = check_use(finder.get_use(filename))
+  var_list   = finder.get_var(filename)
+  meth_list  = 0
+  level      = 0
+  x0         = 1
+  x1         = 0
+  y0         = 0
+  y1         = 0
+  width      = 0
+  height     = 0
+
+  function = Function(type,       \
+                      sub_name,   \
+                      use_list,   \
+                      var_list,   \
+                      meth_list,  \
+                      level,      \
+                      x0,         \
+                      x1,         \
+                      y0,         \
+                      y1,         \
+                      width,      \
+                      height)
+  return function
+
+#===============================================================================
+# Print mod,sub and function information
 #-------------------------------------------------------------------------------
 def print_levels(file_list):
 
@@ -242,6 +308,37 @@ def sub_lvl(subroutines_list,files):
   return subroutines_list
 
 #===============================================================================
+# Determining levels of functions (iterate 8 times)
+#-------------------------------------------------------------------------------
+def fun_lvl(functions_list,files):
+  n = 0
+  modules_list = mod_list_fun(files)
+  while n<8:
+    n += 1
+
+    for i in range(len(functions_list)):
+
+      if functions_list[i].use != "None":       # if there are use statements
+        fun_use_list = functions_list[i].use    # get use list of functions
+        fun_use_list = [i.split()[1] for i in fun_use_list]    # only take name
+        fun_use_list = ([s.strip(",") for s in fun_use_list])  # modules without
+                                                               # ˄˄  other info
+        fun_lvl      = []
+        for k in range(len(fun_use_list)):        # for every use in function
+          for z in range(len(modules_list)):
+            if modules_list[z].name == fun_use_list[k]: # if module matches use
+              lvl = modules_list[z].level
+              fun_lvl.append(lvl)   # add level
+        if fun_lvl == []:           # if fun_lvl is empty, level is 0
+          fun_lvl = [0]
+        else:
+          fun_lvl = fun_lvl
+
+        fun_lvl = max(fun_lvl)      # take the biggest used fun level from list
+        functions_list[i].level = fun_lvl + 1   # add 1 level to max level
+  return functions_list
+
+#===============================================================================
 # Function for appending mods in list (list with only modules)
 #-------------------------------------------------------------------------------
 def mod_list_fun(files):
@@ -268,6 +365,20 @@ def sub_list_fun(files):
   sub_list = sub_lvl(subroutines_list,files)
 
   return sub_list
+
+#===============================================================================
+# Function for appending functions in list (list with only functions)
+#-------------------------------------------------------------------------------
+def fun_list_fun(files):
+  functions_list = []
+
+  for i in range(len(files)):
+    fun_name = finder.get_fun(files[i])   # find functions from imported files
+    if fun_name != 0:                     # if it function then append to list
+      functions_list.append(function_class(files[i]))
+  fun_list = fun_lvl(functions_list,files)
+
+  return fun_list
 
 #===============================================================================
 # Remove empty files from list (such as programs and others)
@@ -479,7 +590,7 @@ def create_grid(file_list):
 #===============================================================================
 # Function for generating grid coordinates (not in use)
 #-------------------------------------------------------------------------------
-def grid(file_list,row,column):
+def grid_coordinates(file_list,row,column):
   width   = max_width(file_list)  + 2             # height of each spot
   height  = max_height(file_list) + 2             # width of each spot
   max_lvl = find_biggest(file_list)               # max level
@@ -559,7 +670,10 @@ def assign_values(file_list):
 def get_file_list(file_path):
   mod_list   = mod_list_fun(file_path)     # list of all mod classes
   sub_list   = sub_list_fun(file_path)     # list of all sub classes
-  file_list  = [*mod_list,*sub_list]       # list of all classes(mod + sub)
+  fun_list   = fun_list_fun(file_path)     # list of all fun classes
+  file_list  = [*mod_list,  \
+                *sub_list,  \
+                *fun_list]                 # list of all classes(mod+sub+fun)
   file_list  = remove_empty(file_list)     # remove empty files from list
   file_list  = update(file_list)           # updating coordinates
   arrange_by_level(file_list)              # arranging by levels
@@ -567,6 +681,6 @@ def get_file_list(file_path):
   file_list  = assign_values(file_list)    # assign x1,height and width
   file_list  = create_grid(file_list)      # plot it with "grid" on
 
-  #update_box_pos(file_list,"Eddy_Mod",10,0) # change place in grid (column,row)
+  # update_box_pos(file_list,"Eddy_Mod",10,0) # change place in grid (column,row)
 
   return file_list
