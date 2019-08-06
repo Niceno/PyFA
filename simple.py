@@ -37,7 +37,7 @@ xf = open("flow.fig", "w")
 xfig.write_header(xf)
 
 # Plot all fortran files starting from root
-xfig.plot_all(xf,file_list)
+xfig.plot_all(xf, file_list)
 
 #End
 xf.close()

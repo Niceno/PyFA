@@ -7,25 +7,28 @@ import attribute
 #===============================================================================
 # Handy constants
 #-------------------------------------------------------------------------------
-XFS       = 450              # xfig scale; xfig units for one cm
-UBH       = 0.75             # unit box height
-THICKNESS = 2                # box line thickness
-FONT_SIZE = UBH * 0.5        # font size depending on box height
-
-#===============================================================================
-# Function that returns list indexes
-#-------------------------------------------------------------------------------
-def list_num(lista):
-
-  list_num_string = list(range(0,len(lista)))
-  return list_num_string
+XFS                     = 450             # xfig scale; xfig units for one cm
+UBH                     = 0.75            # unit box height
+THICKNESS               = 2               # box line thickness
+FONT_SIZE               = UBH * 0.5       # font size depending on box height
+FONT_HEADER             = "Courier-Bold"  # font for headers
+FONT_NORMAL             = "Courier"       # font for everything else
+COLOR_BOX               = "White"
+COLOR_HEADER_MODULE     = "LtBlue"
+COLOR_HEADER_SUBROUTINE = "Pink2"
 
 #===============================================================================
 # Function to choose use statements list length
+#
+# Parameters:
+#   - list:  list of use statements
+# Returns:
+#   - use_list_len:  number of use statements, zero if none
+# Used by:
+#   - Functions which plot frames, to determine box height
 #-------------------------------------------------------------------------------
 def use_len(list):
   if list != 0:
-    # Draw a use text box
     use_list_len = len(list)
   else:
     use_list_len = 0
@@ -33,6 +36,13 @@ def use_len(list):
 
 #===============================================================================
 # Return the code value of a Xfig font
+#
+# Parameters:
+#   - name:  font name, the same name as in Xfig
+# Returns:
+#   - number corresponding to font code, as defined in Xfig format
+# Used by:
+#   - Functions which plot text
 #-------------------------------------------------------------------------------
 def xfig_font_code(name):
 
@@ -46,19 +56,37 @@ def xfig_font_code(name):
     return 18
 
 #===============================================================================
-# Return the code value of a Xfig box color (not needed)
+# Return the code value of a Xfig box color
+#
+# Parameters:
+#   - name:  color name, the same name as in Xfig
+# Returns:
+#   - number corresponding to color code, as defined in Xfig format
+# Used by:
+#   - Functions which plot frames
 #-------------------------------------------------------------------------------
 def xfig_box_color(name):
 
-  if name   == "LtBlue":
+  if name   == "Yellow":
+    return  6
+  elif name == "White":
+    return  7
+  elif name == "LtBlue":
     return 11
   elif name == "Pink2":
     return 28
-  elif name == "White":
-    return 7
 
 #===============================================================================
 # Choose box width depending on longest string
+#
+# Parameters:
+#   - filename:  name of the Fortran file being read (.f90)
+# Returns:
+#   - var_width:  box width in Xfig drawing units
+# Used by:
+#   - Functions which plot boxes
+# Warning:
+#   - Uses ghost parameter 0.4 to convert width from characters to Xfig units
 #-------------------------------------------------------------------------------
 def choose_width(filename):
 
@@ -78,20 +106,25 @@ def choose_width(filename):
   if var_list == []:
     var_list = ["No variables"]
 
-  var_length    = max(var_list, key=len)
-  meth_length   = max(meth_list, key=len)
-  use_length    = max(use_list, key=len)
+  var_length  = max(var_list,  key=len)
+  meth_length = max(meth_list, key=len)
+  use_length  = max(use_list,  key=len)
 
-  lengths   = [len(var_length), len(meth_length), \
-               len(header_name),len(use_length)]
+  lengths = [len(var_length), len(meth_length), \
+             len(header_name),len(use_length)]
 
   var_width = max(lengths)
-  var_width = var_width *0.32  # gives the best ratio for width
+  var_width = var_width * UBH * 0.4  # gives the best ratio for width
 
   return var_width
 
 #===============================================================================
 # Function to write xfig header
+#
+# Parameters:
+#   - file:  Xfig file's handle
+# Returns:
+#   - nothing
 #-------------------------------------------------------------------------------
 def write_header(file):
 
@@ -106,37 +139,56 @@ def write_header(file):
   file.write("1200 2\n")
 
 #===============================================================================
-# Plot everything from list
+# Plot everything (the entire graph) from object list
+#
+# Parameters:
+#   - file:      Xfig file's handle
+#   - obj_list:  list of all objects representing modules or subroutines
+# Returns:
+#   - nothing
 #-------------------------------------------------------------------------------
-def plot_all(xf,file_list):
+def plot_all(file, obj_list):
 
   # Plot boxes
-  for i in range(len(file_list)):
-    plot(xf, file_list[i].x0, file_list[i].y0, file_list[i])
+  for i in range(len(obj_list)):
+    plot(file, obj_list[i])
 
   # Plot splines
-  attribute.plot_all_mod_spline(xf,file_list)
+  plot_all_spline(file, obj_list)
 
 #===============================================================================
-# Choose which one to plot (module or subroutine)
+# Plot module or subroutine (choose which one to plot)
+#
+# Parameters:
+#   - file:      Xfig file's handle
+#   - object:    object to plot (can be subroutine or module)
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting everything (the entire graph)
 #-------------------------------------------------------------------------------
-def plot(file, x0, y0,      \
-         filename):
+def plot(file, object):
 
-  if filename.type == "Module":
-    mod_name = filename.name                  # module name
+  var_list    = object.var
+  meth_list   = object.meth
+  use_list    = object.use
+  x0          = object.x0
+  y0          = object.y0
+
+  # Type of object is module, assign module name
+  if object.type == "Module":
+    mod_name = object.name
     sub_name = 0
 
-  elif filename.type == "Subroutine":
-    sub_name = filename.name
+  # Type of object is subroutine, assign subroutine name
+  elif object.type == "Subroutine":
+    sub_name = object.name
     mod_name = 0
 
   # Module definition has been found, hence length is greater than zero
   if sub_name == 0:
-    var_list    = filename.var
-    meth_list   = filename.meth
-    use_list    = filename.use
 
+  # If variables has not been found, assign "No variables" and plot module
     if var_list == []:
       var_list = ["No variables"]
 
@@ -144,101 +196,139 @@ def plot(file, x0, y0,      \
 
     if (mod_name != []):
 
-      plot_module(file, x0, y0,          \
-                  module_name,           \
-                  var_list,              \
-                  meth_list,             \
-                  use_list,              \
-                  filename)
+      plot_module(file, x0, y0,        \
+                  module_name,         \
+                  var_list,            \
+                  meth_list,           \
+                  use_list,            \
+                  object)
 
   # Module defintion has not been found, hence it is a subroutine
   elif sub_name != 0:
-    var_list    = filename.var
-    use_list    = filename.use
-    module_name = sub_name
+    subroutine_name = sub_name
 
+  # If variables has not been found, do not plot subroutine
     if var_list != []:
-      plot_subroutine(file, x0, y0,      \
-                    module_name,       \
+      plot_subroutine(file, x0, y0,    \
+                    subroutine_name,   \
                     var_list,          \
                     use_list,          \
-                    filename)
+                    object)
 
 #===============================================================================
 # Function to plot module box
+#
+# Parameters:
+#   - file:            Xfig file's handle
+#   - x0:              object position on x axis in centimeters
+#   - y0:              object position on y axis in centimeters
+#   - module_name:     name of the module
+#   - var_list:        list of module variables
+#   - meth_list:       list of module methods
+#   - use_list:        list of module use statements
+#   - object:          object to plot (module)
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting module or subroutine (choosing which one to plot)
 #-------------------------------------------------------------------------------
-def plot_module(file, x0, y0,      \
-         module_name,              \
-         var_list,                 \
-         meth_list,                \
-         use_list,                 \
-         filename):
+def plot_module(file, x0, y0,     \
+         module_name,             \
+         var_list,                \
+         meth_list,               \
+         use_list,                \
+         object):
 
-  # Draw a module text box
+  # Plot a module text box
   plot_mod_name(file, x0, y0,     \
                 module_name,      \
-                filename)
+                object)
 
   if use_list != "None":
-    # Draw a use text box
-    plot_use_name(file, x0, y0,     \
-                  use_list,         \
-                  filename)
+    # If use statement has been found, plot use text box
+    plot_use_name(file, x0, y0,   \
+                  use_list,       \
+                  object)
+    # If use statement has not been found, do not plot use text box
   else:
     use_list = 0
 
 
-  # Draw a variable text box
+  # Plot a variable text box
   plot_var_name(file, x0, y0,     \
                 var_list,         \
                 use_list,         \
-                filename)
+                object)
 
-  # Draw a method text box
+  # Plot a method text box
   plot_meth_name(file, x0, y0,    \
                  var_list,        \
                  meth_list,       \
                  use_list,        \
-                 filename)
+                 object)
 
 #===============================================================================
 # Function to plot subroutine box
+#
+# Parameters:
+#   - file:               Xfig file's handle
+#   - x0:                 object position on x axis in centimeters
+#   - y0:                 object position on y axis in centimeters
+#   - subroutine_name:    name of the subroutine
+#   - var_list:           list of subroutine variables
+#   - use_list:           list of subroutine use statements
+#   - object:             object to plot (subroutine)
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting module or subroutine (choosing which one to plot)
 #-------------------------------------------------------------------------------
 def plot_subroutine(file, x0, y0,      \
-                    module_name,       \
+                    subroutine_name,   \
                     var_list,          \
                     use_list,          \
-                    filename):
+                    object):
 
-  # Draw a module text box
-  plot_sub_name(file, x0, y0,     \
-                module_name,      \
-                filename)
+  # Plot a module text box
+  plot_sub_name(file, x0, y0,         \
+                subroutine_name,      \
+                object)
 
-  # Choose if use box exist
+  # Check if use box exist
   if use_list != "None":
-    # Draw a use text box
-    plot_use_name(file, x0, y0,     \
-                  use_list,         \
-                  filename)
+    # Plot a use text box
+    plot_use_name(file, x0, y0,       \
+                  use_list,           \
+                  object)
   else:
     use_list = 0
 
- # Draw a variable text box
-  plot_var_name(file, x0, y0,     \
-                var_list,         \
-                use_list,         \
-                filename)
+ # Plot a variable text box
+  plot_var_name(file, x0, y0,         \
+                var_list,             \
+                use_list,             \
+                object)
 
 #===============================================================================
 # Function to plot an empty module frame
+#
+# Parameters:
+#   - file:            Xfig file's handle
+#   - x0:              object position on x axis in centimeters
+#   - y0:              object position on y axis in centimeters
+#   - box_width:       box width in centimeters
+#   - box_height:      box height in centimeters
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting module name box (header box)
 #-------------------------------------------------------------------------------
 def plot_mod_frame(file, x0, y0, box_width, box_height):
 
   file.write("2 2 0 ")
   file.write("%3d "       % THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color("LtBlue"))
+  file.write("%3d "       % xfig_box_color(COLOR_HEADER_MODULE))
   file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"   % ( x0           *XFS,  y0            *XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS,  y0            *XFS))
@@ -247,14 +337,25 @@ def plot_mod_frame(file, x0, y0, box_width, box_height):
   file.write("%9d %9d\n" % ( x0           *XFS,  y0            *XFS))
 
 #===============================================================================
-# Function to plot an empty module frame
+# Function to plot an empty subroutine frame
+#
+# Parameters:
+#   - file:            Xfig file's handle
+#   - x0:              object position on x axis in centimeters
+#   - y0:              object position on y axis in centimeters
+#   - box_width:       box width in centimeters
+#   - box_height:      box height in centimeters
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting subroutine name box (header box)
 #-------------------------------------------------------------------------------
 def plot_sub_frame(file, x0, y0, box_width, box_height):
 
   file.write("2 2 0 ")
   file.write("%3d "       % THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color("Pink2"))
+  file.write("%3d "       % xfig_box_color(COLOR_HEADER_SUBROUTINE))
   file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"   % ( x0           *XFS,  y0            *XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS,  y0            *XFS))
@@ -263,83 +364,130 @@ def plot_sub_frame(file, x0, y0, box_width, box_height):
   file.write("%9d %9d\n" % ( x0           *XFS,  y0            *XFS))
 
 #===============================================================================
-# Function to plot an empty use statements box depending on list length
+# Function to plot an empty use statements box (frame)
+#
+# Parameters:
+#   - file:            Xfig file's handle
+#   - x0:              object position on x axis in centimeters
+#   - y0:              object position on y axis in centimeters
+#   - box_width:       box width in centimeters
+#   - box_height:      box height in centimeters
+#   - use_list:        list of use statements
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting use statements box
 #-------------------------------------------------------------------------------
 def plot_use_frame(file, x0, y0, box_width, box_height, \
                    use_list):
 
-  use_list_len = use_len(use_list)
-
   file.write("2 2 0 ")
   file.write("%3d "       % THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color("White"))
+  file.write("%3d "       % xfig_box_color(COLOR_BOX))
   file.write("46 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height+use_list_len) \
+  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height          \
+                                                 +use_len(use_list))    \
                                                  *XFS))
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height+use_list_len) \
+  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height          \
+                                                 +use_len(use_list))    \
                                                  *XFS))
   file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height)*XFS))
 
 #===============================================================================
-# Function to plot an empty variable box depending on list length
+# Function to plot an empty variable box (frame)
+#
+# Parameters:
+#   - file:            Xfig file's handle
+#   - x0:              object position on x axis in centimeters
+#   - y0:              object position on y axis in centimeters
+#   - box_width:       box width in centimeters
+#   - box_height:      box height in centimeters
+#   - var_list:        list of variables
+#   - use_list:        list of use statements
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting variables box
 #-------------------------------------------------------------------------------
 def plot_var_frame(file, x0, y0, box_width, box_height, \
                    var_list,                            \
                    use_list):
 
-  use_list_len = use_len(use_list)
-
   file.write("2 2 0 ")
   file.write("%3d "       % THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color("White"))
+  file.write("%3d "       % xfig_box_color(COLOR_BOX))
   file.write("48 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
-                                                 +use_list_len)*XFS))
+                                                 +use_len(use_list))*XFS))
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
-                                                 +use_list_len)*XFS))
+                                                 +use_len(use_list))*XFS))
   file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height)*XFS))
 
 #===============================================================================
-# Function to plot an empty method box depending on list length
+# Function to plot an empty method box (frame)
+#
+# Parameters:
+#   - file:            Xfig file's handle
+#   - x0:              object position on x axis in centimeters
+#   - y0:              object position on y axis in centimeters
+#   - box_width:       box width in centimeters
+#   - box_height:      box height in centimeters
+#   - var_list:        list of variables
+#   - meth_list:       list of methods
+#   - use_list:        list of use statements
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting methods box
 #-------------------------------------------------------------------------------
 def plot_meth_frame(file, x0, y0, box_width, box_height, \
                     var_list,                            \
                     meth_list,                           \
                     use_list):
 
-  use_list_len = use_len(use_list)
-
   file.write("2 2 0 ")
   file.write("%3d "       % THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color("White"))
+  file.write("%3d "       % xfig_box_color(COLOR_BOX))
   file.write("47 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
-                                                 +use_list_len)*XFS))
+                                                 +use_len(use_list))*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
-                                                 +use_list_len)*XFS))
+                                                 +use_len(use_list))*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height+len(var_list) \
                                                  +len(meth_list)             \
-                                                 +use_list_len)*XFS))
+                                                 +use_len(use_list))*XFS))
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height+len(var_list) \
                                                  +len(meth_list)             \
-                                                 +use_list_len)*XFS))
+                                                 +use_len(use_list))*XFS))
   file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height+len(var_list) \
-                                                 +use_list_len)*XFS))
+                                                 +use_len(use_list))*XFS))
 
 #===============================================================================
 # Function to print centered frameless text
+#
+# Parameters:
+#   - file:            Xfig file's handle
+#   - x0:              object position on x axis in centimeters
+#   - y0:              object position on y axis in centimeters
+#   - box_width:       box width in centimeters
+#   - box_height:      box height in centimeters
+#   - text:            text to plot (header name)
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting methods box
 #-------------------------------------------------------------------------------
-def plot_text_center_cm(file, x0, y0, box_width, box_height, text):
+def plot_text_center(file, x0, y0, box_width, box_height, text):
 
   file.write("4 1 0 45 -1 ")              # 45 is depth
-  file.write("%5d" % xfig_font_code("Helvetica-Bold"))
+  file.write("%5d" % xfig_font_code(FONT_HEADER))
   file.write("%3d" % (FONT_SIZE * 36))    # font size
   file.write(" 0.0000 4 ")
   text_width  = 3                         # could be any value
@@ -352,11 +500,23 @@ def plot_text_center_cm(file, x0, y0, box_width, box_height, text):
 
 #===============================================================================
 # Function to print left aligned frameless text
+#
+# Parameters:
+#   - file:            Xfig file's handle
+#   - x0:              object position on x axis in centimeters
+#   - y0:              object position on y axis in centimeters
+#   - box_width:       box width in centimeters
+#   - box_height:      box height in centimeters
+#   - text:            text to plot (variable,method or use statement)
+# Returns:
+#   - nothing
+# Used by:
+#   - functions for plotting variables,methods and use statements
 #-------------------------------------------------------------------------------
-def plot_text_left_cm(file, x0, y0, box_width, box_height, text):
+def plot_text_left(file, x0, y0, box_width, box_height, text):
 
   file.write("4 0 0 45 -1 ")              # 45 is depth
-  file.write("%5d" % xfig_font_code("Helvetica"))
+  file.write("%5d" % xfig_font_code(FONT_NORMAL))
   file.write("%3d" % (FONT_SIZE * 36))    # font size
   file.write(" 0.0000 4 ")
   text_width  = 3                         # could be any value
@@ -368,29 +528,38 @@ def plot_text_left_cm(file, x0, y0, box_width, box_height, text):
   file.write("%s%s\\001\n" % (" ", text))
 
 #===============================================================================
-# Function to print spline (with 6 coordinates)
+# Function to plot spline (with 6 coordinates)
+#
+# Parameters:
+#   - file:     Xfig file's handle
+#   - object1:  starting object (spline starts at the rigth side of this object)
+#   - object2:  ending object   (spline ends at the left side of this object)
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting spline connections
 #-------------------------------------------------------------------------------
-def plot_spline(file, box1, box2):
+def plot_spline(file, object1, object2):
 
   # First coordinate
-  x1 = box1.x1
-  y1 = (box1.y0 + box1.y1)/2
+  x1 = object1.x1
+  y1 = (object1.y0 + object1.y1)/2
 
   # Last coordinate
-  x6 = box2.x0
-  y6 = (box2.y1+box2.y0)/2
+  x6 = object2.x0
+  y6 = (object2.y1+object2.y0)/2
 
   # Second coordinate
   x2 = x1 + 2
   y2 = y1
 
   # Third coordinate
-  x3 = box1.x1 + 3
-  y3 = box1.y1
+  x3 = object1.x1 + 3
+  y3 = object1.y1
 
   # Fourth coordinate
-  x4 = box2.x0 - 3
-  y4 = box2.y0
+  x4 = object2.x0 - 3
+  y4 = object2.y0
 
   # Fifth coordinate
   x5 = x6 - 2
@@ -415,127 +584,254 @@ def plot_spline(file, box1, box2):
   file.write("\n 0.000 1.000 1.000 1.000 1.000 0.000\n")
 
 #===============================================================================
-# Function to print module name
+# Function for plotting all spline connections
+#
+# Parameters:
+#   - file:      Xfig file's handle
+#   - obj_list:  list of all objects representing modules or subroutines
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting everything (the entire graph) from object list
 #-------------------------------------------------------------------------------
-def plot_mod_name(file, x0, y0, text, filename):
+def plot_all_spline(file, obj_list):
+  uses = []
+  mods = []
 
-  box_width = choose_width(filename)
+  # Getting list with only modules
+  for i in range(len(obj_list)):
+    if obj_list[i].type == "Module":
+      mods.append(obj_list[i])
+
+  # Getting list with objects that have use statements
+  for i in range(len(obj_list)):
+    if obj_list[i].use != "None":
+      uses.append(obj_list[i])
+
+  # Plotting connections
+  for i in range(len(uses)):
+    use = uses[i].use
+    for k in range(len(use)):
+      used = use[k]
+      used = used.strip("use ")
+      for m in range(len(mods)):
+        if used == mods[m].name:
+          plot_spline(file, mods[m],uses[i])
+
+#===============================================================================
+# Function to plot module name box (module header box)
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - x0:           object position on x axis in centimeters
+#   - y0:           object position on y axis in centimeters
+#   - text:         text to plot (module name)
+#   - object:       object to plot (module)
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting module box
+#-------------------------------------------------------------------------------
+def plot_mod_name(file, x0, y0, text, object):
+
+  box_width = choose_width(object)
 
   # Plot module framing box first
   plot_mod_frame(file, x0, y0, box_width, UBH)
 
   # Plot text
-  plot_text_center_cm(file, x0, y0, box_width, UBH, text)
+  plot_text_center(file, x0, y0, box_width, UBH, text)
 
 #===============================================================================
-# Function to print subroutine name
+# Function to plot subroutine name box (subroutine header box)
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - x0:           object position on x axis in centimeters
+#   - y0:           object position on y axis in centimeters
+#   - text:         text to plot (subroutine name)
+#   - object:       object to plot (subroutine)
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting subroutine box
 #-------------------------------------------------------------------------------
-def plot_sub_name(file, x0, y0, text, filename):
+def plot_sub_name(file, x0, y0, text, object):
 
-  box_width = choose_width(filename)
+  box_width = choose_width(object)
 
   # Plot module framing box first
   plot_sub_frame(file, x0, y0, box_width, UBH)
 
   # Plot text
-  plot_text_center_cm(file, x0, y0, box_width, UBH, text)
+  plot_text_center(file, x0, y0, box_width, UBH, text)
 
 #===============================================================================
-# Function to plot use statements
+# Function to plot use statements (text)
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - x0:           object position on x axis in centimeters
+#   - y0:           object position on y axis in centimeters
+#   - use_list:     list of use statements
+#   - object:       object to plot
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting use statements box
 #-------------------------------------------------------------------------------
-def plot_use_text_left_cm(file, x0, y0, \
-                          use_list,     \
-                          filename):
+def plot_use_text_left(file, x0, y0, \
+                       use_list,     \
+                       object):
 
-  box_width    = choose_width(filename)
-  use_list_num = list_num(use_list)
+  box_width    = choose_width(object)
+  use_list_num = list(range(0,len(use_list)))
 
   for i in range(len(use_list)):
-    plot_text_left_cm(file, x0, 0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5) \
-                      +use_list_num[i], box_width, UBH, use_list[i])
+    plot_text_left(file, x0, 0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5) \
+                   +use_list_num[i], box_width, UBH, use_list[i])
 
 #===============================================================================
-# Function to plot variables
+# Function to plot variables (text)
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - x0:           object position on x axis in centimeters
+#   - y0:           object position on y axis in centimeters
+#   - var_list:     list of variables
+#   - use_list:     list of use statements
+#   - object:       object to plot
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting variable box
 #-------------------------------------------------------------------------------
-def plot_var_text_left_cm(file, x0, y0, \
-                          var_list,     \
-                          use_list,     \
-                          filename):
+def plot_var_text_left(file, x0, y0, \
+                       var_list,     \
+                       use_list,     \
+                       object):
 
-  box_width    = choose_width(filename)
-  var_list_num = list_num(var_list)
-  use_list_len = use_len(use_list)
+  box_width    = choose_width(object)
+  var_list_num = list(range(0,len(var_list)))
 
   for i in range(len(var_list)):
-    plot_text_left_cm(file, x0, (0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5)   \
-                      +use_list_len) +var_list_num[i],                     \
-                      box_width, UBH, var_list[i])
+    plot_text_left(file, x0, (0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5)   \
+                   +use_len(use_list)) +var_list_num[i],                \
+                   box_width, UBH, var_list[i])
 
 #===============================================================================
-# Function to plot methods
+# Function to plot methods (text)
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - x0:           object position on x axis in centimeters
+#   - y0:           object position on y axis in centimeters
+#   - var_list:     list of variables
+#   - meth_list:    list of methods
+#   - use_list:     list of use statements
+#   - object:       object to plot
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting methods box
 #-------------------------------------------------------------------------------
-  # Plot methods
-def plot_meth_text_left_cm(x0, y0, xf, \
-                           var_list,   \
-                           meth_list,  \
-                           use_list,   \
-                           filename):
+def plot_meth_text_left(x0, y0, xf, \
+                        var_list,   \
+                        meth_list,  \
+                        use_list,   \
+                        object):
 
-  box_width     = choose_width(filename)
-  meth_list_num = list_num(meth_list)
-  use_list_len  = use_len(use_list)
+  box_width     = choose_width(object)
+  meth_list_num = list(range(0,len(meth_list)))
+
 
   for i in range(len(meth_list)):
-    plot_text_left_cm(xf, x0, (0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5)   \
-                      +len(var_list)+use_list_len+meth_list_num[i]),     \
-                      box_width, UBH, meth_list[i])
+    plot_text_left(xf, x0, (0.25+(y0+FONT_SIZE+(UBH-FONT_SIZE)*0.5)      \
+                   +len(var_list)+use_len(use_list)+meth_list_num[i]),   \
+                   box_width, UBH, meth_list[i])
 
 #===============================================================================
-# Function to print use statements box
+# Function to plot use statements box with text
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - x0:           object position on x axis in centimeters
+#   - y0:           object position on y axis in centimeters
+#   - use_list:     list of use statements
+#   - object:       object to plot
+# Returns:
+#   - nothing
+# Used by:
+#   - functions for plotting modules and subroutines
 #-------------------------------------------------------------------------------
 def plot_use_name(file, x0, y0, \
                   use_list,     \
-                  filename):
+                  object):
 
-  box_width = choose_width(filename)
+  box_width = choose_width(object)
 
   # Plot variable framing box first
   plot_use_frame(file, x0, y0, box_width, UBH, use_list)
 
   # Plot text
-  plot_use_text_left_cm(file, x0, y0, use_list, filename)
+  plot_use_text_left(file, x0, y0, use_list, object)
 
 
 #===============================================================================
-# Function to print variable box
+# Function to plot variable box with text
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - x0:           object position on x axis in centimeters
+#   - y0:           object position on y axis in centimeters
+#   - var_list:     list of variables
+#   - use_list:     list of use statements
+#   - object:       object to plot
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting modules and subroutines
 #-------------------------------------------------------------------------------
 def plot_var_name(file, x0, y0,       \
                   var_list,           \
                   use_list,           \
-                  filename):
+                  object):
 
-  box_width = choose_width(filename)
+  box_width = choose_width(object)
 
   # Plot variable framing box first
   plot_var_frame(file, x0, y0, box_width, UBH, var_list, use_list)
 
   # Plot text
-  plot_var_text_left_cm(file, x0, y0, var_list, use_list, filename)
+  plot_var_text_left(file, x0, y0, var_list, use_list, object)
 
 
 #===============================================================================
-# Function to print methods box
+# Function to plot methods box with text
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - x0:           object position on x axis in centimeters
+#   - y0:           object position on y axis in centimeters
+#   - var_list:     list of variables
+#   - meth_list:    list of methods
+#   - use_list:     list of use statements
+#   - object:       object to plot
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting modules and subroutines
 #-------------------------------------------------------------------------------
 def plot_meth_name(file, x0, y0,      \
                    var_list,          \
                    meth_list,         \
                    use_list,          \
-                   filename):
+                   object):
 
-  box_width = choose_width(filename)
+  box_width = choose_width(object)
 
  # Plot methods framing box first
   plot_meth_frame(file, x0, y0, box_width, UBH, var_list, meth_list, use_list)
 
  # Plot text
-  plot_meth_text_left_cm(x0, y0, file, var_list, meth_list, use_list, filename)
+  plot_meth_text_left(x0, y0, file, var_list, meth_list, use_list, object)

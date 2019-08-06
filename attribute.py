@@ -429,33 +429,6 @@ def max_height(file_list):
   return max_height
 
 #===============================================================================
-# Function for creating spline connections
-#-------------------------------------------------------------------------------
-def plot_all_mod_spline(xf,file_list):
-  uses = []
-  mods = []
-
-  # Getting list with modules
-  for i in range(len(file_list)):
-    if file_list[i].type == "Module":
-      mods.append(file_list[i])
-
-  # Getting list with objects that have use statements
-  for i in range(len(file_list)):
-    if file_list[i].use != "None":
-      uses.append(file_list[i])
-
-  # Plotting connections
-  for i in range(len(uses)):
-    use = uses[i].use
-    for k in range(len(use)):
-      used = use[k]
-      used = used.strip("use ")
-      for m in range(len(mods)):
-        if used == mods[m].name:
-          xfig.plot_spline(xf, mods[m],uses[i])
-
-#===============================================================================
 # Function for creating grid
 #-------------------------------------------------------------------------------
 def create_grid(file_list):
