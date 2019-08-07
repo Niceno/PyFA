@@ -23,6 +23,7 @@ class Module(object):
     module.width  = width
     module.height = height
 
+
   def print_it(abc):
     print("\nModule name: ", abc.name,     \
           "\n\nUse : ",      abc.use,      \
@@ -75,20 +76,21 @@ def print_it(abc):
 #-------------------------------------------------------------------------------
 class Function(object):
   def __init__(function, type, name, use, var, meth,     \
-               level, x0, x1, y0, y1, width, height):
+               level, x0, x1, y0, y1, width, height, fun_type):
 
-    function.name    = name
-    function.use     = use
-    function.var     = var
-    function.meth    = meth
-    function.level   = level
-    function.x0      = x0
-    function.x1      = x1
-    function.y0      = y0
-    function.y1      = y1
-    function.type    = type
-    function.width   = width
-    function.height  = height
+    function.name      = name
+    function.use       = use
+    function.var       = var
+    function.meth      = meth
+    function.level     = level
+    function.x0        = x0
+    function.x1        = x1
+    function.y0        = y0
+    function.y1        = y1
+    function.type      = type
+    function.width     = width
+    function.height    = height
+    function.fun_type  = fun_type
 
 def print_it(abc):
   print("\nName: ",            abc.name,     \
@@ -96,6 +98,7 @@ def print_it(abc):
         "\n\nVariables: ",     abc.var,      \
         "\n\nLevel: ",         abc.level,    \
         "\n\nType: ",          abc.type,     \
+        "\n\nFunction type: ", abc.fun_type, \
         "\n\nx0: ",            abc.x0,       \
         "\n\nx1: ",            abc.x1,       \
         "\n\ny0: ",            abc.y0,       \
@@ -189,6 +192,7 @@ def function_class(filename):
   sub_name   = finder.get_fun(filename)
   use_list   = check_use(finder.get_use(filename))
   var_list   = finder.get_var(filename)
+  fun_type   = finder.get_fun_type(filename)
   meth_list  = 0
   level      = 0
   x0         = 1
@@ -209,7 +213,8 @@ def function_class(filename):
                       y0,         \
                       y1,         \
                       width,      \
-                      height)
+                      height,     \
+                      fun_type)
   return function
 
 #===============================================================================
@@ -665,9 +670,25 @@ def assign_values(file_list):
   return file_list
 
 #===============================================================================
+# Function for saving names of all objects into .txt file
+#-------------------------------------------------------------------------------
+def write_names(obj_list,file_name):
+
+  name_list = []                                  # initialize list
+
+  for i in range(0,len(obj_list)):                # for every object in list
+    name = obj_list[i].name                       # take name of the object
+    name_list.append(name)                        # append name to the list
+  name_list = sorted(name_list, key=str.lower)    # sort list alphabetically
+
+  # Write list of all names into a .txt file
+  open(file_name, "w").write                  \
+      ("\n".join(("".join(item)) for item in name_list))
+
+#===============================================================================
 # Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
-def get_file_list(file_path):
+def get_obj_list(file_path):
   mod_list   = mod_list_fun(file_path)     # list of all mod classes
   sub_list   = sub_list_fun(file_path)     # list of all sub classes
   fun_list   = fun_list_fun(file_path)     # list of all fun classes

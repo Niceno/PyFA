@@ -92,6 +92,40 @@ def get_fun(filename):
   return fun_name
 
 #===============================================================================
+# Find function name
+#-------------------------------------------------------------------------------
+def get_fun_type(filename):
+
+  function = []                                 # initialize
+  pattern    = re.compile(".+?(?=function)", re.IGNORECASE)
+
+  with open (filename, 'rt') as myfile:         # open file
+    for line in myfile:                         # read line by line
+      if pattern.search(line) != None:          # search for pattern
+        if not line.startswith("!"):            # skip line starting with "!"
+          function.append(( line.rstrip("\n"))) # add line with pattern to list
+  function = [s.strip() for s in function if s.strip()] # remove whitespaces
+
+  if len(function) != 0:                      # if function is not empty
+    fun_string = function[0]                  # take the first string
+
+    fun_name = fun_string.split(" function")[0] # split by "function" and
+                                                # take only part before phrase
+    fun_name = "type " + fun_name
+
+    if fun_name.endswith("&"):
+    #  fun_name =  fun_name[:-len("  &")]
+      fun_name = fun_name + ")"
+
+    if fun_name.startswith("!"):
+      fun_name = 0
+
+  elif len(function) == 0:
+    fun_name = 0                                # if no function return 0
+
+  return fun_name
+
+#===============================================================================
 # Decide if header is module or subroutine
 #-------------------------------------------------------------------------------
 def get_header(filename):
