@@ -31,7 +31,7 @@ print("\nGreat program for extracting UML from Fortran.\n")
 #browse.check_all(root)
 
 # Save names of all objects into .txt file
-attribute.write_names(obj_list,"object_names.txt")
+attribute.write_names(obj_list, "object_names.txt")
 
 # Open Xfig file
 xf = open("flow.fig", "w")

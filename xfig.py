@@ -4,6 +4,7 @@
 import finder
 import browse
 import attribute
+import itertools
 #===============================================================================
 # Handy constants
 #-------------------------------------------------------------------------------
@@ -181,6 +182,9 @@ def plot_all(file, obj_list):
 
   # Plot splines
   plot_all_spline(file, obj_list)
+
+  # Plot grid
+  plot_grid(file, obj_list)
 
 #===============================================================================
 # Plot module, subroutine or function (choose which one to plot)
@@ -706,6 +710,33 @@ def plot_text_left(file, x0, y0, box_width, box_height, text):
   file.write("%s%s\\001\n" % (" ", text))
 
 #===============================================================================
+# Function to print right aligned frameless text
+#
+# Parameters:
+#   - file:            Xfig file's handle
+#   - x0:              object position on x axis in centimeters
+#   - y0:              object position on y axis in centimeters
+#   - text:            text to plot (variable,method or use statement)
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting grid
+#-------------------------------------------------------------------------------
+def plot_text_right(file, x0, y0, text):
+
+  file.write("4 2 2 500 -1 ")               # 45 is depth
+  file.write("%5d" % xfig_font_code(FONT_NORMAL))
+  file.write("%3d" % (FONT_SIZE * 36))    # font size
+  file.write(" 0.0000 4 ")
+  text_width  = 3                         # could be any value
+  text_height = 3                         # could be any value
+  file.write("%9d" % (text_height * XFS)) # text height in xfig units
+  file.write("%9d" % (text_width  * XFS)) # text width in xfig units
+  file.write("%9d %9d" % ( (x0)*XFS,  \
+                           (y0)*XFS))
+  file.write("%s%s\\001\n" % (" ", text))
+
+#===============================================================================
 # Function to plot spline (with 6 coordinates)
 #
 # Parameters:
@@ -760,6 +791,77 @@ def plot_spline(file, object1, object2):
                              (y6)*XFS))
 
   file.write("\n 0.000 1.000 1.000 1.000 1.000 0.000\n")
+
+#===============================================================================
+# Function to plot line
+#
+# Parameters:
+#   - file:     Xfig file's handle
+#   - x0:       first coordinate -> on x axis in centimeters
+#   - y0:       first coordinate -> on y axis in centimeters
+#   - x1:       second coordinate -> on x axis in centimeters
+#   - y1:       second coordinate -> on y axis in centimeters
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting grid
+#-------------------------------------------------------------------------------
+def plot_line(file, x0, y0, x1, y1):
+
+  file.write("2 1 0 1 2 7 500 -1 -1 0.000 0 0 -1 0 0 2")
+
+  file.write("\n%9d %9d" % ( (x0) *XFS,  \
+                             (y0)*XFS))
+  file.write("%9d %9d" %   ( (x1) *XFS,  \
+                             (y1)*XFS))
+  file.write("\n")
+
+#===============================================================================
+# Function to plot grid
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - obj_list:     list of all objects
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting everything (the entire graph)
+#-------------------------------------------------------------------------------
+def plot_grid(xf, obj_list):
+
+  width   = attribute.max_width(obj_list)  + 2      # height of each grid spot
+  height  = attribute.max_height(obj_list) + 2      # width of each grid spot
+  max_lvl = attribute.find_biggest(obj_list)        # max level
+
+  width_list   = []
+  height_list  = []
+
+  # List with widths (columns)
+  for i in range(len(obj_list)):
+    widths = width * i
+    width_list.append(widths)
+
+  # List with heights (rows)
+  for i in range(max_lvl + 4):
+    heights = height * i
+    height_list.append(heights)
+
+  min_v = 0
+  max_v = max(width_list)
+  min_h = 0
+  max_h = max(height_list)
+
+ # Plot grid
+  for i in range(0,len(width_list)):
+    plot_line(xf, width_list[i], min_h, width_list[i], max_h)
+  for i in range(0,len(height_list)):
+    plot_line(xf, min_v, height_list[i], max_v, height_list[i])
+
+  # Plot coordinates of each spot in grid
+  for column in range(0,len(width_list)):
+    for row in range(0,len(height_list)):
+      plot_text_right(xf, width_list[column]+width-0.5, height_list[row]+1,  \
+                      "({}, {})".format(row, column))
 
 #===============================================================================
 # Function for plotting all spline connections
