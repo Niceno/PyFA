@@ -575,8 +575,8 @@ def create_grid(file_list):
   # Assign values to coordinates
   for i in range(len(lvl_lista)):
     lista = lvl_lista[i]
-    for l in range(len(lvl_lista[i])): # v===== remove i to start columns at 0
-
+    for l in range(len(lvl_lista[i])):
+                                 # v===== remove i to start columns at 0
       lista[l].x0 = ((width_list[l+i]          \
                     + width_list[l+1+i])/2)    \
                     - (lista[l].width/2)
@@ -644,7 +644,8 @@ def update_box_pos(file_list, name, column, row):
     heights = height * i
     height_list.append(heights)
 
-  for i in range(len(file_list)):      # assign these values
+  # Assign new coordinates
+  for i in range(len(file_list)):
     if name == file_list[i].name:
       file_list[i].x0 = ((width_list[column]        \
                       +   width_list[column+1])/2)  \
@@ -686,20 +687,48 @@ def write_names(obj_list,file_name):
       ("\n".join(("".join(item)) for item in name_list))
 
 #===============================================================================
+# Function for removing subroutine objects that are already in modules
+#-------------------------------------------------------------------------------
+def remove_unwanted_subs(obj_list):
+
+  meth_list = []            # list of all methods
+  indexes   = []            # list of indexes of all unwanted subroutines
+
+  for i in range(0,len(obj_list)):
+    if obj_list[i].type == "Module":
+      meth_list.append(obj_list[i].meth)
+
+  # Flat list of all methods in modules
+  meth_list = [item for sublist in meth_list for item in sublist]
+
+  # List of indexes of all unwanted subroutines
+  for i in range(0,len(obj_list)):
+    for m in range(0,len(meth_list)):
+      if meth_list[m] in obj_list[i].name:
+        indexes.append(i)
+
+  # Delete unwanted subroutines from objects list
+  for index in sorted(indexes, reverse=True):
+    del obj_list[index]
+
+  return obj_list
+
+#===============================================================================
 # Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
 def get_obj_list(file_path):
-  mod_list   = mod_list_fun(file_path)     # list of all mod classes
-  sub_list   = sub_list_fun(file_path)     # list of all sub classes
-  fun_list   = fun_list_fun(file_path)     # list of all fun classes
-  file_list  = [*mod_list,  \
-                *sub_list,  \
-                *fun_list]                 # list of all classes(mod+sub+fun)
-  file_list  = remove_empty(file_list)     # remove empty files from list
-  file_list  = update(file_list)           # updating coordinates
-  arrange_by_level(file_list)              # arranging by levels
-  file_list  = lvl_file_list(file_list)    # put it together in list
-  file_list  = assign_values(file_list)    # assign x1,height and width
-  file_list  = create_grid(file_list)      # plot it with "grid" on
+  mod_list  = mod_list_fun(file_path)     # list of all mod classes
+  sub_list  = sub_list_fun(file_path)     # list of all sub classes
+  fun_list  = fun_list_fun(file_path)     # list of all fun classes
+  file_list = [*mod_list,  \
+               *sub_list,  \
+               *fun_list]                 # list of all classes(mod+sub+fun)
+  file_list = remove_empty(file_list)     # remove empty files from list
+  file_list = remove_unwanted_subs(file_list)
+  file_list = update(file_list)           # updating coordinates
+  arrange_by_level(file_list)             # arranging by levels
+  file_list = lvl_file_list(file_list)    # put it together in list
+  file_list = assign_values(file_list)    # assign x1,height and width
+  file_list = create_grid(file_list)      # plot it with "grid" on
 
   return file_list

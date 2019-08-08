@@ -743,12 +743,13 @@ def plot_text_right(file, x0, y0, text):
 #   - file:     Xfig file's handle
 #   - object1:  starting object (spline starts at the rigth side of this object)
 #   - object2:  ending object   (spline ends at the left side of this object)
+#   - depth:    depth of plotted spline
 # Returns:
 #   - nothing
 # Used by:
 #   - function for plotting spline connections
 #-------------------------------------------------------------------------------
-def plot_spline(file, object1, object2):
+def plot_spline(file, object1, object2, depth):
 
   # First coordinate
   x1 = object1.x1
@@ -774,7 +775,10 @@ def plot_spline(file, object1, object2):
   x5 = x6 - 2
   y5 = y6
 
-  file.write("3 2 0 2 0 7 100 -1 -1 0.000 0 1 0 6")   # 6 --> number of points
+  file.write("3 2 0 2 0 7 ")
+  file.write("%5d" % (depth))
+  file.write(" -1 -1 0.000 0 1 0 6")                  # 6 --> number of points
+
   file.write("\n 1 1 1.00 90.00 120.00")              # arrow settings
 
   file.write("\n%9d %9d" % ( (x1) *XFS,  \
@@ -817,6 +821,8 @@ def plot_all_spline(file, obj_list):
     if obj_list[i].use != "None":
       use_objects.append(obj_list[i])
 
+  depth_list = list(range(101,101+len(mod_objects)))  # depths for every module
+
   # Plotting connections
   for i in range(len(use_objects)):
     use = use_objects[i].use
@@ -825,7 +831,7 @@ def plot_all_spline(file, obj_list):
       used = used.strip("use ")
       for m in range(len(mod_objects)):
         if used == mod_objects[m].name:
-          plot_spline(file, mod_objects[m],use_objects[i])
+          plot_spline(file, mod_objects[m],use_objects[i],depth_list[m])
 
 #===============================================================================
 # Function to plot line
