@@ -106,6 +106,38 @@ def print_it(abc):
         "\n\nWidth: ",         abc.width,    \
         "\n\nHeight: ",        abc.height    )
 
+#===============================================================================
+# Define program class
+#-------------------------------------------------------------------------------
+class Program(object):
+  def __init__(program, type, name, use, var, meth, level,     \
+               x0, x1, y0, y1, width, height):
+
+    program.name    = name
+    program.use     = use
+    program.var     = var
+    program.meth    = meth
+    program.level   = level
+    program.x0      = x0
+    program.x1      = x1
+    program.y0      = y0
+    program.y1      = y1
+    program.type    = type
+    program.width   = width
+    program.height  = height
+
+def print_it(abc):
+  print("\nName: ",            abc.name,     \
+        "\n\nUse : ",          abc.use,      \
+        "\n\nVariables: ",     abc.var,      \
+        "\n\nLevel: ",         abc.level,    \
+        "\n\nType: ",          abc.type,     \
+        "\n\nx0: ",            abc.x0,       \
+        "\n\nx1: ",            abc.x1,       \
+        "\n\ny0: ",            abc.y0,       \
+        "\n\ny1: ",            abc.y1,       \
+        "\n\nWidth: ",         abc.width,    \
+        "\n\nHeight: ",        abc.height    )
 
 #===============================================================================
 # Check if use list is empty
@@ -189,7 +221,7 @@ def subroutine_class(filename):
 def function_class(filename):
 
   type       = "Function"
-  sub_name   = finder.get_fun(filename)
+  fun_name   = finder.get_fun(filename)
   use_list   = check_use(finder.get_use(filename))
   var_list   = finder.get_var(filename)
   fun_type   = finder.get_fun_type(filename)
@@ -203,7 +235,7 @@ def function_class(filename):
   height     = 0
 
   function = Function(type,       \
-                      sub_name,   \
+                      fun_name,   \
                       use_list,   \
                       var_list,   \
                       meth_list,  \
@@ -216,6 +248,38 @@ def function_class(filename):
                       height,     \
                       fun_type)
   return function
+
+#===============================================================================
+# Import attributes from fortran files to program
+#-------------------------------------------------------------------------------
+def program_class(filename):
+
+  type       = "Program"
+  prog_name  = finder.get_prog(filename)
+  use_list   = check_use(finder.get_use(filename))
+  var_list   = 0
+  meth_list  = 0
+  level      = 0
+  x0         = 1
+  x1         = 0
+  y0         = 0
+  y1         = 0
+  width      = 0
+  height     = 0
+
+  program = Program(type,        \
+                    prog_name,   \
+                    use_list,    \
+                    var_list,    \
+                    meth_list,   \
+                    level,       \
+                    x0,          \
+                    x1,          \
+                    y0,          \
+                    y1,          \
+                    width,       \
+                    height)
+  return program
 
 #===============================================================================
 # Print mod,sub and function information
@@ -343,6 +407,38 @@ def fun_lvl(functions_list,files):
         functions_list[i].level = fun_lvl + 1   # add 1 level to max level
   return functions_list
 
+
+#===============================================================================
+# Determining levels of program (iterate 8 times)
+#-------------------------------------------------------------------------------
+def prog_lvl(program_list,files):
+  n = 0
+  modules_list = mod_list_fun(files)
+  while n<8:
+    n += 1
+
+    for i in range(len(program_list)):
+
+      if program_list[i].use != "None":       # if there are use statements
+        prog_use_list = program_list[i].use    # get use list of program
+        prog_use_list = [i.split()[1] for i in prog_use_list]    # only take name
+        prog_use_list = ([s.strip(",") for s in prog_use_list])  # modules without
+                                                               # ˄˄  other info
+        prog_lvl      = []
+        for k in range(len(prog_use_list)):        # for every use in program
+          for z in range(len(modules_list)):
+            if modules_list[z].name == prog_use_list[k]: # if module matches use
+              lvl = modules_list[z].level
+              prog_lvl.append(lvl)   # add level
+        if prog_lvl == []:           # if prog_lvl is empty, level is 0
+          prog_lvl = [0]
+        else:
+          prog_lvl = prog_lvl
+
+        prog_lvl = max(prog_lvl)      # take the biggest used prog level from list
+        program_list[i].level = prog_lvl + 2   # add 2 levels to max level
+  return program_list
+
 #===============================================================================
 # Function for appending mods in list (list with only modules)
 #-------------------------------------------------------------------------------
@@ -384,6 +480,20 @@ def fun_list_fun(files):
   fun_list = fun_lvl(functions_list,files)
 
   return fun_list
+
+#===============================================================================
+# Function for appending program in list (list with only programs)
+#-------------------------------------------------------------------------------
+def prog_list_fun(files):
+  program_list = []
+
+  for i in range(len(files)):
+    program_name = finder.get_prog(files[i])   # find program from imported files
+    if program_name != 0:                 # if it s program then append to list
+      program_list.append(program_class(files[i]))
+
+  program_list = prog_lvl(program_list,files)
+  return program_list
 
 #===============================================================================
 # Remove empty files from list (such as programs and others)
@@ -720,9 +830,11 @@ def get_obj_list(file_path):
   mod_list  = mod_list_fun(file_path)     # list of all mod classes
   sub_list  = sub_list_fun(file_path)     # list of all sub classes
   fun_list  = fun_list_fun(file_path)     # list of all fun classes
+  prog_list = prog_list_fun(file_path)    # list of all prog classes
   file_list = [*mod_list,  \
                *sub_list,  \
-               *fun_list]                 # list of all classes(mod+sub+fun)
+               *fun_list,\
+               *prog_list]                 # list of all classes(mod+sub+fun)
   file_list = remove_empty(file_list)     # remove empty files from list
   file_list = remove_unwanted_subs(file_list)
   file_list = update(file_list)           # updating coordinates

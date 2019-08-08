@@ -18,7 +18,7 @@ COLOR_BOX               = "White"         # color of var,meth and use boxes
 COLOR_HEADER_MODULE     = "LtBlue"        # color of module header
 COLOR_HEADER_SUBROUTINE = "Pink2"         # color of subroutine header
 COLOR_HEADER_FUNCTION   = "Yellow"        # color of function header
-
+COLOR_HEADER_PROGRAM    = "Green2"        # color of program header
 #===============================================================================
 # Function to choose use statements list length
 #
@@ -94,6 +94,8 @@ def xfig_box_color(name):
     return 11
   elif name == "Pink2":
     return 28
+  elif name == "Green2":
+    return 14
 
 #===============================================================================
 # Choose box width depending on longest string
@@ -129,7 +131,8 @@ def choose_width(filename):
     meth_list = meth_list
   if var_list == []:
     var_list = ["No variables"]
-
+  if var_list == 0:
+    var_list = ["No variables"]
 
   var_length      = max(var_list,  key=len)
   meth_length     = max(meth_list, key=len)
@@ -207,22 +210,33 @@ def plot(file, object):
 
   # Type of object is module, assign module name
   if object.type == "Module":
-    mod_name = object.name
-    sub_name = 0
-    fun_name = 0
+    mod_name  = object.name
+    sub_name  = 0
+    fun_name  = 0
+    prog_name = 0
 
   # Type of object is subroutine, assign subroutine name
   elif object.type == "Subroutine":
-    sub_name = object.name
-    mod_name = 0
-    fun_name = 0
+    sub_name  = object.name
+    mod_name  = 0
+    fun_name  = 0
+    prog_name = 0
 
   # Type of object is function, assign function name
   elif object.type == "Function":
 
-    fun_name = object.name
-    mod_name = 0
-    sub_name = 0
+    fun_name  = object.name
+    mod_name  = 0
+    sub_name  = 0
+    prog_name = 0
+
+  elif object.type == "Program":
+
+    prog_name = object.name
+    fun_name  = 0
+    mod_name  = 0
+    sub_name  = 0
+
 
   # Module definition has been found
   if mod_name !=0 :
@@ -266,6 +280,15 @@ def plot(file, object):
                     use_list,          \
                     object)
 
+  # Program definition has been found
+  elif prog_name != 0:
+    program_name = prog_name
+
+    plot_program(file, x0, y0,      \
+                 program_name,      \
+                 use_list,          \
+                 object)
+
 #===============================================================================
 # Function to plot module box
 #
@@ -281,7 +304,7 @@ def plot(file, object):
 # Returns:
 #   - nothing
 # Used by:
-#   - function for plotting module or subroutine (choosing which one to plot)
+#   - function for plotting module/subroutine/function (choosing what to plot)
 #-------------------------------------------------------------------------------
 def plot_module(file, x0, y0,     \
                 module_name,      \
@@ -331,7 +354,7 @@ def plot_module(file, x0, y0,     \
 # Returns:
 #   - nothing
 # Used by:
-#   - function for plotting module or subroutine (choosing which one to plot)
+#   - function for plotting module/subroutine/function (choosing what to plot)
 #-------------------------------------------------------------------------------
 def plot_subroutine(file, x0, y0,      \
                     subroutine_name,   \
@@ -404,6 +427,39 @@ def plot_function(file, x0, y0,       \
                 use_list,             \
                 object)
 
+#===============================================================================
+# Function to plot program box
+#
+# Parameters:
+#   - file:               Xfig file's handle
+#   - x0:                 object position on x axis in centimeters
+#   - y0:                 object position on y axis in centimeters
+#   - programe_name:      name of the program
+#   - use_list:           list of subroutine use statements
+#   - object:             object to plot (subroutine)
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting module/subroutine/function/program
+#-------------------------------------------------------------------------------
+def plot_program(file, x0, y0,      \
+                    program_name,      \
+                    use_list,          \
+                    object):
+
+  # Plot a header text box
+  plot_prog_name(file, x0, y0,         \
+                program_name,          \
+                object)
+
+  # Check if use box exist
+  if use_list != "None":
+    # Plot a use text box
+    plot_use_name(file, x0, y0,       \
+                  use_list,           \
+                  object)
+  else:
+    use_list = 0
 
 #===============================================================================
 # Function to plot an empty module frame
@@ -479,6 +535,33 @@ def plot_fun_frame(file, x0, y0, box_width, box_height):
   file.write("%3d "       % THICKNESS)
   file.write("0")
   file.write("%3d "       % xfig_box_color(COLOR_HEADER_FUNCTION))
+  file.write("15 -1 20 0.000 0 0 -1 0 0 5\n")
+  file.write("%9d %9d"   % ( x0           *XFS,  y0            *XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*XFS,  y0            *XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d\n" % ( x0           *XFS,  y0            *XFS))
+
+#===============================================================================
+# Function to plot an empty program frame
+#
+# Parameters:
+#   - file:            Xfig file's handle
+#   - x0:              object position on x axis in centimeters
+#   - y0:              object position on y axis in centimeters
+#   - box_width:       box width in centimeters
+#   - box_height:      box height in centimeters
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting program name box (header box)
+#-------------------------------------------------------------------------------
+def plot_prog_frame(file, x0, y0, box_width, box_height):
+
+  file.write("2 2 0 ")
+  file.write("%3d "       % THICKNESS)
+  file.write("0")
+  file.write("%3d "       % xfig_box_color(COLOR_HEADER_PROGRAM))
   file.write("15 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"   % ( x0           *XFS,  y0            *XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS,  y0            *XFS))
@@ -980,6 +1063,30 @@ def plot_fun_name(file, x0, y0, text, object):
 
   # Plot module framing box first
   plot_fun_frame(file, x0, y0, box_width, UBH)
+
+  # Plot text
+  plot_text_center(file, x0, y0, box_width, UBH, text)
+
+#===============================================================================
+# Function to plot program name box (program header box)
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - x0:           object position on x axis in centimeters
+#   - y0:           object position on y axis in centimeters
+#   - text:         text to plot (program name)
+#   - object:       object to plot (program)
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting program box
+#-------------------------------------------------------------------------------
+def plot_prog_name(file, x0, y0, text, object):
+
+  box_width = choose_width(object)
+
+  # Plot module framing box first
+  plot_prog_frame(file, x0, y0, box_width, UBH)
 
   # Plot text
   plot_text_center(file, x0, y0, box_width, UBH, text)

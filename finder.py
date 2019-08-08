@@ -94,6 +94,38 @@ def get_fun(filename):
 #===============================================================================
 # Find function name
 #-------------------------------------------------------------------------------
+def get_prog(filename):
+
+  program = []                                 # initialize
+  pattern    = re.compile(".+?(?=program)", re.IGNORECASE)
+
+  with open (filename, 'rt') as myfile:         # open file
+    for line in myfile:                         # read line by line
+      if pattern.search(line) != None:          # search for pattern
+        if not line.startswith("!"):            # skip line starting with "!"
+          program.append(( line.rstrip("\n"))) # add line with pattern to list
+  program = [s.strip() for s in program if s.strip()] # remove whitespaces
+
+  if len(program) != 0:                      # if program is not empty
+    fun_string = program[0]                  # take the first string
+
+    prog_name   = re.sub("program ", "", fun_string) # return program
+
+    if prog_name.endswith("&"):
+    #  prog_name =  prog_name[:-len("  &")]
+      prog_name = prog_name + ")"
+
+    if prog_name.startswith("!"):
+      prog_name = 0
+
+  elif len(program) == 0:
+    prog_name = 0                                # if no program return 0
+
+  return prog_name
+
+#===============================================================================
+# Find function name
+#-------------------------------------------------------------------------------
 def get_fun_type(filename):
 
   function = []                                 # initialize
