@@ -702,6 +702,4 @@ def get_obj_list(file_path):
   file_list  = assign_values(file_list)    # assign x1,height and width
   file_list  = create_grid(file_list)      # plot it with "grid" on
 
-  # update_box_pos(file_list,"Eddy_Mod",10,0) # change place in grid (column,row)
-
   return file_list

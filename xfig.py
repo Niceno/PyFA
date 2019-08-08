@@ -425,7 +425,7 @@ def plot_mod_frame(file, x0, y0, box_width, box_height):
   file.write("%3d "       % THICKNESS)
   file.write("0")
   file.write("%3d "       % xfig_box_color(COLOR_HEADER_MODULE))
-  file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
+  file.write("15 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"   % ( x0           *XFS,  y0            *XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS,  y0            *XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
@@ -452,7 +452,7 @@ def plot_sub_frame(file, x0, y0, box_width, box_height):
   file.write("%3d "       % THICKNESS)
   file.write("0")
   file.write("%3d "       % xfig_box_color(COLOR_HEADER_SUBROUTINE))
-  file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
+  file.write("15 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"   % ( x0           *XFS,  y0            *XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS,  y0            *XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
@@ -479,7 +479,7 @@ def plot_fun_frame(file, x0, y0, box_width, box_height):
   file.write("%3d "       % THICKNESS)
   file.write("0")
   file.write("%3d "       % xfig_box_color(COLOR_HEADER_FUNCTION))
-  file.write("50 -1 20 0.000 0 0 -1 0 0 5\n")
+  file.write("15 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"   % ( x0           *XFS,  y0            *XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS,  y0            *XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
@@ -510,7 +510,7 @@ def plot_fun_type_frame(file, x0, y0, box_width, box_height,  \
   file.write("%3d "       % THICKNESS)
   file.write("0")
   file.write("%3d "       % xfig_box_color(COLOR_BOX))
-  file.write("44 -1 20 0.000 0 0 -1 0 0 5\n")
+  file.write("11 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height           \
@@ -545,7 +545,7 @@ def plot_use_frame(file, x0, y0, box_width, box_height, \
   file.write("%3d "       % THICKNESS)
   file.write("0")
   file.write("%3d "       % xfig_box_color(COLOR_BOX))
-  file.write("46 -1 20 0.000 0 0 -1 0 0 5\n")
+  file.write("12 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height          \
@@ -584,7 +584,7 @@ def plot_var_frame(file, x0, y0, box_width, box_height, \
   file.write("%3d "       % THICKNESS)
   file.write("0")
   file.write("%3d "       % xfig_box_color(COLOR_BOX))
-  file.write("48 -1 20 0.000 0 0 -1 0 0 5\n")
+  file.write("14 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height            \
@@ -627,7 +627,7 @@ def plot_meth_frame(file, x0, y0, box_width, box_height, \
   file.write("%3d "       % THICKNESS)
   file.write("0")
   file.write("%3d "       % xfig_box_color(COLOR_BOX))
-  file.write("47 -1 20 0.000 0 0 -1 0 0 5\n")
+  file.write("13 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height           \
                                                  +len(var_list)          \
                                                  +use_len(use_list)      \
@@ -668,7 +668,7 @@ def plot_meth_frame(file, x0, y0, box_width, box_height, \
 #-------------------------------------------------------------------------------
 def plot_text_center(file, x0, y0, box_width, box_height, text):
 
-  file.write("4 1 0 0 -1 ")              # 45 is depth
+  file.write("4 1 0 10 -1 ")              # 45 is depth
   file.write("%5d" % xfig_font_code(FONT_HEADER))
   file.write("%3d" % (FONT_SIZE * 36))    # font size
   file.write(" 0.0000 4 ")
@@ -697,7 +697,7 @@ def plot_text_center(file, x0, y0, box_width, box_height, text):
 #-------------------------------------------------------------------------------
 def plot_text_left(file, x0, y0, box_width, box_height, text):
 
-  file.write("4 0 0 0 -1 ")              # 45 is depth
+  file.write("4 0 0 10 -1 ")              # 45 is depth
   file.write("%5d" % xfig_font_code(FONT_NORMAL))
   file.write("%3d" % (FONT_SIZE * 36))    # font size
   file.write(" 0.0000 4 ")
@@ -774,8 +774,8 @@ def plot_spline(file, object1, object2):
   x5 = x6 - 2
   y5 = y6
 
-  file.write("3 2 0 2 0 7 55 -1 -1 0.000 0 1 0 6")   # 6 --> number of points
-  file.write("\n 1 1 1.00 90.00 120.00")             # arrow settings
+  file.write("3 2 0 2 0 7 100 -1 -1 0.000 0 1 0 6")   # 6 --> number of points
+  file.write("\n 1 1 1.00 90.00 120.00")              # arrow settings
 
   file.write("\n%9d %9d" % ( (x1) *XFS,  \
                              (y1)*XFS))
@@ -791,6 +791,41 @@ def plot_spline(file, object1, object2):
                              (y6)*XFS))
 
   file.write("\n 0.000 1.000 1.000 1.000 1.000 0.000\n")
+
+#===============================================================================
+# Function for plotting all spline connections
+#
+# Parameters:
+#   - file:      Xfig file's handle
+#   - obj_list:  list of all objects representing modules or subroutines
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting everything (the entire graph) from object list
+#-------------------------------------------------------------------------------
+def plot_all_spline(file, obj_list):
+  use_objects = []
+  mod_objects = []
+
+  # Getting list with only modules
+  for i in range(len(obj_list)):
+    if obj_list[i].type == "Module":
+      mod_objects.append(obj_list[i])
+
+  # Getting list with objects that have use statements
+  for i in range(len(obj_list)):
+    if obj_list[i].use != "None":
+      use_objects.append(obj_list[i])
+
+  # Plotting connections
+  for i in range(len(use_objects)):
+    use = use_objects[i].use
+    for k in range(len(use)):
+      used = use[k]
+      used = used.strip("use ")
+      for m in range(len(mod_objects)):
+        if used == mod_objects[m].name:
+          plot_spline(file, mod_objects[m],use_objects[i])
 
 #===============================================================================
 # Function to plot line
@@ -817,7 +852,7 @@ def plot_line(file, x0, y0, x1, y1):
   file.write("\n")
 
 #===============================================================================
-# Function to plot grid
+# Function to plot grid with coordinates
 #
 # Parameters:
 #   - file:         Xfig file's handle
@@ -833,8 +868,9 @@ def plot_grid(xf, obj_list):
   height  = attribute.max_height(obj_list) + 2      # width of each grid spot
   max_lvl = attribute.find_biggest(obj_list)        # max level
 
-  width_list   = []
-  height_list  = []
+  width_list    = []
+  height_list   = []
+  zero_lvl_list = []
 
   # List with widths (columns)
   for i in range(len(obj_list)):
@@ -842,9 +878,12 @@ def plot_grid(xf, obj_list):
     width_list.append(widths)
 
   # List with heights (rows)
-  for i in range(max_lvl + 4):
+  for i in range(max_lvl + 15):
     heights = height * i
     height_list.append(heights)
+
+  width_list  = width_list[:15] # activate if u want specific number of columns
+  height_list = height_list[:8] # activate if u want specific number of rows
 
   min_v = 0
   max_v = max(width_list)
@@ -852,51 +891,20 @@ def plot_grid(xf, obj_list):
   max_h = max(height_list)
 
  # Plot grid
+
+  # Plot vertical lines
   for i in range(0,len(width_list)):
     plot_line(xf, width_list[i], min_h, width_list[i], max_h)
+
+  # Plot horizontal lines
   for i in range(0,len(height_list)):
     plot_line(xf, min_v, height_list[i], max_v, height_list[i])
 
   # Plot coordinates of each spot in grid
-  for column in range(0,len(width_list)):
-    for row in range(0,len(height_list)):
+  for column in range(0,len(width_list)-1):
+    for row in range(0,len(height_list)-1):
       plot_text_right(xf, width_list[column]+width-0.5, height_list[row]+1,  \
                       "({}, {})".format(row, column))
-
-#===============================================================================
-# Function for plotting all spline connections
-#
-# Parameters:
-#   - file:      Xfig file's handle
-#   - obj_list:  list of all objects representing modules or subroutines
-# Returns:
-#   - nothing
-# Used by:
-#   - function for plotting everything (the entire graph) from object list
-#-------------------------------------------------------------------------------
-def plot_all_spline(file, obj_list):
-  uses = []
-  mods = []
-
-  # Getting list with only modules
-  for i in range(len(obj_list)):
-    if obj_list[i].type == "Module":
-      mods.append(obj_list[i])
-
-  # Getting list with objects that have use statements
-  for i in range(len(obj_list)):
-    if obj_list[i].use != "None":
-      uses.append(obj_list[i])
-
-  # Plotting connections
-  for i in range(len(uses)):
-    use = uses[i].use
-    for k in range(len(use)):
-      used = use[k]
-      used = used.strip("use ")
-      for m in range(len(mods)):
-        if used == mods[m].name:
-          plot_spline(file, mods[m],uses[i])
 
 #===============================================================================
 # Function to plot module name box (module header box)
