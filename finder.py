@@ -177,7 +177,7 @@ def get_header(filename):
 #-------------------------------------------------------------------------------
 def get_call(filename):
 
-  use_name = []
+  call_name = []
 
   pattern   = re.compile("(call)\s", re.IGNORECASE)
 
@@ -185,30 +185,70 @@ def get_call(filename):
     for line in myfile:                          # read line by line
       if pattern.search(line) != None:           # search for pattern
         if not line.startswith("!"):             # skip line starting with "!"
-          use_name.append(( line.rstrip("\n")))  # add line with pattern to list
+          call_name.append(( line.rstrip("\n")))  # add line with pattern to list
 
-  use_name = [s.strip() for s in use_name if s.strip()] # remove whitespace
+  call_name = [s.strip() for s in call_name if s.strip()] # remove whitespace
 
-  # If you only want to take name of use statement without "type" or "only"
-  use_name_list = [i.split()[1] for i in use_name]           # take use name
-  use_name_list = ([s.strip("(") for s in use_name_list])    # remove ","
-  use_name_list = [i.rsplit("(",1)[0] for i in use_name_list]
+  # If you only want to take name of call statement without "type" or "only"
+  call_name_list = [i.split()[1] for i in call_name]           # take call name
+  call_name_list = ([s.strip("(") for s in call_name_list])    # remove ","
+  call_name_list = [i.rsplit("(",1)[0] for i in call_name_list]
 
   # Solve problem with having "!" in strings
-  use_list = []
-  for i in range(len(use_name)):
-    string = use_name[i]
+  call_list = []
+  for i in range(len(call_name)):
+    string = call_name[i]
     string = string.split('!')[0]
-    use_list.append(string)
+    call_list.append(string)
 
-  if use_name != []:                # use_name for whole line
-    true_name_list = use_name_list  # use_name_list - take only name
+  if call_name != []:                # call_name for whole line
+    true_name_list = call_name_list  # call_name_list - take only name
     true_name_list = list(set(true_name_list))
 
   else:
     true_name_list = 0
 
   return true_name_list
+
+#===============================================================================
+# Find type statements
+#-------------------------------------------------------------------------------
+def get_type(filename):
+
+  type_name = []
+
+  pattern   = re.compile("^\s+(?=type\s+)", re.IGNORECASE)
+
+  with open (filename, 'rt') as myfile:          # open file
+    for line in myfile:                          # read line by line
+      if pattern.search(line) != None:           # search for pattern
+        if not line.startswith("!"):             # skip line starting with "!"
+          type_name.append(( line.rstrip("\n"))) # add line with pattern to list
+
+  type_name = [s.strip() for s in type_name if s.strip()] # remove whitespace
+
+  # If you only want to take name of type statement without "type" or "only"
+  type_name_list = [i.split()[1] for i in type_name]           # take type name
+  type_name_list = ([s.strip("(") for s in type_name_list])    # remove ","
+  type_name_list = [i.rsplit("(",1)[0] for i in type_name_list]
+
+  # Solve problem with having "!" in strings
+  type_list = []
+  for i in range(len(type_name)):
+    string = type_name[i]
+    string = string.split('!')[0]
+    type_list.append(string)
+
+  if type_name != []:                # type_name for whole line
+    true_name_list = type_name_list  # type_name_list - take only name
+    true_name_list = list(set(true_name_list))
+
+  else:
+    true_name_list = 0
+
+  return true_name_list
+
+get_type("Flow_Mod.f90")
 
 #===============================================================================
 # Find use statements
