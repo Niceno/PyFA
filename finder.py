@@ -10,14 +10,16 @@ import os
 #-------------------------------------------------------------------------------
 def get_mod(filename):
 
-  module  = []                                        # initialize module list
-  pattern = re.compile(".+?(?=_Mod$)", re.IGNORECASE)
+  module   = []                                        # initialize module list
+  pattern  = re.compile(".+?(?=_Mod$)", re.IGNORECASE)
+  pattern2 = re.compile("^\s*\S*use.*", re.IGNORECASE) # avoiding uses(for prog)
 
   with open (filename, 'rt') as myfile:               # open file
     for line in myfile:                               # read line by line
       if pattern.search(line) != None:                # search for pattern
         if not line.startswith("!"):                  # skip line start with "!"
-          module.append(( line.rstrip("\n")))         # add lines to list
+          if not pattern2.search(line) != None:       # skip line with use
+            module.append(( line.rstrip("\n")))       # add lines to list
 
   module = [s.strip() for s in module if s.strip()]   # remove whitespaces
 

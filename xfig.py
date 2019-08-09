@@ -120,7 +120,6 @@ def choose_width(filename):
     fun_type = filename.fun_type
   else:
     fun_type = ["0"]
-
   if use_list == 0:
     use_list = ["0"]
   else:
