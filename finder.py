@@ -53,7 +53,6 @@ def get_sub(filename):
     sub_name   = re.sub("subroutine ", "", sub_string)     # return subroutine
 
     if sub_name.endswith("&"):
-    #  sub_name =  sub_name[:-len("  &")]
       sub_name = sub_name + ")"
 
   elif len(subroutine) == 0:
@@ -105,7 +104,7 @@ def get_prog(filename):
     for line in myfile:                         # read line by line
       if pattern.search(line) != None:          # search for pattern
         if not line.startswith("!"):            # skip line starting with "!"
-          program.append(( line.rstrip("\n"))) # add line with pattern to list
+          program.append(( line.rstrip("\n")))  # add line with pattern to list
   program = [s.strip() for s in program if s.strip()] # remove whitespaces
 
   if len(program) != 0:                      # if program is not empty
@@ -172,6 +171,44 @@ def get_header(filename):
     header = module_name
 
   return header
+
+#===============================================================================
+# Find call statements
+#-------------------------------------------------------------------------------
+def get_call(filename):
+
+  use_name = []
+
+  pattern   = re.compile("(call)\s", re.IGNORECASE)
+
+  with open (filename, 'rt') as myfile:          # open file
+    for line in myfile:                          # read line by line
+      if pattern.search(line) != None:           # search for pattern
+        if not line.startswith("!"):             # skip line starting with "!"
+          use_name.append(( line.rstrip("\n")))  # add line with pattern to list
+
+  use_name = [s.strip() for s in use_name if s.strip()] # remove whitespace
+
+  # If you only want to take name of use statement without "type" or "only"
+  use_name_list = [i.split()[1] for i in use_name]           # take use name
+  use_name_list = ([s.strip("(") for s in use_name_list])    # remove ","
+  use_name_list = [i.rsplit("(",1)[0] for i in use_name_list]
+
+  # Solve problem with having "!" in strings
+  use_list = []
+  for i in range(len(use_name)):
+    string = use_name[i]
+    string = string.split('!')[0]
+    use_list.append(string)
+
+  if use_name != []:                # use_name for whole line
+    true_name_list = use_name_list  # use_name_list - take only name
+    true_name_list = list(set(true_name_list))
+
+  else:
+    true_name_list = 0
+
+  return true_name_list
 
 #===============================================================================
 # Find use statements
@@ -335,7 +372,6 @@ def get_meth(filename):
 #===============================================================================
 # Find only methods names
 #-------------------------------------------------------------------------------
-
 def get_only_meth(filename):
   module_name = get_mod(filename)
 

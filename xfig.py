@@ -833,13 +833,15 @@ def plot_text_right(file, x0, y0, text):
 #-------------------------------------------------------------------------------
 def plot_spline(file, object1, object2, depth):
 
-  # First coordinate
+  use_list = object2.use
+
+  # First coordinate at half of the box
   x1 = object1.x1
   y1 = (object1.y0 + object1.y1)/2
 
   # Last coordinate
   x6 = object2.x0
-  y6 = (object2.y1+object2.y0)/2
+  y6 = object2.y0 + UBH + len(use_list)/2
 
   # Second coordinate
   x2 = x1 + 2
@@ -859,9 +861,72 @@ def plot_spline(file, object1, object2, depth):
 
   file.write("3 2 0 2 0 7 ")
   file.write("%5d" % (depth))
-  file.write(" -1 -1 0.000 0 1 0 6")                  # 6 --> number of points
+  file.write(" -1 -1 0.000 0 1 1 6")                  # 6 --> number of points
 
-  file.write("\n 1 1 1.00 90.00 120.00")              # arrow settings
+  file.write("\n 1 1 1.00 135.00 180.00")              # arrow settings
+  file.write("\n 6 1 1.00 135.00 180.00")              # arrow settings
+
+  file.write("\n%9d %9d" % ( (x1) *XFS,  \
+                             (y1)*XFS))
+  file.write("%9d %9d" %   ( (x2) *XFS,  \
+                             (y2)*XFS))
+  file.write("%9d %9d" %   ( (x3) *XFS,  \
+                             (y3)*XFS))
+  file.write("%9d %9d" %   ( (x4) *XFS,  \
+                             (y4)*XFS))
+  file.write("%9d %9d" %   ( (x5) *XFS,  \
+                             (y5)*XFS))
+  file.write("%9d %9d" %   ( (x6) *XFS,  \
+                             (y6)*XFS))
+
+  file.write("\n 0.000 1.000 1.000 1.000 1.000 0.000\n")
+
+#===============================================================================
+# Function to plot spline (with 6 coordinates)
+#
+# Parameters:
+#   - file:     Xfig file's handle
+#   - object1:  starting object (spline starts at the rigth side of this object)
+#   - object2:  ending object   (spline ends at the left side of this object)
+#   - depth:    depth of plotted spline
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting spline connections
+#-------------------------------------------------------------------------------
+def plot_dashed_spline(file, object1, object2, depth):
+
+  # First coordinate
+  x1 = object1.x1
+  y1 = (object1.y0 + object1.y1)/2
+
+  # Last coordinate
+  x6 = object2.x0
+  y6 = object2.y0 + UBH/2
+
+  # Second coordinate
+  x2 = x1 + 2
+  y2 = y1
+
+  # Third coordinate
+  x3 = object1.x1 + 3
+  y3 = object1.y0
+
+  # Fourth coordinate
+  x4 = object2.x0 - 3
+  y4 = object2.y1
+
+  # Fifth coordinate
+  x5 = x6 - 2
+  y5 = y6
+
+  file.write("3 2 1 2 0 7 ")
+  file.write("%5d" % (depth))
+  file.write(" -1 -1 8.000 0 1 1 6")                   # 6 --> number of points
+                                                       # 8 --> dash length
+
+  file.write("\n 1 0 1.00 135.00 180.00")              # arrow settings
+  file.write("\n 6 0 1.00 135.00 180.00")              # arrow settings
 
   file.write("\n%9d %9d" % ( (x1) *XFS,  \
                              (y1)*XFS))
@@ -890,8 +955,10 @@ def plot_spline(file, object1, object2, depth):
 #   - function for plotting everything (the entire graph) from object list
 #-------------------------------------------------------------------------------
 def plot_all_spline(file, obj_list):
-  use_objects = []
-  mod_objects = []
+
+  use_objects  = []
+  mod_objects  = []
+  call_objects = []
 
   # Getting list with only modules
   for i in range(len(obj_list)):
@@ -903,9 +970,16 @@ def plot_all_spline(file, obj_list):
     if obj_list[i].use != "None":
       use_objects.append(obj_list[i])
 
-  depth_list = list(range(101,101+len(mod_objects)))  # depths for every module
+  # Getting list with objects that have call statements
+  for i in range(len(obj_list)):
+    if obj_list[i].call != 0:
+      call_objects.append(obj_list[i])
 
-  # Plotting connections
+
+  depth_list_use = list(range(101,101+len(mod_objects)))   # depths for modules
+  depth_list_call = list(range(201,201+len(call_objects))) # depths for calls
+
+  # Plotting connections for use statements
   for i in range(len(use_objects)):
     use = use_objects[i].use
     for k in range(len(use)):
@@ -913,7 +987,17 @@ def plot_all_spline(file, obj_list):
       used = used.strip("use ")
       for m in range(len(mod_objects)):
         if used == mod_objects[m].name:
-          plot_spline(file, mod_objects[m],use_objects[i],depth_list[m])
+          plot_spline(file, mod_objects[m],use_objects[i], depth_list_use[m])
+
+  # Plotting connections for call statements
+  for i in range(len(call_objects)):
+    call = call_objects[i].call
+    for k in range(len(call)):
+      called = call[k]
+      for m in range(len(obj_list)):
+        if called in obj_list[m].name:
+          plot_dashed_spline(file, call_objects[i],         \
+                             obj_list[m], depth_list_call[i])
 
 #===============================================================================
 # Function to plot line

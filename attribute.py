@@ -8,12 +8,13 @@ import browse
 # Define module class
 #-------------------------------------------------------------------------------
 class Module(object):
-  def __init__(module, type, name, use, var, meth,      \
-               level, x0, x1, y0, y1, width, height):
+  def __init__(module, type, name, use, var, meth,            \
+               level, x0, x1, y0, y1, width, height, call):
     module.name   = name
     module.use    = use
     module.var    = var
     module.meth   = meth
+    module.call   = call
     module.level  = level
     module.x0     = x0
     module.x1     = x1
@@ -42,13 +43,14 @@ class Module(object):
 # Define subroutine class
 #-------------------------------------------------------------------------------
 class Subroutine(object):
-  def __init__(subroutine, type, name, use, var, meth,     \
-               level, x0, x1, y0, y1, width, height):
+  def __init__(subroutine, type, name, use, var, meth,       \
+               level, x0, x1, y0, y1, width, height, call):
 
     subroutine.name    = name
     subroutine.use     = use
     subroutine.var     = var
     subroutine.meth    = meth
+    subroutine.call    = call
     subroutine.level   = level
     subroutine.x0      = x0
     subroutine.x1      = x1
@@ -76,12 +78,13 @@ def print_it(abc):
 #-------------------------------------------------------------------------------
 class Function(object):
   def __init__(function, type, name, use, var, meth,     \
-               level, x0, x1, y0, y1, width, height, fun_type):
+               level, x0, x1, y0, y1, width, height, fun_type, call):
 
     function.name      = name
     function.use       = use
     function.var       = var
     function.meth      = meth
+    function.call      = call
     function.level     = level
     function.x0        = x0
     function.x1        = x1
@@ -111,12 +114,13 @@ def print_it(abc):
 #-------------------------------------------------------------------------------
 class Program(object):
   def __init__(program, type, name, use, var, meth, level,     \
-               x0, x1, y0, y1, width, height):
+               x0, x1, y0, y1, width, height, call):
 
     program.name    = name
     program.use     = use
     program.var     = var
     program.meth    = meth
+    program.call    = call
     program.level   = level
     program.x0      = x0
     program.x1      = x1
@@ -160,6 +164,7 @@ def module_class(filename):
   use_list     = check_use(finder.get_use(filename))
   var_list     = finder.get_var(filename)
   meth_list    = finder.get_meth(filename)
+  call_list    = finder.get_call(filename)
   level        = 0
   x0           = 1
   x1           = 0
@@ -179,7 +184,8 @@ def module_class(filename):
                   y0,           \
                   y1,           \
                   width,        \
-                  height)
+                  height,       \
+                  call_list)
 
   return module
 
@@ -192,6 +198,7 @@ def subroutine_class(filename):
   sub_name   = finder.get_sub(filename)
   use_list   = check_use(finder.get_use(filename))
   var_list   = finder.get_var(filename)
+  call_list  = finder.get_call(filename)
   meth_list  = 0
   level      = 0
   x0         = 1
@@ -212,7 +219,8 @@ def subroutine_class(filename):
                           y0,         \
                           y1,         \
                           width,      \
-                          height)
+                          height,     \
+                          call_list)
   return subroutine
 
 #===============================================================================
@@ -225,6 +233,7 @@ def function_class(filename):
   use_list   = check_use(finder.get_use(filename))
   var_list   = finder.get_var(filename)
   fun_type   = finder.get_fun_type(filename)
+  call_list  = finder.get_call(filename)
   meth_list  = 0
   level      = 0
   x0         = 1
@@ -246,7 +255,8 @@ def function_class(filename):
                       y1,         \
                       width,      \
                       height,     \
-                      fun_type)
+                      fun_type,   \
+                      call_list)
   return function
 
 #===============================================================================
@@ -257,6 +267,7 @@ def program_class(filename):
   type       = "Program"
   prog_name  = finder.get_prog(filename)
   use_list   = check_use(finder.get_use(filename))
+  call_list  = finder.get_call(filename)
   var_list   = 0
   meth_list  = 0
   level      = 0
@@ -278,7 +289,8 @@ def program_class(filename):
                     y0,          \
                     y1,          \
                     width,       \
-                    height)
+                    height,      \
+                    call_list)
   return program
 
 #===============================================================================
