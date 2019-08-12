@@ -54,6 +54,23 @@ def check_if_function(object):
   return fun_type_len
 
 #===============================================================================
+# Function to check if object has type statements
+#
+# Parameters:
+#   - object:  checked object
+# Returns:
+#   - fun_type_len:  1 if it is has type stat, 0 if not
+# Used by:
+#   - Functions which plot frames, to determine box height
+#-------------------------------------------------------------------------------
+def check_if_type_stat(object):
+  if object.type_stat != 0:
+    type_len = len(object.type_stat)
+  else:
+    type_len = 0
+  return type_len
+
+#===============================================================================
 # Return the code value of a Xfig font
 #
 # Parameters:
@@ -317,6 +334,12 @@ def plot_module(file, x0, y0,     \
                 module_name,      \
                 object)
 
+
+  # Plot a type statements box
+  type_stat_len  = check_if_type_stat(object)
+  if type_stat_len != 0:
+    plot_type_stat(file, x0, y0, object)
+
   if use_list != "None":
     # If use statement has been found, plot use text box
     plot_use_name(file, x0, y0,   \
@@ -366,6 +389,11 @@ def plot_subroutine(file, x0, y0,      \
                 subroutine_name,      \
                 object)
 
+  # Plot a type statements box
+  type_stat_len  = check_if_type_stat(object)
+  if type_stat_len != 0:
+    plot_type_stat(file, x0, y0, object)
+
   # Check if use box exist
   if use_list != "None":
     # Plot a use text box
@@ -408,6 +436,12 @@ def plot_function(file, x0, y0,       \
                 function_name,        \
                 object)
 
+  # Plot a type statements box
+  type_stat_len  = check_if_type_stat(object)
+  if type_stat_len != 0:
+    plot_type_stat(file, x0, y0, object)
+
+
   plot_fun_type_name(file, x0, y0,    \
                      object)
 
@@ -441,7 +475,7 @@ def plot_function(file, x0, y0,       \
 # Used by:
 #   - function for plotting module/subroutine/function/program
 #-------------------------------------------------------------------------------
-def plot_program(file, x0, y0,      \
+def plot_program(file, x0, y0,         \
                     program_name,      \
                     use_list,          \
                     object):
@@ -450,6 +484,11 @@ def plot_program(file, x0, y0,      \
   plot_prog_name(file, x0, y0,         \
                 program_name,          \
                 object)
+
+  # Plot a type statements box
+  type_stat_len  = check_if_type_stat(object)
+  if type_stat_len != 0:
+    plot_type_stat(file, x0, y0, object)
 
   # Check if use box exist
   if use_list != "None":
@@ -569,6 +608,48 @@ def plot_prog_frame(file, x0, y0, box_width, box_height):
   file.write("%9d %9d\n" % ( x0           *XFS,  y0            *XFS))
 
 #===============================================================================
+# Function to plot an empty type statement box (frame without text)
+#
+# Parameters:
+#   - file:            Xfig file's handle
+#   - x0:              object position on x axis in centimeters
+#   - y0:              object position on y axis in centimeters
+#   - box_width:       box width in centimeters
+#   - box_height:      box height in centimeters
+#   - object:          object to plot
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting type statement box
+#-------------------------------------------------------------------------------
+def plot_type_stat_frame(file, x0, y0, box_width, box_height,  \
+                        object):
+
+  type_stat_len = check_if_type_stat(object)
+
+  if object.type == "Module":
+    color = COLOR_HEADER_MODULE
+  if object.type == "Subroutine":
+    color = COLOR_HEADER_SUBROUTINE
+  if object.type == "Function":
+    color = COLOR_HEADER_FUNCTION
+  if object.type == "Program":
+    color = COLOR_HEADER_PROGRAM
+
+  file.write("2 2 0 ")
+  file.write("%3d "       % THICKNESS)
+  file.write("0")
+  file.write("%3d "       % xfig_box_color(color))
+  file.write("11 -1 30 0.000 0 0 -1 0 0 5\n")
+  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height           \
+                                                 +type_stat_len)*XFS))
+  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height           \
+                                                 +type_stat_len)*XFS))
+  file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height)*XFS))
+
+#===============================================================================
 # Function to plot an empty function type box (frame without text)
 #
 # Parameters:
@@ -586,7 +667,8 @@ def plot_prog_frame(file, x0, y0, box_width, box_height):
 def plot_fun_type_frame(file, x0, y0, box_width, box_height,  \
                         object):
 
-  fun_type_len = check_if_function(object)
+  fun_type_len  = check_if_function(object)
+  type_stat_len = check_if_type_stat(object)
 
   file.write("2 2 0 ")
   file.write("%3d "       % THICKNESS)
@@ -596,9 +678,11 @@ def plot_fun_type_frame(file, x0, y0, box_width, box_height,  \
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height           \
-                                                 +fun_type_len)*XFS))
+                                                +fun_type_len            \
+                                                +type_stat_len)*XFS))
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height           \
-                                                 +fun_type_len)*XFS))
+                                                 +fun_type_len           \
+                                                 +type_stat_len)*XFS))
   file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height)*XFS))
 
 #===============================================================================
@@ -621,7 +705,8 @@ def plot_use_frame(file, x0, y0, box_width, box_height, \
                    use_list,                            \
                    object):
 
-  fun_type_len = check_if_function(object)
+  fun_type_len  = check_if_function(object)
+  type_stat_len = check_if_type_stat(object)
 
   file.write("2 2 0 ")
   file.write("%3d "       % THICKNESS)
@@ -632,10 +717,12 @@ def plot_use_frame(file, x0, y0, box_width, box_height, \
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height          \
                                                  +use_len(use_list)     \
-                                                 +fun_type_len)*XFS))
+                                                 +fun_type_len          \
+                                                 +type_stat_len)*XFS))
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height          \
                                                  +use_len(use_list)     \
-                                                 +fun_type_len)*XFS))
+                                                 +fun_type_len          \
+                                                 +type_stat_len)*XFS))
   file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height)*XFS))
 
 #===============================================================================
@@ -660,7 +747,8 @@ def plot_var_frame(file, x0, y0, box_width, box_height, \
                    use_list,                            \
                    object):
 
-  fun_type_len = check_if_function(object)
+  fun_type_len  = check_if_function(object)
+  type_stat_len = check_if_type_stat(object)
 
   file.write("2 2 0 ")
   file.write("%3d "       % THICKNESS)
@@ -672,11 +760,13 @@ def plot_var_frame(file, x0, y0, box_width, box_height, \
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height            \
                                                  +len(var_list)           \
                                                  +use_len(use_list)       \
-                                                 +fun_type_len)*XFS))
+                                                 +fun_type_len            \
+                                                 +type_stat_len)*XFS))
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height            \
                                                  +len(var_list)           \
                                                  +use_len(use_list)       \
-                                                 +fun_type_len)*XFS))
+                                                 +fun_type_len            \
+                                                 +type_stat_len)*XFS))
   file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height)*XFS))
 
 #===============================================================================
@@ -703,7 +793,8 @@ def plot_meth_frame(file, x0, y0, box_width, box_height, \
                     use_list,                            \
                     object):
 
-  fun_type_len = check_if_function(object)
+  fun_type_len  = check_if_function(object)
+  type_stat_len = check_if_type_stat(object)
 
   file.write("2 2 0 ")
   file.write("%3d "       % THICKNESS)
@@ -713,25 +804,30 @@ def plot_meth_frame(file, x0, y0, box_width, box_height, \
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height           \
                                                  +len(var_list)          \
                                                  +use_len(use_list)      \
-                                                 +fun_type_len)*XFS))
+                                                 +fun_type_len           \
+                                                 +type_stat_len)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height           \
                                                  +len(var_list)          \
                                                  +use_len(use_list)      \
-                                                 +fun_type_len)*XFS))
+                                                 +fun_type_len           \
+                                                 +type_stat_len)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height           \
                                                  +len(var_list)          \
                                                  +len(meth_list)         \
                                                  +use_len(use_list)      \
-                                                 +fun_type_len)*XFS))
+                                                 +fun_type_len           \
+                                                 +type_stat_len)*XFS))
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height           \
                                                  +len(var_list)          \
                                                  +len(meth_list)         \
                                                  +use_len(use_list)      \
-                                                 +fun_type_len)*XFS))
+                                                 +fun_type_len           \
+                                                 +type_stat_len)*XFS))
   file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height           \
                                                  +len(var_list)          \
                                                  +use_len(use_list)      \
-                                                 +fun_type_len)*XFS))
+                                                 +fun_type_len           \
+                                                 +type_stat_len)*XFS))
 
 #===============================================================================
 # Function to print centered frameless text
@@ -777,10 +873,10 @@ def plot_text_center(file, x0, y0, box_width, box_height, text):
 # Used by:
 #   - functions for plotting variables, methods and use statements
 #-------------------------------------------------------------------------------
-def plot_text_left(file, x0, y0, box_width, box_height, text):
+def plot_text_left(file, x0, y0, box_width, box_height, text, font):
 
   file.write("4 0 0 10 -1 ")              # 45 is depth
-  file.write("%5d" % xfig_font_code(FONT_NORMAL))
+  file.write("%5d" % xfig_font_code(font))
   file.write("%3d" % (FONT_SIZE * 36))    # font size
   file.write(" 0.0000 4 ")
   text_width  = 3                         # could be any value
@@ -798,7 +894,7 @@ def plot_text_left(file, x0, y0, box_width, box_height, text):
 #   - file:            Xfig file's handle
 #   - x0:              object position on x axis in centimeters
 #   - y0:              object position on y axis in centimeters
-#   - text:            text to plot (variable,method or use statement)
+#   - text:            text to plot (coordinates)
 # Returns:
 #   - nothing
 # Used by:
@@ -996,7 +1092,7 @@ def plot_all_spline(file, obj_list):
       called = call[k]
       for m in range(len(obj_list)):
         if called in obj_list[m].name:
-          plot_dashed_spline(file, call_objects[i],         \
+          plot_dashed_spline(file, call_objects[i],            \
                              obj_list[m], depth_list_call[i])
 
 #===============================================================================
@@ -1175,6 +1271,33 @@ def plot_prog_name(file, x0, y0, text, object):
   plot_text_center(file, x0, y0, box_width, UBH, text)
 
 #===============================================================================
+# Function to plot type statements (text)
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - x0:           object position on x axis in centimeters
+#   - y0:           object position on y axis in centimeters
+#   - object:       object to plot
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting type statements box
+#-------------------------------------------------------------------------------
+def plot_type_stat_text_left(file, x0, y0, object):
+
+  type_stat      = object.type_stat
+  type_stat_len  = check_if_type_stat(object)
+  box_width      = choose_width(object)
+  y_pos          = 0.25 + (y0 + FONT_SIZE + (UBH-FONT_SIZE)*0.5)
+
+  type_stat_num  = list(range(0,type_stat_len))
+
+  if type_stat_len != 0:
+    for i in range(type_stat_len):
+      plot_text_left(file, x0, y_pos + type_stat_num[i],       \
+                     box_width, UBH, type_stat[i], FONT_HEADER)
+
+#===============================================================================
 # Function to plot function type (text)
 #
 # Parameters:
@@ -1189,11 +1312,12 @@ def plot_prog_name(file, x0, y0, text, object):
 #-------------------------------------------------------------------------------
 def plot_fun_type_text_left(file, x0, y0, object):
 
-  fun_type   = object.fun_type
-  box_width  = choose_width(object)
-  y_pos      = 0.25 + (y0 + FONT_SIZE + (UBH-FONT_SIZE)*0.5)
+  fun_type      = object.fun_type
+  box_width     = choose_width(object)
+  type_stat_len = check_if_type_stat(object)
+  y_pos         = type_stat_len + 0.25 + (y0 + FONT_SIZE + (UBH-FONT_SIZE)*0.5)
 
-  plot_text_left(file, x0, y_pos, box_width, UBH, fun_type)
+  plot_text_left(file, x0, y_pos, box_width, UBH, fun_type, FONT_NORMAL)
 
 #===============================================================================
 # Function to plot use statements (text)
@@ -1213,14 +1337,16 @@ def plot_use_text_left(file, x0, y0, \
                        use_list,     \
                        object):
 
-  use_list_num = list(range(0,len(use_list)))
-  fun_type_len = check_if_function(object)
-  box_width    = choose_width(object)
-  y_pos        = fun_type_len + 0.25 + (y0 + FONT_SIZE + (UBH-FONT_SIZE)*0.5)
+  use_list_num  = list(range(0,len(use_list)))
+  fun_type_len  = check_if_function(object)
+  type_stat_len = check_if_type_stat(object)
+  box_width     = choose_width(object)
+  y_pos         = fun_type_len + type_stat_len + 0.25       \
+                + (y0 + FONT_SIZE + (UBH-FONT_SIZE)*0.5)
 
   for i in range(len(use_list)):
     plot_text_left(file, x0, y_pos + use_list_num[i],       \
-                   box_width, UBH, use_list[i])
+                   box_width, UBH, use_list[i], FONT_NORMAL)
 
 #===============================================================================
 # Function to plot variables (text)
@@ -1242,15 +1368,16 @@ def plot_var_text_left(file, x0, y0, \
                        use_list,     \
                        object):
 
-  box_width    = choose_width(object)
-  var_list_num = list(range(0,len(var_list)))
-  fun_type_len = check_if_function(object)
-  y_pos        = fun_type_len + use_len(use_list)                 \
-               + 0.25 + (y0 + FONT_SIZE + (UBH-FONT_SIZE)*0.5)
+  box_width     = choose_width(object)
+  var_list_num  = list(range(0,len(var_list)))
+  fun_type_len  = check_if_function(object)
+  type_stat_len = check_if_type_stat(object)
+  y_pos         = fun_type_len + use_len(use_list) + type_stat_len    \
+                + 0.25 + (y0 + FONT_SIZE + (UBH-FONT_SIZE)*0.5)
 
   for i in range(len(var_list)):
-    plot_text_left(file, x0, y_pos + var_list_num[i],             \
-                   box_width, UBH, var_list[i])
+    plot_text_left(file, x0, y_pos + var_list_num[i],                 \
+                   box_width, UBH, var_list[i], FONT_NORMAL)
 
 #===============================================================================
 # Function to plot methods (text)
@@ -1277,12 +1404,39 @@ def plot_meth_text_left(x0, y0, xf, \
   box_width     = choose_width(object)
   meth_list_num = list(range(0,len(meth_list)))
   fun_type_len  = check_if_function(object)
-  y_pos         = fun_type_len + len(var_list) + use_len(use_list)     \
+  type_stat_len = check_if_type_stat(object)
+  y_pos         = fun_type_len + type_stat_len                         \
+                + len(var_list) + use_len(use_list)                    \
                 + (0.25 + (y0 + FONT_SIZE + (UBH-FONT_SIZE)*0.5))
 
   for i in range(len(meth_list)):
     plot_text_left(xf, x0, y_pos + meth_list_num[i],                   \
-                   box_width, UBH, meth_list[i])
+                   box_width, UBH, meth_list[i], FONT_NORMAL)
+
+#===============================================================================
+# Function to plot type statements box with text
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - x0:           object position on x axis in centimeters
+#   - y0:           object position on y axis in centimeters
+#   - use_list:     list of use statements
+#   - object:       object to plot
+# Returns:
+#   - nothing
+# Used by:
+#   - functions for plotting modules, subroutines and functions
+#-------------------------------------------------------------------------------
+def plot_type_stat(file, x0, y0,   \
+                   object):
+
+  box_width = choose_width(object)
+
+  # Plot type statement framing box first
+  plot_type_stat_frame(file, x0, y0, box_width, UBH, object)
+
+  # Plot text
+  plot_type_stat_text_left(file, x0, y0, object)
 
 #===============================================================================
 # Function to plot function type box with text
@@ -1303,7 +1457,7 @@ def plot_fun_type_name(file, x0, y0,   \
 
   box_width = choose_width(object)
 
-  # Plot variable framing box first
+  # Plot function type framing box first
   plot_fun_type_frame(file, x0, y0, box_width, UBH, object)
 
   # Plot text
@@ -1329,7 +1483,7 @@ def plot_use_name(file, x0, y0, \
 
   box_width = choose_width(object)
 
-  # Plot variable framing box first
+  # Plot use statements framing box first
   plot_use_frame(file, x0, y0, box_width, UBH, use_list, object)
 
   # Plot text

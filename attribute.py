@@ -9,21 +9,21 @@ import browse
 #-------------------------------------------------------------------------------
 class Module(object):
   def __init__(module, type, name, use, var, meth,            \
-               level, x0, x1, y0, y1, width, height, call):
-    module.name   = name
-    module.use    = use
-    module.var    = var
-    module.meth   = meth
-    module.call   = call
-    module.level  = level
-    module.x0     = x0
-    module.x1     = x1
-    module.y0     = y0
-    module.y1     = y1
-    module.type   = type
-    module.width  = width
-    module.height = height
-
+               level, x0, x1, y0, y1, width, height, call, type_stat):
+    module.name      = name
+    module.use       = use
+    module.var       = var
+    module.meth      = meth
+    module.call      = call
+    module.level     = level
+    module.x0        = x0
+    module.x1        = x1
+    module.y0        = y0
+    module.y1        = y1
+    module.type      = type
+    module.width     = width
+    module.height    = height
+    module.type_stat = type_stat
 
   def print_it(abc):
     print("\nModule name: ", abc.name,     \
@@ -44,21 +44,22 @@ class Module(object):
 #-------------------------------------------------------------------------------
 class Subroutine(object):
   def __init__(subroutine, type, name, use, var, meth,       \
-               level, x0, x1, y0, y1, width, height, call):
+               level, x0, x1, y0, y1, width, height, call, type_stat):
 
-    subroutine.name    = name
-    subroutine.use     = use
-    subroutine.var     = var
-    subroutine.meth    = meth
-    subroutine.call    = call
-    subroutine.level   = level
-    subroutine.x0      = x0
-    subroutine.x1      = x1
-    subroutine.y0      = y0
-    subroutine.y1      = y1
-    subroutine.type    = type
-    subroutine.width   = width
-    subroutine.height  = height
+    subroutine.name      = name
+    subroutine.use       = use
+    subroutine.var       = var
+    subroutine.meth      = meth
+    subroutine.call      = call
+    subroutine.level     = level
+    subroutine.x0        = x0
+    subroutine.x1        = x1
+    subroutine.y0        = y0
+    subroutine.y1        = y1
+    subroutine.type      = type
+    subroutine.width     = width
+    subroutine.height    = height
+    subroutine.type_stat = type_stat
 
 def print_it(abc):
   print("\nName: ",            abc.name,     \
@@ -78,7 +79,7 @@ def print_it(abc):
 #-------------------------------------------------------------------------------
 class Function(object):
   def __init__(function, type, name, use, var, meth,     \
-               level, x0, x1, y0, y1, width, height, fun_type, call):
+               level, x0, x1, y0, y1, width, height, fun_type, call, type_stat):
 
     function.name      = name
     function.use       = use
@@ -94,6 +95,7 @@ class Function(object):
     function.width     = width
     function.height    = height
     function.fun_type  = fun_type
+    function.type_stat = type_stat
 
 def print_it(abc):
   print("\nName: ",            abc.name,     \
@@ -114,21 +116,22 @@ def print_it(abc):
 #-------------------------------------------------------------------------------
 class Program(object):
   def __init__(program, type, name, use, var, meth, level,     \
-               x0, x1, y0, y1, width, height, call):
+               x0, x1, y0, y1, width, height, call, type_stat):
 
-    program.name    = name
-    program.use     = use
-    program.var     = var
-    program.meth    = meth
-    program.call    = call
-    program.level   = level
-    program.x0      = x0
-    program.x1      = x1
-    program.y0      = y0
-    program.y1      = y1
-    program.type    = type
-    program.width   = width
-    program.height  = height
+    program.name      = name
+    program.use       = use
+    program.var       = var
+    program.meth      = meth
+    program.call      = call
+    program.level     = level
+    program.x0        = x0
+    program.x1        = x1
+    program.y0        = y0
+    program.y1        = y1
+    program.type      = type
+    program.width     = width
+    program.height    = height
+    program.type_stat = type_stat
 
 def print_it(abc):
   print("\nName: ",            abc.name,     \
@@ -165,6 +168,7 @@ def module_class(filename):
   var_list     = finder.get_var(filename)
   meth_list    = finder.get_meth(filename)
   call_list    = finder.get_call(filename)
+  type_stat    = finder.get_type(filename)
   level        = 0
   x0           = 1
   x1           = 0
@@ -185,7 +189,8 @@ def module_class(filename):
                   y1,           \
                   width,        \
                   height,       \
-                  call_list)
+                  call_list,    \
+                  type_stat)
 
   return module
 
@@ -199,6 +204,7 @@ def subroutine_class(filename):
   use_list   = check_use(finder.get_use(filename))
   var_list   = finder.get_var(filename)
   call_list  = finder.get_call(filename)
+  type_stat  = finder.get_type(filename)
   meth_list  = 0
   level      = 0
   x0         = 1
@@ -220,7 +226,8 @@ def subroutine_class(filename):
                           y1,         \
                           width,      \
                           height,     \
-                          call_list)
+                          call_list,  \
+                          type_stat)
   return subroutine
 
 #===============================================================================
@@ -234,6 +241,7 @@ def function_class(filename):
   var_list   = finder.get_var(filename)
   fun_type   = finder.get_fun_type(filename)
   call_list  = finder.get_call(filename)
+  type_stat  = finder.get_type(filename)
   meth_list  = 0
   level      = 0
   x0         = 1
@@ -256,7 +264,8 @@ def function_class(filename):
                       width,      \
                       height,     \
                       fun_type,   \
-                      call_list)
+                      call_list,  \
+                      type_stat)
   return function
 
 #===============================================================================
@@ -268,6 +277,7 @@ def program_class(filename):
   prog_name  = finder.get_prog(filename)
   use_list   = check_use(finder.get_use(filename))
   call_list  = finder.get_call(filename)
+  type_stat  = finder.get_type(filename)
   var_list   = 0
   meth_list  = 0
   level      = 0
@@ -290,7 +300,8 @@ def program_class(filename):
                     y1,          \
                     width,       \
                     height,      \
-                    call_list)
+                    call_list,   \
+                    type_stat)
   return program
 
 #===============================================================================

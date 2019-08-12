@@ -178,7 +178,6 @@ def get_header(filename):
 def get_call(filename):
 
   call_name = []
-
   pattern   = re.compile("(call)\s", re.IGNORECASE)
 
   with open (filename, 'rt') as myfile:          # open file
@@ -216,7 +215,6 @@ def get_call(filename):
 def get_type(filename):
 
   type_name = []
-
   pattern   = re.compile("^\s+(?=type\s+)", re.IGNORECASE)
 
   with open (filename, 'rt') as myfile:          # open file
@@ -239,16 +237,14 @@ def get_type(filename):
     string = string.split('!')[0]
     type_list.append(string)
 
-  if type_name != []:                # type_name for whole line
-    true_name_list = type_name_list  # type_name_list - take only name
+  if type_name != []:           # type_list      - whole string
+    true_name_list = type_list  # type_name_list - take only name
     true_name_list = list(set(true_name_list))
 
   else:
     true_name_list = 0
 
   return true_name_list
-
-get_type("Flow_Mod.f90")
 
 #===============================================================================
 # Find use statements
