@@ -20,7 +20,7 @@ def get_mod(file_path):
   pattern  = re.compile(".+?(?=_Mod$)", re.IGNORECASE)
   pattern2 = re.compile("^\s*\S*use.*", re.IGNORECASE) # avoiding uses(for prog)
 
-  with open (file_path, 'rt') as myfile:               # open file
+  with open (file_path, 'rt') as myfile:              # open file
     for line in myfile:                               # read line by line
       if pattern.search(line) != None:                # search for pattern
         if not line.startswith("!"):                  # skip line start with "!"
@@ -34,7 +34,7 @@ def get_mod(file_path):
     module_name = re.sub("module ", "", mod_string)   # return subroutine
 
   elif len(module) == 0:
-    module_name = []                                # if no module return empty
+    module_name = []
 
   return module_name
 
@@ -53,7 +53,7 @@ def get_sub(file_path):
   subroutine = []                               # initialize module list
   pattern    = re.compile(".+?(?=subroutine)", re.IGNORECASE)
 
-  with open (file_path, 'rt') as myfile:         # open file
+  with open (file_path, 'rt') as myfile:        # open file
     for line in myfile:                         # read line by line
       if pattern.search(line) != None:          # search for pattern
         if not line.startswith("!"):            # skip line starting with "!"
@@ -69,7 +69,7 @@ def get_sub(file_path):
       sub_name = sub_name + ")"
 
   elif len(subroutine) == 0:
-    sub_name = 0                                # if no subroutine return 0
+    sub_name = 0
 
   return sub_name
 
@@ -88,7 +88,7 @@ def get_fun(file_path):
   function = []                                 # initialize
   pattern    = re.compile(".+?(?=function)", re.IGNORECASE)
 
-  with open (file_path, 'rt') as myfile:         # open file
+  with open (file_path, 'rt') as myfile:        # open file
     for line in myfile:                         # read line by line
       if pattern.search(line) != None:          # search for pattern
         if not line.startswith("!"):            # skip line starting with "!"
@@ -107,7 +107,7 @@ def get_fun(file_path):
       fun_name = 0
 
   elif len(function) == 0:
-    fun_name = 0                             # if there is no function return 0
+    fun_name = 0
 
   return fun_name
 
@@ -126,7 +126,7 @@ def get_prog(file_path):
   program = []                                 # initialize
   pattern    = re.compile(".+?(?=program)", re.IGNORECASE)
 
-  with open (file_path, 'rt') as myfile:         # open file
+  with open (file_path, 'rt') as myfile:        # open file
     for line in myfile:                         # read line by line
       if pattern.search(line) != None:          # search for pattern
         if not line.startswith("!"):            # skip line starting with "!"
@@ -145,7 +145,7 @@ def get_prog(file_path):
       prog_name = 0
 
   elif len(program) == 0:
-    prog_name = 0                                # if no program return 0
+    prog_name = 0
 
   return prog_name
 
@@ -486,8 +486,7 @@ def get_only_meth(file_path):
 # Returns:
 #   - list_item:     list without spaces in all strings
 # Used by:
-#   - Function "get_all_var" 
-
+#   - Function "get_all_var"
 #-------------------------------------------------------------------------------
 def clean_list(list_item):
   if isinstance(list_item, list):

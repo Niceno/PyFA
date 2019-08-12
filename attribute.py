@@ -5,11 +5,38 @@ import xfig
 import finder
 import browse
 #===============================================================================
-# Define module class
+# Handy constants
+#-------------------------------------------------------------------------------
+ALIGN_BOXES             = "Diagonal"      # "Left"
+
+#===============================================================================
+# Defining module class
+#
+# Parameters:
+#   - module:     initialize name (e.g. you can write module.name to get name)
+#   - type:       type of object (can be module/subroutine/function/program)
+#   - name:       name of the module
+#   - use:        list of module use statements
+#   - var:        list of module variables
+#   - meth:       list of module methods
+#   - level:      level of module
+#   - x0:         first corner(upper left) position on x axis in centimeters
+#   - y0:         first corner(upper left) position on y axis in centimeters
+#   - x1:         second corner(upper right) position on x axis in centimeters
+#   - y1:         second corner(upper right) position on y axis in centimeters
+#   - width:      module box width
+#   - height:     module box height
+#   - call:       call statements of module
+#   - type_stat:  type statements of module
+# Returns:
+#   - nothing
+# Used by:
+#   - Function for importing attributes(parameters) to module class(object)
 #-------------------------------------------------------------------------------
 class Module(object):
   def __init__(module, type, name, use, var, meth,            \
                level, x0, x1, y0, y1, width, height, call, type_stat):
+
     module.name      = name
     module.use       = use
     module.var       = var
@@ -25,22 +52,29 @@ class Module(object):
     module.height    = height
     module.type_stat = type_stat
 
-  def print_it(abc):
-    print("\nModule name: ", abc.name,     \
-          "\n\nUse : ",      abc.use,      \
-          "\n\nVariables: ", abc.var,      \
-          "\n\nMethods: ",   abc.meth,     \
-          "\n\nLevel: ",     abc.level,    \
-          "\n\nType: ",      abc.type,     \
-          "\n\nx0: ",        abc.x0,       \
-          "\n\nx1: ",        abc.x1,       \
-          "\n\ny0: ",        abc.y0,       \
-          "\n\ny1: ",        abc.y1,       \
-          "\n\nWidth: ",     abc.width,    \
-          "\n\nHeight: ",    abc.height    )
-
 #===============================================================================
-# Define subroutine class
+# Defining subroutine class
+#
+# Parameters:
+#   - subroutine: initialize name (so you can write subroutine.name to get name)
+#   - type:       type of object (can be module/subroutine/function/program)
+#   - name:       name of the subroutine
+#   - use:        list of subroutine use statements
+#   - var:        list of subroutine variables
+#   - meth:       list of subroutine methods
+#   - level:      level of subroutine
+#   - x0:         first corner(upper left) position on x axis in centimeters
+#   - y0:         first corner(upper left) position on y axis in centimeters
+#   - x1:         second corner(upper right) position on x axis in centimeters
+#   - y1:         second corner(upper right) position on y axis in centimeters
+#   - width:      subroutine box width
+#   - height:     subroutine box height
+#   - call:       call statements of subroutine
+#   - type_stat:  type statements of subroutine
+# Returns:
+#   - nothing
+# Used by:
+#   - Function for importing attributes(parameters) to subroutine class(object)
 #-------------------------------------------------------------------------------
 class Subroutine(object):
   def __init__(subroutine, type, name, use, var, meth,       \
@@ -61,21 +95,30 @@ class Subroutine(object):
     subroutine.height    = height
     subroutine.type_stat = type_stat
 
-def print_it(abc):
-  print("\nName: ",            abc.name,     \
-        "\n\nUse : ",          abc.use,      \
-        "\n\nVariables: ",     abc.var,      \
-        "\n\nLevel: ",         abc.level,    \
-        "\n\nType: ",          abc.type,     \
-        "\n\nx0: ",            abc.x0,       \
-        "\n\nx1: ",            abc.x1,       \
-        "\n\ny0: ",            abc.y0,       \
-        "\n\ny1: ",            abc.y1,       \
-        "\n\nWidth: ",         abc.width,    \
-        "\n\nHeight: ",        abc.height    )
-
 #===============================================================================
-# Define function class
+# Defining function class
+#
+# Parameters:
+#   - function:   initialize name (so you can write function.name to get name)
+#   - type:       type of object (can be module/subroutine/function/program)
+#   - name:       name of the function
+#   - use:        list of function use statements
+#   - var:        list of function variables
+#   - meth:       list of function methods
+#   - level:      level of function
+#   - x0:         first corner(upper left) position on x axis in centimeters
+#   - y0:         first corner(upper left) position on y axis in centimeters
+#   - x1:         second corner(upper right) position on x axis in centimeters
+#   - y1:         second corner(upper right) position on y axis in centimeters
+#   - width:      function box width
+#   - height:     function box height
+#   - fun_type:   type of function
+#   - call:       call statements of function
+#   - type_stat:  type statements of function
+# Returns:
+#   - nothing
+# Used by:
+#   - Function for importing attributes(parameters) to function class(object)
 #-------------------------------------------------------------------------------
 class Function(object):
   def __init__(function, type, name, use, var, meth,     \
@@ -97,22 +140,29 @@ class Function(object):
     function.fun_type  = fun_type
     function.type_stat = type_stat
 
-def print_it(abc):
-  print("\nName: ",            abc.name,     \
-        "\n\nUse : ",          abc.use,      \
-        "\n\nVariables: ",     abc.var,      \
-        "\n\nLevel: ",         abc.level,    \
-        "\n\nType: ",          abc.type,     \
-        "\n\nFunction type: ", abc.fun_type, \
-        "\n\nx0: ",            abc.x0,       \
-        "\n\nx1: ",            abc.x1,       \
-        "\n\ny0: ",            abc.y0,       \
-        "\n\ny1: ",            abc.y1,       \
-        "\n\nWidth: ",         abc.width,    \
-        "\n\nHeight: ",        abc.height    )
-
 #===============================================================================
-# Define program class
+# Defining program class
+#
+# Parameters:
+#   - program:   initialize name (so you can write program.name to get name)
+#   - type:       type of object (can be module/subroutine/function/program)
+#   - name:       name of the program
+#   - use:        list of program use statements
+#   - var:        list of program variables
+#   - meth:       list of program methods
+#   - level:      level of program
+#   - x0:         first corner(upper left) position on x axis in centimeters
+#   - y0:         first corner(upper left) position on y axis in centimeters
+#   - x1:         second corner(upper right) position on x axis in centimeters
+#   - y1:         second corner(upper right) position on y axis in centimeters
+#   - width:      program box width
+#   - height:     program box height
+#   - call:       call statements of program
+#   - type_stat:  type statements of program
+# Returns:
+#   - nothing
+# Used by:
+#   - program for importing attributes(parameters) to program class(object)
 #-------------------------------------------------------------------------------
 class Program(object):
   def __init__(program, type, name, use, var, meth, level,     \
@@ -133,21 +183,15 @@ class Program(object):
     program.height    = height
     program.type_stat = type_stat
 
-def print_it(abc):
-  print("\nName: ",            abc.name,     \
-        "\n\nUse : ",          abc.use,      \
-        "\n\nVariables: ",     abc.var,      \
-        "\n\nLevel: ",         abc.level,    \
-        "\n\nType: ",          abc.type,     \
-        "\n\nx0: ",            abc.x0,       \
-        "\n\nx1: ",            abc.x1,       \
-        "\n\ny0: ",            abc.y0,       \
-        "\n\ny1: ",            abc.y1,       \
-        "\n\nWidth: ",         abc.width,    \
-        "\n\nHeight: ",        abc.height    )
-
 #===============================================================================
-# Check if use list is empty
+# Function to check if use list is empty
+#
+# Parameters:
+#   - list:       use list to check
+# Returns:
+#   - use_list:   if exists return use list, return "None" if list is empty
+# Used by:
+#   - Functions for importing attributes to objects
 #-------------------------------------------------------------------------------
 def check_use(list):
 
@@ -511,7 +555,7 @@ def prog_list_fun(files):
   program_list = []
 
   for i in range(len(files)):
-    program_name = finder.get_prog(files[i])   # find program from imported files
+    program_name = finder.get_prog(files[i]) # find program from imported files
     if program_name != 0:                 # if it s program then append to list
       program_list.append(program_class(files[i]))
 
@@ -538,6 +582,9 @@ def find_y1(file):
   use_list     = file.use
   var_list     = file.var
   meth_list    = file.meth
+  call_list    = file.call
+  type_list    = file.type_stat
+  len_fun_type = 0
 
   if use_list == "None":
     use_list = []
@@ -545,8 +592,15 @@ def find_y1(file):
     var_list = []
   if meth_list == 0:
     meth_list = []
+  if type_list == 0:
+    type_list = []
+  if file.type == "Function":
+    fun_type = file.fun_type
+    if fun_type != 0:
+      len_fun_type = 1
 
-  y1 = file.y0 + UBH + len(var_list) + len(meth_list) + len(use_list)
+  y1 = file.y0 + UBH + len(var_list) + len(meth_list) + len(use_list)    \
+     + len(type_list) + len_fun_type
 
   return y1
 
@@ -708,10 +762,17 @@ def create_grid(file_list):
   # Assign values to coordinates
   for i in range(len(lvl_lista)):
     lista = lvl_lista[i]
+
+    # Choose alignment
+    if ALIGN_BOXES == "Diagonal":
+      row = i
+    elif ALIGN_BOXES == "Left":
+      row = 0
+
     for l in range(len(lvl_lista[i])):
-                                 # v===== remove i to start allignment at 0
-      lista[l].x0 = ((width_list[l+i]          \
-                    + width_list[l+1+i])/2)    \
+
+      lista[l].x0 = ((width_list[l+row]          \
+                    + width_list[l+1+row])/2)    \
                     - (lista[l].width/2)
 
       lista[l].y0 = ((height_list[i]           \

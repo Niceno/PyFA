@@ -18,7 +18,7 @@ COLOR_HEADER_MODULE     = "LtBlue"        # color of module header
 COLOR_HEADER_SUBROUTINE = "Pink2"         # color of subroutine header
 COLOR_HEADER_FUNCTION   = "Yellow"        # color of function header
 COLOR_HEADER_PROGRAM    = "Green2"        # color of program header
-ALIGN_BOXES             = "Left"          # "Diagonal"
+
 #===============================================================================
 # Function to choose use statements list length
 #
