@@ -27,7 +27,7 @@ obj_list = attribute.get_obj_list(file_paths)    # list of all .f90 files
 
 print("\nGreat program for extracting UML from Fortran.\n")
 
-# Printing mods and subs and their levels
+# Printing objects and their levels
 #attribute.print_levels(obj_list)
 
 # Check directories for errors

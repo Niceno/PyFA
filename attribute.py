@@ -709,7 +709,7 @@ def create_grid(file_list):
   for i in range(len(lvl_lista)):
     lista = lvl_lista[i]
     for l in range(len(lvl_lista[i])):
-                                 # v===== remove i to start columns at 0
+                                 # v===== remove i to start allignment at 0
       lista[l].x0 = ((width_list[l+i]          \
                     + width_list[l+1+i])/2)    \
                     - (lista[l].width/2)
@@ -850,20 +850,20 @@ def remove_unwanted_subs(obj_list):
 # Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
 def get_obj_list(file_path):
-  mod_list  = mod_list_fun(file_path)     # list of all mod classes
-  sub_list  = sub_list_fun(file_path)     # list of all sub classes
-  fun_list  = fun_list_fun(file_path)     # list of all fun classes
-  prog_list = prog_list_fun(file_path)    # list of all prog classes
+  mod_list  = mod_list_fun(file_path)    # list of all mod classes
+  sub_list  = sub_list_fun(file_path)    # list of all sub classes
+  fun_list  = fun_list_fun(file_path)    # list of all fun classes
+  prog_list = prog_list_fun(file_path)   # list of all prog classes
   file_list = [*mod_list,  \
                *sub_list,  \
                *fun_list,\
-               *prog_list]                 # list of all classes(mod+sub+fun)
-  file_list = remove_empty(file_list)     # remove empty files from list
+               *prog_list]               # list of all classes(mod+sub+fun+prog)
+  file_list = remove_empty(file_list)    # remove empty files from list
   file_list = remove_unwanted_subs(file_list)
-  file_list = update(file_list)           # updating coordinates
-  arrange_by_level(file_list)             # arranging by levels
-  file_list = lvl_file_list(file_list)    # put it together in list
-  file_list = assign_values(file_list)    # assign x1,height and width
-  file_list = create_grid(file_list)      # plot it with "grid" on
+  file_list = update(file_list)          # updating coordinates
+  arrange_by_level(file_list)            # arranging by levels
+  file_list = lvl_file_list(file_list)   # put it together in list
+  file_list = assign_values(file_list)   # assign x1,height and width
+  file_list = create_grid(file_list)     # plot it with "grid" on
 
   return file_list

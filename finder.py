@@ -4,17 +4,23 @@
 import re
 import xfig
 import os
-
 #===============================================================================
-# Find module name
+# Function to search through .f90 file and export module name
+#
+# Parameters:
+#   - file_path:     path to .f90 file
+# Returns:
+#   - module_name:   name of the module, return [] if none
+# Used by:
+#   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
-def get_mod(filename):
+def get_mod(file_path):
 
   module   = []                                        # initialize module list
   pattern  = re.compile(".+?(?=_Mod$)", re.IGNORECASE)
   pattern2 = re.compile("^\s*\S*use.*", re.IGNORECASE) # avoiding uses(for prog)
 
-  with open (filename, 'rt') as myfile:               # open file
+  with open (file_path, 'rt') as myfile:               # open file
     for line in myfile:                               # read line by line
       if pattern.search(line) != None:                # search for pattern
         if not line.startswith("!"):                  # skip line start with "!"
@@ -33,14 +39,21 @@ def get_mod(filename):
   return module_name
 
 #===============================================================================
-# Find subroutine name
+# Function to search through .f90 file and export subroutine name
+#
+# Parameters:
+#   - file_path:  path to .f90 file
+# Returns:
+#   - sub_name:   name of the subroutine, return 0 if none
+# Used by:
+#   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
-def get_sub(filename):
+def get_sub(file_path):
 
   subroutine = []                               # initialize module list
   pattern    = re.compile(".+?(?=subroutine)", re.IGNORECASE)
 
-  with open (filename, 'rt') as myfile:         # open file
+  with open (file_path, 'rt') as myfile:         # open file
     for line in myfile:                         # read line by line
       if pattern.search(line) != None:          # search for pattern
         if not line.startswith("!"):            # skip line starting with "!"
@@ -61,14 +74,21 @@ def get_sub(filename):
   return sub_name
 
 #===============================================================================
-# Find function name
+# Function to search through .f90 file and export function name
+#
+# Parameters:
+#   - file_path:     path to .f90 file
+# Returns:
+#   - fun_name:      name of the function, return 0 if none
+# Used by:
+#   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
-def get_fun(filename):
+def get_fun(file_path):
 
   function = []                                 # initialize
   pattern    = re.compile(".+?(?=function)", re.IGNORECASE)
 
-  with open (filename, 'rt') as myfile:         # open file
+  with open (file_path, 'rt') as myfile:         # open file
     for line in myfile:                         # read line by line
       if pattern.search(line) != None:          # search for pattern
         if not line.startswith("!"):            # skip line starting with "!"
@@ -81,26 +101,32 @@ def get_fun(filename):
     fun_name   = re.sub("integer function ", "", fun_string) # return function
 
     if fun_name.endswith("&"):
-    #  fun_name =  fun_name[:-len("  &")]
       fun_name = fun_name + ")"
 
     if fun_name.startswith("!"):
       fun_name = 0
 
   elif len(function) == 0:
-    fun_name = 0                                # if no function return 0
+    fun_name = 0                             # if there is no function return 0
 
   return fun_name
 
 #===============================================================================
-# Find function name
+# Function to search through .f90 file and export program name
+#
+# Parameters:
+#   - file_path:     path to .f90 file
+# Returns:
+#   - prog_name:     name of the function, return 0 if none
+# Used by:
+#   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
-def get_prog(filename):
+def get_prog(file_path):
 
   program = []                                 # initialize
   pattern    = re.compile(".+?(?=program)", re.IGNORECASE)
 
-  with open (filename, 'rt') as myfile:         # open file
+  with open (file_path, 'rt') as myfile:         # open file
     for line in myfile:                         # read line by line
       if pattern.search(line) != None:          # search for pattern
         if not line.startswith("!"):            # skip line starting with "!"
@@ -113,7 +139,6 @@ def get_prog(filename):
     prog_name   = re.sub("program ", "", fun_string) # return program
 
     if prog_name.endswith("&"):
-    #  prog_name =  prog_name[:-len("  &")]
       prog_name = prog_name + ")"
 
     if prog_name.startswith("!"):
@@ -125,14 +150,21 @@ def get_prog(filename):
   return prog_name
 
 #===============================================================================
-# Find function name
+# Function to search through .f90 file and export function type
+#
+# Parameters:
+#   - file_path:     path to .f90 file
+# Returns:
+#   - fun_type:      type of the function, return 0 if none
+# Used by:
+#   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
-def get_fun_type(filename):
+def get_fun_type(file_path):
 
   function = []                                 # initialize
   pattern    = re.compile(".+?(?=function)", re.IGNORECASE)
 
-  with open (filename, 'rt') as myfile:         # open file
+  with open (file_path, 'rt') as myfile:        # open file
     for line in myfile:                         # read line by line
       if pattern.search(line) != None:          # search for pattern
         if not line.startswith("!"):            # skip line starting with "!"
@@ -142,49 +174,41 @@ def get_fun_type(filename):
   if len(function) != 0:                      # if function is not empty
     fun_string = function[0]                  # take the first string
 
-    fun_name = fun_string.split(" function")[0] # split by "function" and
+    fun_type = fun_string.split(" function")[0] # split by "function" and
                                                 # take only part before phrase
-    fun_name = "type " + fun_name
+    fun_type = "type " + fun_type
 
-    if fun_name.endswith("&"):
-    #  fun_name =  fun_name[:-len("  &")]
-      fun_name = fun_name + ")"
+    if fun_type.endswith("&"):
+      fun_type = fun_type + ")"
 
-    if fun_name.startswith("!"):
-      fun_name = 0
+    if fun_type.startswith("!"):
+      fun_type = 0
 
   elif len(function) == 0:
-    fun_name = 0                                # if no function return 0
+    fun_type = 0
 
-  return fun_name
-
-#===============================================================================
-# Decide if header is module or subroutine
-#-------------------------------------------------------------------------------
-def get_header(filename):
-
-  sub_name    = get_sub(filename)
-  module_name = get_mod(filename)
-  if sub_name != 0:      # if module_name is not empty take module name
-    header = sub_name
-  elif sub_name == 0:    # if module_name is empty take sub name
-    header = module_name
-
-  return header
+  return fun_type
 
 #===============================================================================
-# Find call statements
+# Function to search through .f90 file and export call statements
+#
+# Parameters:
+#   - file_path:     path to .f90 file
+# Returns:
+#   - call_list:     list of call statements, return 0 if none
+# Used by:
+#   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
-def get_call(filename):
+def get_call(file_path):
 
   call_name = []
   pattern   = re.compile("(call)\s", re.IGNORECASE)
 
-  with open (filename, 'rt') as myfile:          # open file
+  with open (file_path, 'rt') as myfile:         # open file
     for line in myfile:                          # read line by line
       if pattern.search(line) != None:           # search for pattern
         if not line.startswith("!"):             # skip line starting with "!"
-          call_name.append(( line.rstrip("\n")))  # add line with pattern to list
+          call_name.append(( line.rstrip("\n"))) # add line with pattern to list
 
   call_name = [s.strip() for s in call_name if s.strip()] # remove whitespace
 
@@ -193,31 +217,31 @@ def get_call(filename):
   call_name_list = ([s.strip("(") for s in call_name_list])    # remove ","
   call_name_list = [i.rsplit("(",1)[0] for i in call_name_list]
 
-  # Solve problem with having "!" in strings
-  call_list = []
-  for i in range(len(call_name)):
-    string = call_name[i]
-    string = string.split('!')[0]
-    call_list.append(string)
-
-  if call_name != []:                # call_name for whole line
-    true_name_list = call_name_list  # call_name_list - take only name
-    true_name_list = list(set(true_name_list))
+  if call_name_list != []:                # call_name for whole line
+    call_list = call_name_list            # call_name_list - take only name
+    call_list = list(set(call_list))
 
   else:
-    true_name_list = 0
+    call_list = 0
 
-  return true_name_list
+  return call_list
 
 #===============================================================================
-# Find type statements
+# Function to search through .f90 file and export type statements
+#
+# Parameters:
+#   - file_path:   path to .f90 file
+# Returns:
+#   - type_list:   list of type statements, return 0 if none
+# Used by:
+#   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
-def get_type(filename):
+def get_type(file_path):
 
   type_name = []
   pattern   = re.compile("^\s+(?=type\s+)", re.IGNORECASE)
 
-  with open (filename, 'rt') as myfile:          # open file
+  with open (file_path, 'rt') as myfile:         # open file
     for line in myfile:                          # read line by line
       if pattern.search(line) != None:           # search for pattern
         if not line.startswith("!"):             # skip line starting with "!"
@@ -237,44 +261,39 @@ def get_type(filename):
     string = string.split('!')[0]
     type_list.append(string)
 
-  if type_name != []:           # type_list      - whole string
-    true_name_list = type_list  # type_name_list - take only name
-    true_name_list = list(set(true_name_list))
+  if type_list != []:           # type_list      - whole string
+    type_list = type_list       # true_type_list - take only name
+    type_list = list(set(type_list))
 
   else:
-    true_name_list = 0
+    type_list = 0
 
-  return true_name_list
+  return type_list
 
 #===============================================================================
-# Find use statements
+# Function to search through .f90 file and export use statements
+#
+# Parameters:
+#   - file_path:    path to .f90 file
+# Returns:
+#   - use_list:     list of use statements, return 0 if none
+# Used by:
+#   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
-def get_use(filename):
+
+def get_use(file_path):
 
   use_name = []
-#  next_lines = []
 
   pattern   = re.compile("(use)\s", re.IGNORECASE)
-#  pattern2  = re.compile("^(  use)(.*)(only)(.*)(&)$", re.IGNORECASE)
-#  pattern3  = re.compile("(.*)(&)$", re.IGNORECASE)
 
-  with open (filename, 'rt') as myfile:          # open file
+  with open (file_path, 'rt') as myfile:         # open file
     for line in myfile:                          # read line by line
       if pattern.search(line) != None:           # search for pattern
         if not line.startswith("!"):             # skip line starting with "!"
           use_name.append(( line.rstrip("\n")))  # add line with pattern to list
 
-#      if pattern2.search(line) != None:
-#        next_line = "use" + next(myfile)
-#        print(next_line)
-#        use_name.append(next_line)
-#        if next_line.endswith("&"):
-#          print("Found")
-#          next_line2 = "use" + next(myfile)
-#          use_name.append(next_line2)
-
   use_name = [s.strip() for s in use_name if s.strip()] # remove whitespace
-#  print(use_name)
 
   # If you only want to take name of use statement without "type" or "only"
   use_name_list = [i.split()[1] for i in use_name]           # take use name
@@ -283,30 +302,37 @@ def get_use(filename):
 
   # Solve problem with having "!" in strings
   use_list = []
-  for i in range(len(use_name)):
-    string = use_name[i]
+  for i in range(len(use_name_list)):
+    string = use_name_list[i]
     string = string.split('!')[0]
     use_list.append(string)
 
-  if use_name != []:                # use_name for whole line
-    true_name_list = use_name_list  # use_name_list - take only name
+  if use_list != []:                # use_name for whole line
+    use_list = use_list             # use_name_list - take only name
   else:
-    true_name_list = 0
+    use_list = 0
 
-  return true_name_list
+  return use_list
 
 #===============================================================================
-# Find all variables
+# Function to search through .f90 file and export all variables
+#
+# Parameters:
+#   - file_path:    path to .f90 file
+# Returns:
+#   - var_list:     list of all variables
+# Used by:
+#   - Function for deciding which variables to print
 #-------------------------------------------------------------------------------
-def get_all_var(filename):
+def get_all_var(file_path):
 
   # Find all var names
 
   vars = []
-  with open(filename) as file:                # open file
+  with open(file_path) as file:               # open file
     for line in file:                         # read line by line
       vars_help = re.findall("(?<=:: ).*$", line)  # looking for line with ::
-      vars.append(vars_help)                  # list of lists of vars with []
+      vars.append(vars_help)                  # list of lists of vars
   vars2 = [x for x in vars if x != []]        # remove empty lists
 
   flat_list = []                              # create a list of strings of vars
@@ -330,7 +356,7 @@ def get_all_var(filename):
   var_type = []
   pattern  = re.compile("::", re.IGNORECASE)
 
-  with open (filename, 'rt') as myfile:          # open file
+  with open (file_path, 'rt') as myfile:         # open file
     for line in myfile:                          # read line by line
       if pattern.search(line) != None:           # search for pattern
         if not line.startswith("!"):             # skip line starting with "!"
@@ -340,21 +366,26 @@ def get_all_var(filename):
   var_type_list = [i.split()[0] for i in var_type]           # take first string
   var_type_list = ([s.strip(",") for s in var_type_list])    # remove ","
 
-  # merge var names and var types into one var list
-
+  # Merge var names and var types into one var list
   var_list = [var_type_list[i] + var_name_list2[i] \
              for i in range(len(var_type_list))]
 
   return var_list
 
 #===============================================================================
-# Find subroutine variables and choose variables to print
+# Function to decide number of printing variables (to print only global)
+#
+# Parameters:
+#   - file_path:        path to .f90 file
+# Returns:
+#   - sub_var_list:     list of global variables in subroutines
+# Used by:
+#   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
-def get_var(filename):
+def get_var(file_path):
 
-  var_list    = get_all_var(filename)
-  sub_name    = get_sub(filename)
-
+  var_list    = get_all_var(file_path)
+  sub_name    = get_sub(file_path)
   if sub_name != 0:                                # if it is subroutine
 
     sub_var_list = []
@@ -374,14 +405,21 @@ def get_var(filename):
   return sub_var_list
 
 #===============================================================================
-# Find methods with their module name
+# Function to search through .f90 file and export all methods(module functions)
+#
+# Parameters:
+#   - file_path:     path to .f90 file
+# Returns:
+#   - meth_list:     list of all methods(module functions)
+# Used by:
+#   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
-def get_meth(filename):
-  module_name = get_mod(filename)
+def get_meth(file_path):
+  module_name = get_mod(file_path)
 
   methods = []
 
-  with open(filename) as file:                    # open file
+  with open(file_path) as file:                   # open file
     for line in file:                             # read line by line
       meths = re.findall("(?<=_Mod/)(.*)(?=.f90)", line) # search _Mod and .f90
       methods.append(meths)                       # add those lines to list
@@ -393,27 +431,33 @@ def get_meth(filename):
       flat_meth_list.append(item)
 
   # Check if any method is found
-
   if len(module_name) == 0:
     meth_list = [""]
   elif flat_meth_list == []:
     meth_list = ["No methods available"]
   elif flat_meth_list != []:
     meth_list = [i.split()[0] for i in flat_meth_list]
-    mod = get_mod(filename)                               # get module name
-    meth_list = [mod + "_" + x for x in meth_list]        # add module name
+    mod = get_mod(file_path)                               # get module name
+    meth_list = [mod + "_" + x for x in meth_list]         # add module name
 
   return meth_list
 
 #===============================================================================
-# Find only methods names
+# Function to get only names of methods without module names as "prefix"
+#
+# Parameters:
+#   - file_path:     path to .f90 file
+# Returns:
+#   - meth_list:     list of methods without module names (e.g. Fetch_Profile)
+# Used by:
+#   - Function in browse.py for checking directories
 #-------------------------------------------------------------------------------
-def get_only_meth(filename):
-  module_name = get_mod(filename)
+def get_only_meth(file_path):
+  module_name = get_mod(file_path)
 
   methods = []
 
-  with open(filename) as file:                    # open file
+  with open(file_path) as file:                   # open file
     for line in file:                             # read line by line
       meths = re.findall("(?<=_Mod/)(.*)(?=.f90)", line) # search _Mod and .f90
       methods.append(meths)                       # add those lines to list
@@ -425,7 +469,6 @@ def get_only_meth(filename):
       flat_meth_list.append(item)
 
   # Check if any method is found
-
   if len(module_name) == 0:
     meth_list = [""]
   elif flat_meth_list == []:
@@ -436,7 +479,15 @@ def get_only_meth(filename):
   return meth_list
 
 #===============================================================================
-# Deletes spaces in all strings of a list (needed at one point)
+# Function to delete spaces in all strings in a list
+#
+# Parameters:
+#   - list_item:     list that needs to bo "cleaned" of spaces in strings
+# Returns:
+#   - list_item:     list without spaces in all strings
+# Used by:
+#   - Function "get_all_var" 
+
 #-------------------------------------------------------------------------------
 def clean_list(list_item):
   if isinstance(list_item, list):
@@ -445,5 +496,4 @@ def clean_list(list_item):
         list_item[index] = clean_list(list_item[index])
       if not isinstance(list_item[index], (int, tuple, float, list)):
         list_item[index] = list_item[index].strip()
-
   return list_item

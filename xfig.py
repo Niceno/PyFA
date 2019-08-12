@@ -18,6 +18,7 @@ COLOR_HEADER_MODULE     = "LtBlue"        # color of module header
 COLOR_HEADER_SUBROUTINE = "Pink2"         # color of subroutine header
 COLOR_HEADER_FUNCTION   = "Yellow"        # color of function header
 COLOR_HEADER_PROGRAM    = "Green2"        # color of program header
+ALIGN_BOXES             = "Left"          # "Diagonal"
 #===============================================================================
 # Function to choose use statements list length
 #
@@ -117,7 +118,7 @@ def xfig_box_color(name):
 # Choose box width depending on longest string
 #
 # Parameters:
-#   - filename:  name of the Fortran file being read (.f90)
+#   - filename:   name of the Fortran file being read (.f90)
 # Returns:
 #   - var_width:  box width in Xfig drawing units
 # Used by:
@@ -251,7 +252,6 @@ def plot(file, object):
     fun_name  = 0
     mod_name  = 0
     sub_name  = 0
-
 
   # Module definition has been found
   if mod_name !=0 :
