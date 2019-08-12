@@ -4,7 +4,6 @@
 import finder
 import browse
 import attribute
-import itertools
 #===============================================================================
 # Handy constants
 #-------------------------------------------------------------------------------
@@ -300,9 +299,9 @@ def plot(file, object):
   elif prog_name != 0:
     program_name = prog_name
 
-    plot_program(file, x0, y0,      \
-                 program_name,      \
-                 use_list,          \
+    plot_program(file, x0, y0,         \
+                 program_name,         \
+                 use_list,             \
                  object)
 
 #===============================================================================
@@ -333,7 +332,6 @@ def plot_module(file, x0, y0,     \
   plot_mod_name(file, x0, y0,     \
                 module_name,      \
                 object)
-
 
   # Plot a type statements box
   type_stat_len  = check_if_type_stat(object)
@@ -385,8 +383,8 @@ def plot_subroutine(file, x0, y0,      \
                     object):
 
   # Plot a header text box
-  plot_sub_name(file, x0, y0,         \
-                subroutine_name,      \
+  plot_sub_name(file, x0, y0,          \
+                subroutine_name,       \
                 object)
 
   # Plot a type statements box
@@ -397,8 +395,8 @@ def plot_subroutine(file, x0, y0,      \
   # Check if use box exist
   if use_list != "None":
     # Plot a use text box
-    plot_use_name(file, x0, y0,       \
-                  use_list,           \
+    plot_use_name(file, x0, y0,        \
+                  use_list,            \
                   object)
   else:
     use_list = 0
@@ -440,7 +438,6 @@ def plot_function(file, x0, y0,       \
   type_stat_len  = check_if_type_stat(object)
   if type_stat_len != 0:
     plot_type_stat(file, x0, y0, object)
-
 
   plot_fun_type_name(file, x0, y0,    \
                      object)
@@ -640,7 +637,7 @@ def plot_type_stat_frame(file, x0, y0, box_width, box_height,  \
   file.write("%3d "       % THICKNESS)
   file.write("0")
   file.write("%3d "       % xfig_box_color(color))
-  file.write("11 -1 30 0.000 0 0 -1 0 0 5\n")
+  file.write("11 -1 30 0.000 0 0 -1 0 0 5\n")         # 30*5 = 150% intensity
   file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
   file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height           \
@@ -937,7 +934,7 @@ def plot_spline(file, object1, object2, depth):
 
   # Last coordinate
   x6 = object2.x0
-  y6 = object2.y0 + UBH + len(use_list)/2
+  y6 = object2.y0 + UBH + check_if_type_stat(object2) + len(use_list)/2
 
   # Second coordinate
   x2 = x1 + 2
@@ -957,7 +954,7 @@ def plot_spline(file, object1, object2, depth):
 
   file.write("3 2 0 2 0 7 ")
   file.write("%5d" % (depth))
-  file.write(" -1 -1 0.000 0 1 1 6")                  # 6 --> number of points
+  file.write(" -1 -1 0.000 0 1 1 6")                   # 6 --> number of points
 
   file.write("\n 1 1 1.00 135.00 180.00")              # arrow settings
   file.write("\n 6 1 1.00 135.00 180.00")              # arrow settings
