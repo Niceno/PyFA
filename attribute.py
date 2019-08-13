@@ -7,7 +7,7 @@ import browse
 #===============================================================================
 # Handy constants
 #-------------------------------------------------------------------------------
-ALIGN_BOXES             = "Diagonal"      # "Left"
+ALIGN_BOXES = "Diagonal"      # "Left"
 
 #===============================================================================
 # Defining module class
@@ -144,7 +144,7 @@ class Function(object):
 # Defining program class
 #
 # Parameters:
-#   - program:   initialize name (so you can write program.name to get name)
+#   - program:    initialize name (so you can write program.name to get name)
 #   - type:       type of object (can be module/subroutine/function/program)
 #   - name:       name of the program
 #   - use:        list of program use statements
@@ -187,9 +187,9 @@ class Program(object):
 # Function to check if use list is empty
 #
 # Parameters:
-#   - list:       use list to check
+#   - list:      use list to check
 # Returns:
-#   - use_list:   if exists return use list, return "None" if list is empty
+#   - use_list:  if it exists return use list, return "None" if list is empty(0)
 # Used by:
 #   - Functions for importing attributes to objects
 #-------------------------------------------------------------------------------
@@ -203,16 +203,23 @@ def check_use(list):
 
 #===============================================================================
 # Import attributes from fortran files to module object
+#
+# Parameters:
+#   - file_path:    path to .f90 file
+# Returns:
+#   - module:       object of type "Module" with assigned attributes
+# Used by:
+#   - Function for appending modules (all module objects) into a list
 #-------------------------------------------------------------------------------
-def module_class(filename):
+def module_class(file_path):
 
   type         = "Module"
-  module_name  = finder.get_mod(filename)
-  use_list     = check_use(finder.get_use(filename))
-  var_list     = finder.get_var(filename)
-  meth_list    = finder.get_meth(filename)
-  call_list    = finder.get_call(filename)
-  type_stat    = finder.get_type(filename)
+  module_name  = finder.get_mod(file_path)
+  use_list     = check_use(finder.get_use(file_path))
+  var_list     = finder.get_var(file_path)
+  meth_list    = finder.get_meth(file_path)
+  call_list    = finder.get_call(file_path)
+  type_stat    = finder.get_type(file_path)
   level        = 0
   x0           = 1
   x1           = 0
@@ -240,15 +247,22 @@ def module_class(filename):
 
 #===============================================================================
 # Import attributes from fortran files to subroutine object
+#
+# Parameters:
+#   - file_path:    path to .f90 file
+# Returns:
+#   - subroutine:   object of type "Subroutine" with assigned attributes
+# Used by:
+#   - Function for appending subroutines (all subroutine objects) into a list
 #-------------------------------------------------------------------------------
-def subroutine_class(filename):
+def subroutine_class(file_path):
 
   type       = "Subroutine"
-  sub_name   = finder.get_sub(filename)
-  use_list   = check_use(finder.get_use(filename))
-  var_list   = finder.get_var(filename)
-  call_list  = finder.get_call(filename)
-  type_stat  = finder.get_type(filename)
+  sub_name   = finder.get_sub(file_path)
+  use_list   = check_use(finder.get_use(file_path))
+  var_list   = finder.get_var(file_path)
+  call_list  = finder.get_call(file_path)
+  type_stat  = finder.get_type(file_path)
   meth_list  = 0
   level      = 0
   x0         = 1
@@ -275,17 +289,24 @@ def subroutine_class(filename):
   return subroutine
 
 #===============================================================================
-# Import attributes from fortran files to function
+# Import attributes from fortran files to function object
+#
+# Parameters:
+#   - file_path:    path to .f90 file
+# Returns:
+#   - function:     object of type "Function" with assigned attributes
+# Used by:
+#   - Function for appending functions (all function objects) into a list
 #-------------------------------------------------------------------------------
-def function_class(filename):
+def function_class(file_path):
 
   type       = "Function"
-  fun_name   = finder.get_fun(filename)
-  use_list   = check_use(finder.get_use(filename))
-  var_list   = finder.get_var(filename)
-  fun_type   = finder.get_fun_type(filename)
-  call_list  = finder.get_call(filename)
-  type_stat  = finder.get_type(filename)
+  fun_name   = finder.get_fun(file_path)
+  use_list   = check_use(finder.get_use(file_path))
+  var_list   = finder.get_var(file_path)
+  fun_type   = finder.get_fun_type(file_path)
+  call_list  = finder.get_call(file_path)
+  type_stat  = finder.get_type(file_path)
   meth_list  = 0
   level      = 0
   x0         = 1
@@ -313,15 +334,22 @@ def function_class(filename):
   return function
 
 #===============================================================================
-# Import attributes from fortran files to program
+# Import attributes from fortran files to program object
+#
+# Parameters:
+#   - file_path:    path to .f90 file
+# Returns:
+#   - program:      object of type "Program" with assigned attributes
+# Used by:
+#   - Function for appending programs (all program objects) into a list
 #-------------------------------------------------------------------------------
-def program_class(filename):
+def program_class(file_path):
 
   type       = "Program"
-  prog_name  = finder.get_prog(filename)
-  use_list   = check_use(finder.get_use(filename))
-  call_list  = finder.get_call(filename)
-  type_stat  = finder.get_type(filename)
+  prog_name  = finder.get_prog(file_path)
+  use_list   = check_use(finder.get_use(file_path))
+  call_list  = finder.get_call(file_path)
+  type_stat  = finder.get_type(file_path)
   var_list   = 0
   meth_list  = 0
   level      = 0
@@ -349,55 +377,73 @@ def program_class(filename):
   return program
 
 #===============================================================================
-# Print mod,sub and function information
+# Function for printing out all object information
+#
+# Parameters:
+#   - obj_list:   list of objects
+# Returns:
+#   - nothing
+# Used by:
+#   - Main program, only for printing information
 #-------------------------------------------------------------------------------
-def print_levels(file_list):
+def print_info(obj_list):
 
-  for i in range(len(file_list)):
-    print("\nName: ",         file_list[i].name,     \
-          "\nType: ",         file_list[i].type,     \
-          "\nModules used: ", file_list[i].use,      \
-          "\nVariables: ",    file_list[i].var,      \
-          "\nMethods: ",      file_list[i].meth,     \
-          "\nWidth: ",        file_list[i].width,    \
-          "\nHeight: ",       file_list[i].height,   \
-          "\nLevel: ",        file_list[i].level)
+  for i in range(len(obj_list)):
+    print("\nName: ",            obj_list[i].name,        \
+          "\nType: ",            obj_list[i].type,        \
+          "\nModules used: ",    obj_list[i].use,         \
+          "\nVariables: ",       obj_list[i].var,         \
+          "\nMethods: ",         obj_list[i].meth,        \
+          "\nCalls: ",           obj_list[i].call,        \
+          "\nType statements: ", obj_list[i].type_stat,   \
+          "\nLevel: ",           obj_list[i].level,       \
+          "\nWidth: ",           obj_list[i].width,       \
+          "\nHeight: ",          obj_list[i].height,      \
+          "\nX0:",               obj_list[i].x0,          \
+          "Y0:",                 obj_list[i].y0,          \
+          "\nX1:",               obj_list[i].x1,          \
+          "Y1:",                 obj_list[i].y1)
 
 #===============================================================================
-# Finding biggest level of list
+# Function to find maximum level of objects from list
+#
+# Parameters:
+#   - obj_list:    list of objects
+# Returns:
+#   - lvl:         max level of objects from list
+# Used by:
+#   - Functions for creating grid and updating coordinates of objects
 #-------------------------------------------------------------------------------
-def find_biggest(list):
+def find_max_lvl(obj_list):
   lvls = []
-  for i in range(len(list)):
-    lvl = list[i].level
+  for i in range(len(obj_list)):
+    lvl = obj_list[i].level
     lvls.append(lvl)
   lvl = max(lvls)
   return lvl
 
 #===============================================================================
-# Finding current level of module
-#-------------------------------------------------------------------------------
-def find_level(list,name):
-  for i in range(len(list)):
-    if list[i].name == name:
-      lvl = list[i].level
-  return lvl
-
-#===============================================================================
-# Determining levels of modules  (iterate 8 times)
+# Function for determining and importing levels of modules (iterate 8 times)
+#
+# Parameters:
+#   - modules_list:    list of module objects
+# Returns:
+#   - modules_list:    list of module objects with imported correct levels
+# Used by:
+#   - Function for appending module objects into a list
 #-------------------------------------------------------------------------------
 def mod_lvl(modules_list):
+
   n = 0
   while n<8:
     n += 1
-
     for i in range(len(modules_list)):
 
       if modules_list[i].use != "None":         # if there are use statements
         mod_use_list = modules_list[i].use      # get use list of modules
-        mod_use_list = [i.split()[1] for i in mod_use_list]    # only take name
-        mod_use_list = ([s.strip(",") for s in mod_use_list])  # modules without
-                                                               # ˄˄ other info
+        mod_use_list = [i.split()[1] for i in mod_use_list]   # only take name
+        mod_use_list = ([s.strip(",") for s in mod_use_list]) # modules without
+                                                              # other info
         mod_lvl      = []
         for k in range(len(mod_use_list)):      # for every use in module
           for z in range(len(modules_list)):
@@ -408,26 +454,35 @@ def mod_lvl(modules_list):
           mod_lvl = [0]
         else:
           mod_lvl = mod_lvl
-        mod_lvl = max(mod_lvl)    # take the biggest used module level from list
+        mod_lvl = max(mod_lvl)    # take the max used module level from list
         modules_list[i].level = mod_lvl + 1     # add 1 level to max level
   return modules_list
 
 #===============================================================================
-# Determining levels of subroutines (iterate 8 times)
+# Function for determining and importing levels of subroutines (iterate 8 times)
+#
+# Parameters:
+#   - subroutines_list: list of subroutine objects
+#   - file_paths:       list of all paths to .f90 files
+# Returns:
+#   - subroutines_list: list of subroutine objects with imported correct levels
+# Used by:
+#   - Function for appending subroutine objects into a list
 #-------------------------------------------------------------------------------
-def sub_lvl(subroutines_list,files):
+def sub_lvl(subroutines_list,file_paths):
+
+  modules_list = mod_list_fun(file_paths)
+
   n = 0
-  modules_list = mod_list_fun(files)
   while n<8:
     n += 1
-
     for i in range(len(subroutines_list)):
 
       if subroutines_list[i].use != "None":       # if there are use statements
         sub_use_list = subroutines_list[i].use    # get use list of subroutines
         sub_use_list = [i.split()[1] for i in sub_use_list]    # only take name
         sub_use_list = ([s.strip(",") for s in sub_use_list])  # modules without
-                                                               # ˄˄  other info
+                                                               # other info
         sub_lvl      = []
         for k in range(len(sub_use_list)):        # for every use in subroutine
           for z in range(len(modules_list)):
@@ -444,11 +499,19 @@ def sub_lvl(subroutines_list,files):
   return subroutines_list
 
 #===============================================================================
-# Determining levels of functions (iterate 8 times)
+# Function for determining and importing levels of functions (iterate 8 times)
+#
+# Parameters:
+#   - functions_list:   list of function objects
+#   - file_paths:       list of all paths to .f90 files
+# Returns:
+#   - functions_list:   list of function objects with imported correct levels
+# Used by:
+#   - Function for appending function objects into a list
 #-------------------------------------------------------------------------------
-def fun_lvl(functions_list,files):
+def fun_lvl(functions_list,file_paths):
   n = 0
-  modules_list = mod_list_fun(files)
+  modules_list = mod_list_fun(file_paths)
   while n<8:
     n += 1
 
@@ -458,7 +521,7 @@ def fun_lvl(functions_list,files):
         fun_use_list = functions_list[i].use    # get use list of functions
         fun_use_list = [i.split()[1] for i in fun_use_list]    # only take name
         fun_use_list = ([s.strip(",") for s in fun_use_list])  # modules without
-                                                               # ˄˄  other info
+                                                               # other info
         fun_lvl      = []
         for k in range(len(fun_use_list)):        # for every use in function
           for z in range(len(modules_list)):
@@ -474,13 +537,20 @@ def fun_lvl(functions_list,files):
         functions_list[i].level = fun_lvl + 1   # add 1 level to max level
   return functions_list
 
-
 #===============================================================================
-# Determining levels of program (iterate 8 times)
+# Function for determining and importing levels of programs (iterate 8 times)
+#
+# Parameters:
+#   - program_list:   list of program objects
+#   - file_paths:     list of all paths to .f90 files
+# Returns:
+#   - program_list:   list of program objects with imported correct levels
+# Used by:
+#   - Function for appending program objects into a list
 #-------------------------------------------------------------------------------
-def prog_lvl(program_list,files):
+def prog_lvl(program_list, file_paths):
   n = 0
-  modules_list = mod_list_fun(files)
+  modules_list = mod_list_fun(file_paths)
   while n<8:
     n += 1
 
@@ -488,9 +558,9 @@ def prog_lvl(program_list,files):
 
       if program_list[i].use != "None":       # if there are use statements
         prog_use_list = program_list[i].use    # get use list of program
-        prog_use_list = [i.split()[1] for i in prog_use_list]    # only take name
-        prog_use_list = ([s.strip(",") for s in prog_use_list])  # modules without
-                                                               # ˄˄  other info
+        prog_use_list = [i.split()[1] for i in prog_use_list]  # only take name
+        prog_use_list = ([s.strip(",") for s in prog_use_list])# modules without
+                                                               # other info
         prog_lvl      = []
         for k in range(len(prog_use_list)):        # for every use in program
           for z in range(len(modules_list)):
@@ -502,88 +572,112 @@ def prog_lvl(program_list,files):
         else:
           prog_lvl = prog_lvl
 
-        prog_lvl = max(prog_lvl)      # take the biggest used prog level from list
+        prog_lvl = max(prog_lvl)   # take the biggest used prog level from list
         program_list[i].level = prog_lvl + 2   # add 2 levels to max level
   return program_list
 
 #===============================================================================
-# Function for appending mods in list (list with only modules)
+# Function for creating modules and appending into list
+#
+# Parameters:
+#   - file_paths:     list of all paths to .f90 files
+# Returns:
+#   - mod_list:       list with only module objects
+# Used by:
+#   - Function for creating complete and updated object list
 #-------------------------------------------------------------------------------
-def mod_list_fun(files):
+def mod_list_fun(file_paths):
   modules_list = []
 
-  for i in range(len(files)):
-    module_name = finder.get_mod(files[i]) #find modules from imported files
-    sub_name = finder.get_sub(files[i])    #find subroutines from imported files
-    if sub_name == 0:                      # if it is module then append to list
-      modules_list.append(module_class(files[i]))
+  for i in range(len(file_paths)):
+    module_name = finder.get_mod(file_paths[i]) # find modules from file paths
+    sub_name = finder.get_sub(file_paths[i])    # find subs from file paths
+    if module_name != []:                       # if it is module append to list
+      modules_list.append(module_class(file_paths[i]))
   mod_list = mod_lvl(modules_list)
   return mod_list
 
 #===============================================================================
-# Function for appending subs in list (list with only subroutines)
+# Function for creating subroutines and appending into list
+#
+# Parameters:
+#   - file_paths:     list of all paths to .f90 files
+# Returns:
+#   - sub_list:       list with only subrorutine objects
+# Used by:
+#   - Function for creating complete and updated object list
 #-------------------------------------------------------------------------------
-def sub_list_fun(files):
+def sub_list_fun(file_paths):
   subroutines_list = []
 
-  for i in range(len(files)):
-    sub_name = finder.get_sub(files[i])   # find subroutines from imported files
-    if sub_name != 0:                     # if it subroutine then append to list
-      subroutines_list.append(subroutine_class(files[i]))
-  sub_list = sub_lvl(subroutines_list,files)
+  for i in range(len(file_paths)):
+    sub_name = finder.get_sub(file_paths[i])  # find subroutines from file paths
+    if sub_name != 0:                         # if it is sub then append to list
+      subroutines_list.append(subroutine_class(file_paths[i]))
+  sub_list = sub_lvl(subroutines_list,file_paths)
 
   return sub_list
 
 #===============================================================================
-# Function for appending functions in list (list with only functions)
+# Function for creating functions and appending into list
+#
+# Parameters:
+#   - file_paths:     list of all paths to .f90 files
+# Returns:
+#   - fun_list:       list with only function objects
+# Used by:
+#   - Function for creating complete and updated object list
 #-------------------------------------------------------------------------------
-def fun_list_fun(files):
+def fun_list_fun(file_paths):
   functions_list = []
 
-  for i in range(len(files)):
-    fun_name = finder.get_fun(files[i])   # find functions from imported files
-    if fun_name != 0:                     # if it function then append to list
-      functions_list.append(function_class(files[i]))
-  fun_list = fun_lvl(functions_list,files)
+  for i in range(len(file_paths)):
+    fun_name = finder.get_fun(file_paths[i])  # find functions from file paths
+    if fun_name != 0:                    # if it is function then append to list
+      functions_list.append(function_class(file_paths[i]))
+  fun_list = fun_lvl(functions_list,file_paths)
 
   return fun_list
 
 #===============================================================================
-# Function for appending program in list (list with only programs)
+# Function for creating programs and appending into list
+#
+# Parameters:
+#   - file_paths:     list of all paths to .f90 files
+# Returns:
+#   - program_list:   list with only program objects
+# Used by:
+#   - Function for creating complete and updated object list
 #-------------------------------------------------------------------------------
-def prog_list_fun(files):
+def prog_list_fun(file_paths):
   program_list = []
 
-  for i in range(len(files)):
-    program_name = finder.get_prog(files[i]) # find program from imported files
-    if program_name != 0:                 # if it s program then append to list
-      program_list.append(program_class(files[i]))
+  for i in range(len(file_paths)):
+    program_name = finder.get_prog(file_paths[i]) # find program from file paths
+    if program_name != 0:                 # if it is program then append to list
+      program_list.append(program_class(file_paths[i]))
 
-  program_list = prog_lvl(program_list,files)
+  program_list = prog_lvl(program_list,file_paths)
   return program_list
 
 #===============================================================================
-# Remove empty files from list (such as programs and others)
+# Function for calculating y1 coordinate
+#
+# Parameters:
+#   - object:    object for calculating y1
+# Returns:
+#   - y1:        second coordinate on y axis (upper right corner)
+# Used by:
+#   - Function for updating object attributes
 #-------------------------------------------------------------------------------
-def remove_empty(file_list):
-  i = 0
-  while i<len(file_list):
-      if file_list[i].name == [] :
-          del file_list[i]
-      else:
-          i+=1
-  return file_list
+def find_y1(object):
 
-#===============================================================================
-# Find y1 coordinate
-#-------------------------------------------------------------------------------
-def find_y1(file):
   UBH          = 0.75
-  use_list     = file.use
-  var_list     = file.var
-  meth_list    = file.meth
-  call_list    = file.call
-  type_list    = file.type_stat
+  use_list     = object.use
+  var_list     = object.var
+  meth_list    = object.meth
+  call_list    = object.call
+  type_list    = object.type_stat
   len_fun_type = 0
 
   if use_list == "None":
@@ -594,72 +688,109 @@ def find_y1(file):
     meth_list = []
   if type_list == 0:
     type_list = []
-  if file.type == "Function":
-    fun_type = file.fun_type
+  if object.type == "Function":
+    fun_type = object.fun_type
     if fun_type != 0:
       len_fun_type = 1
 
-  y1 = file.y0 + UBH + len(var_list) + len(meth_list) + len(use_list)    \
+  y1 = object.y0 + UBH + len(var_list) + len(meth_list) + len(use_list)    \
      + len(type_list) + len_fun_type
 
   return y1
 
 #===============================================================================
-# Find the biggest box at certain level
+# Function for calculating heights of all objects at certain level
+#
+# Parameters:
+#   - obj_list:     list of objects
+#   - level:        level
+# Returns:
+#   - heights:      list of all heights at certain level
+# Used by:
+#   - Function for finding maximum height of each level
 #-------------------------------------------------------------------------------
-def find_lvl_height(file_list,level):
+def find_lvl_heights(obj_list, level):
   heights = []
-  for i in range(len(file_list)):
-    if file_list[i].level == level:
-      height = file_list[i].y1 - file_list[i].y0
+  for i in range(len(obj_list)):
+    if obj_list[i].level == level:
+      height = obj_list[i].y1 - obj_list[i].y0
       heights.append(height)
   return heights
 
 #===============================================================================
-# Updating list attributes
+# Function for updating (importing) coordinates of objects
+#
+# Parameters:
+#   - obj_list:     list of objects
+# Returns:
+#   - obj_list:     list of objects with updated coordinates
+# Used by:
+#   - Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
-def update(file_list):
-  for i in range(len(file_list)):
+def update(obj_list):
+  for i in range(len(obj_list)):
 
-    file_list[i].x0     = x_pos(file_list)[i]                 # update x0
-    file_list[i].x1     = xfig.choose_width(file_list[i])     # update x1
-    file_list[i].y0     = (file_list[i].level*2)+1            # update y0
-    file_list[i].y1     = find_y1(file_list[i])               # update y1
+    obj_list[i].x0     = x_pos(obj_list)[i]                 # update x0
+    obj_list[i].x1     = xfig.choose_width(obj_list[i])     # update x1
+    obj_list[i].y0     = (obj_list[i].level*2)+1            # update y0
+    obj_list[i].y1     = find_y1(obj_list[i])               # update y1
 
-  return file_list
+  return obj_list
 
 #===============================================================================
-# List with heights of levels
+# Function for finding maximum height of each level
+#
+# Parameters:
+#   - obj_list:       list of objects
+# Returns:
+#   - heights_list:   list of maximum heights of each level
+# Used by:
+#   - Function for arranging objects by level (updating y coordinates)
 #-------------------------------------------------------------------------------
-def lvl_height(file_list):
+def lvl_height(obj_list):
   heights_list = [0]
-  biggest_lvl  = find_biggest(file_list)
+  biggest_lvl  = find_max_lvl(obj_list)
   for i in range(biggest_lvl):
-    heights = max(find_lvl_height(file_list,i))
+    heights = max(find_lvl_heights(obj_list,i))
     heights_list.append(heights)
 
   return heights_list
 
 #===============================================================================
-# Updating y coordinates (arranging by levels)
+# Function for updating y coordinates (arranging by levels)
+#
+# Parameters:
+#   - obj_list:       list of objects
+# Returns:
+#   - nothing
+# Used by:
+#   - Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
-def arrange_by_level(file_list):
-  lvl_heights = lvl_height(file_list)
+def arrange_by_level(obj_list):
+  lvl_heights = lvl_height(obj_list)
 
-  for i in range(len(file_list)):
+  for i in range(len(obj_list)):
     for l in range(len(lvl_heights)):
-      if file_list[i].level == l:
-        file_list[i].y0 = file_list[i].y0 + sum(lvl_heights[0:l+1])
-        file_list[i].y1 = file_list[i].y1 + sum(lvl_heights[0:l+1])
+      if obj_list[i].level == l:
+        obj_list[i].y0 = obj_list[i].y0 + sum(lvl_heights[0:l+1])
+        obj_list[i].y1 = obj_list[i].y1 + sum(lvl_heights[0:l+1])
 
 #===============================================================================
-# Function to return list with positions on x axis
+# Function to create list with positions of objects on x axis
+#
+# Parameters:
+#   - obj_list:     list of objects
+# Returns:
+#   - box_pos:      list of x axis coordinates for objects
+# Used by:
+#   - Function for creating lists of classes at specific level and updating
 #-------------------------------------------------------------------------------
-def x_pos(files):
+def x_pos(obj_list):
+
   # Create list with all box widths
   box_widths = [0] + []                       # initialize box_widths list
-  for i in range(len(files)):
-    box = xfig.choose_width(files[i])
+  for i in range(len(obj_list)):
+    box = xfig.choose_width(obj_list[i])
     box_widths.append(box)                    # list of box widths of all boxes
 
   # Create new list for boxes to be parallel
@@ -668,76 +799,104 @@ def x_pos(files):
   for item in box_widths:
     sum += item + 1
     box_pos.append(sum)
+
   return box_pos
 
 #===============================================================================
-# Function for creating lists of classes with same level
+# Function for creating lists of objects at specific level
+#  and updating x coordinates
+#
+# Parameters:
+#   - obj_list:     list of objects
+#   - lvl:          level
+# Returns:
+#   - list:         list of objects with updated x0 coordinate
+# Used by:
+#   - Function for creating lists of classes at specific level
 #-------------------------------------------------------------------------------
-def lvl_list(file_list,lvl):
+def lvl_list(obj_list,lvl):
   list = []
-  for i in range(len(file_list)):
-    if file_list[i].level == lvl:
-      list.append(file_list[i])
+  for i in range(len(obj_list)):
+    if obj_list[i].level == lvl:
+      list.append(obj_list[i])
   for i in range(len(list)):
     list[i].x0 = x_pos(list)[i]
+
   return list
 
 #===============================================================================
-# Function for putting all classes together again in list
+# Function for appending list of multiple lists into 1 list
+#
+# Parameters:
+#   - obj_list:       list with multiple lists of objects
+# Returns:
+#   - flat_list:      list with all objects
+# Used by:
+#   - Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
-def lvl_file_list(file_list):
+def lvl_file_list(obj_list):
   lvl_lista = []
-  lvl_num   = len(lvl_height(file_list))
+  lvl_num   = len(lvl_height(obj_list))
 
   for i in range(lvl_num+1):
-    lvl = lvl_list(file_list,i)
+    lvl = lvl_list(obj_list,i)
     lvl_lista.append(lvl)
   flat_list = [item for sublist in lvl_lista for item in sublist]
 
   return flat_list
 
 #===============================================================================
-# Function for finding max width of level
+# Function for finding maximum width of all objects
+#
+# Parameters:
+#   - obj_list:    list of objects
+# Returns:
+#   - max_width:   maximum width of all objets (boxes)
+# Used by:
+#   - Functions for creating and updating grid
 #-------------------------------------------------------------------------------
-def find_lvl_width(file_list,level):
-  widths = []
-  for i in range(len(file_list)):
-    if file_list[i].level == level:
-      width = file_list[i].width
-      widths.append(width)
-  return widths
-
-#===============================================================================
-# Function for finding max width of all files
-#-------------------------------------------------------------------------------
-def max_width(file_list):
+def max_width(obj_list):
   widths_list = []
-  for i in range(len(file_list)):
-    widths = file_list[i].x1 - file_list[i].x0
+  for i in range(len(obj_list)):
+    widths = obj_list[i].x1 - obj_list[i].x0
     widths_list.append(widths)
 
   max_width = max(widths_list)
   return max_width
 
 #===============================================================================
-# Function for finding max height of all files
+# Function for finding max height of all objects
+#
+# Parameters:
+#   - obj_list:     list of objects
+# Returns:
+#   - max_height:   maximum height of all objets (boxes)
+# Used by:
+#   - Functions for creating and updating grid
 #-------------------------------------------------------------------------------
-def max_height(file_list):
+def max_height(obj_list):
   heights_list = []
-  for i in range(len(file_list)):
-    heights = file_list[i].y1 - file_list[i].y0
+  for i in range(len(obj_list)):
+    heights = obj_list[i].y1 - obj_list[i].y0
     heights_list.append(heights)
 
   max_height = max(heights_list)
   return max_height
 
 #===============================================================================
-# Function for creating grid
+# Function for creating grid and updating coordinates
+#
+# Parameters:
+#   - obj_list:     list of objects
+# Returns:
+#   - updated_list: list of objects with updated coordinates (plotting in grid)
+# Used by:
+#   - Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
-def create_grid(file_list):
-  width   = max_width(file_list)  + 2             # height of each grid spot
-  height  = max_height(file_list) + 2             # width of each grid spot
-  max_lvl = find_biggest(file_list)               # max level
+def create_grid(obj_list):
+  width   = max_width(obj_list)  + 2             # height of each grid spot
+  height  = max_height(obj_list) + 2             # width of each grid spot
+  max_lvl = find_max_lvl(obj_list)               # max level
 
   width_list   = []
   height_list  = []
@@ -745,7 +904,7 @@ def create_grid(file_list):
   updated_list = []
 
   # List with widths (columns)
-  for i in range(len(file_list) + 2):
+  for i in range(len(obj_list) + 2):
     widths = width * i
     width_list.append(widths)
 
@@ -756,7 +915,7 @@ def create_grid(file_list):
 
   # List of lists of levels
   for i in range(max_lvl + 2):
-    lvl = lvl_list(file_list,i)
+    lvl = lvl_list(obj_list,i)
     lvl_lista.append(lvl)
 
   # Assign values to coordinates
@@ -787,41 +946,20 @@ def create_grid(file_list):
   return updated_list
 
 #===============================================================================
-# Function for generating grid coordinates (not in use)
+# Function for updating only 1 box by row and column (change placement in grid)
+#
+# Parameters:
+#   - obj_list:     list of objects
+# Returns:
+#   - nothing
+# Used by:
+#   - nothing (optional in main program)
 #-------------------------------------------------------------------------------
-def grid_coordinates(file_list,row,column):
-  width   = max_width(file_list)  + 2             # height of each spot
-  height  = max_height(file_list) + 2             # width of each spot
-  max_lvl = find_biggest(file_list)               # max level
+def update_box_pos(obj_list, name, column, row):
 
-  width_list   = []
-  height_list  = []
-  lvl_lista    = []
-  updated_list = []
-
-  # List with widths
-  for i in range(len(file_list) + 10):
-    widths = width * i
-    width_list.append(widths)
-
-  # List with heights
-  for i in range(max_lvl + 10):
-    heights = height * i
-    height_list.append(heights)
-
-  x = width_list[row]
-  y = height_list[column]
-
-  return (x,y)
-
-#===============================================================================
-# Function for updating only 1 box by row and column
-#-------------------------------------------------------------------------------
-def update_box_pos(file_list, name, column, row):
-
-  width   = max_width(file_list)  + 2             # height of each grid spot
-  height  = max_height(file_list) + 2             # width of each grid spot
-  max_lvl = find_biggest(file_list)               # max level
+  width   = max_width(obj_list)  + 2             # height of each grid spot
+  height  = max_height(obj_list) + 2             # width of each grid spot
+  max_lvl = find_max_lvl(obj_list)               # max level
 
   width_list   = []
   height_list  = []
@@ -829,7 +967,7 @@ def update_box_pos(file_list, name, column, row):
   updated_list = []
 
   # List with widths (columns)
-  for i in range(len(file_list)+10):
+  for i in range(len(obj_list)+10):
     widths = width * i
     width_list.append(widths)
 
@@ -839,33 +977,50 @@ def update_box_pos(file_list, name, column, row):
     height_list.append(heights)
 
   # Assign new coordinates
-  for i in range(len(file_list)):
-    if name == file_list[i].name:
-      file_list[i].x0 = ((width_list[column]        \
+  for i in range(len(obj_list)):
+    if name == obj_list[i].name:
+      obj_list[i].x0 = ((width_list[column]        \
                       +   width_list[column+1])/2)  \
-                      -  (file_list[i].width/2)
+                      -  (obj_list[i].width/2)
 
-      file_list[i].y0 = ((height_list[row]          \
+      obj_list[i].y0 = ((height_list[row]          \
                       +   height_list[row+1])/2)    \
-                      -  (file_list[i].height/2)
+                      -  (obj_list[i].height/2)
 
-      file_list[i].x1 = file_list[i].x0 + file_list[i].width
-      file_list[i].y1 = file_list[i].y0 + file_list[i].height
+      obj_list[i].x1 = obj_list[i].x0 + obj_list[i].width
+      obj_list[i].y1 = obj_list[i].y0 + obj_list[i].height
 
 #===============================================================================
-# Function for assigning values to x1,width and height
+# Function for assigning x1,width and height to objects
+#
+# Parameters:
+#   - obj_list:     list of objects
+# Returns:
+#   - nothing
+# Used by:
+#   - Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
-def assign_values(file_list):
+def assign_values(obj_list):
 
-  for i in range(len(file_list)):
-    file_list[i].x1     = file_list[i].x1 + file_list[i].x0
-    file_list[i].width  = file_list[i].x1 - file_list[i].x0
-    file_list[i].height = file_list[i].y1 - file_list[i].y0
+  for i in range(len(obj_list)):
+    obj_list[i].x1     = obj_list[i].x1 + obj_list[i].x0
+    obj_list[i].width  = obj_list[i].x1 - obj_list[i].x0
+    obj_list[i].height = obj_list[i].y1 - obj_list[i].y0
 
-  return file_list
+  return obj_list
 
 #===============================================================================
 # Function for saving names of all objects into .txt file
+#
+# Parameters:
+#   - obj_list:     list of objects
+#   - file_name:    name of saved .txt file
+# Returns:
+#   - nothing
+# Note:
+#   - creates a .txt file in PyFA folder
+# Used by:
+#   - Main program (simple.py)
 #-------------------------------------------------------------------------------
 def write_names(obj_list,file_name):
 
@@ -881,9 +1036,18 @@ def write_names(obj_list,file_name):
       ("\n".join(("".join(item)) for item in name_list))
 
 #===============================================================================
-# Function for removing subroutine objects that are already in modules
+# Function for removing subroutine objects that are already printed
+#  in module methods (functions)
+#
+# Parameters:
+#   - obj_list:     list of objects
+# Returns:
+#   - obj_list:     list of objects without subroutine objects already printed
+#                   in module methods (functions)
+# Used by:
+#   - Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
-def remove_unwanted_subs(obj_list):
+def remove_unnecessary_subs(obj_list):
 
   meth_list = []            # list of all methods
   indexes   = []            # list of indexes of all unwanted subroutines
@@ -909,22 +1073,29 @@ def remove_unwanted_subs(obj_list):
 
 #===============================================================================
 # Function for creating complete and updated file list
+#
+# Parameters:
+#   - file_path:    path to .f90 file
+# Returns:
+#   - obj_list:     list with all created and updated objects
+# Used by:
+#   - Main program (simple.py)
 #-------------------------------------------------------------------------------
 def get_obj_list(file_path):
+
   mod_list  = mod_list_fun(file_path)    # list of all mod classes
   sub_list  = sub_list_fun(file_path)    # list of all sub classes
   fun_list  = fun_list_fun(file_path)    # list of all fun classes
   prog_list = prog_list_fun(file_path)   # list of all prog classes
-  file_list = [*mod_list,  \
+  obj_list = [*mod_list,   \
                *sub_list,  \
-               *fun_list,\
+               *fun_list,  \
                *prog_list]               # list of all classes(mod+sub+fun+prog)
-  file_list = remove_empty(file_list)    # remove empty files from list
-  file_list = remove_unwanted_subs(file_list)
-  file_list = update(file_list)          # updating coordinates
-  arrange_by_level(file_list)            # arranging by levels
-  file_list = lvl_file_list(file_list)   # put it together in list
-  file_list = assign_values(file_list)   # assign x1,height and width
-  file_list = create_grid(file_list)     # plot it with "grid" on
+  obj_list = remove_unnecessary_subs(obj_list)
+  obj_list = update(obj_list)            # updating coordinates
+  arrange_by_level(obj_list)             # arranging by levels
+  obj_list = lvl_file_list(obj_list)     # put it together in list
+  obj_list = assign_values(obj_list)     # assign x1,height and width
+  obj_list = create_grid(obj_list)       # plot it with "grid" on
 
-  return file_list
+  return obj_list

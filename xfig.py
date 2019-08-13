@@ -1131,7 +1131,7 @@ def plot_grid(xf, obj_list):
 
   width   = attribute.max_width(obj_list)  + 2      # height of each grid spot
   height  = attribute.max_height(obj_list) + 2      # width of each grid spot
-  max_lvl = attribute.find_biggest(obj_list)        # max level
+  max_lvl = attribute.find_max_lvl(obj_list)        # max level
 
   width_list    = []
   height_list   = []

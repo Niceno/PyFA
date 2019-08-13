@@ -8,10 +8,11 @@ import attribute
 #===============================================================================
 # Lists
 #-------------------------------------------------------------------------------
-#root  = "/home/simcic/Development/T-Flows/Sources/IvanTest"
-root  = "/home/simcic/Development/Synthetic-Eddies"
+root  = "/home/simcic/Development/T-Flows/Sources/Generate"
+#root  = "/home/simcic/Development/Synthetic-Eddies"
 
 file_paths = browse.source_paths(root)             # list of paths to all .f90
+#print(file_paths)
 
 #file_paths = browse.remove_path(file_paths,\
 #            "/home/simcic/Development/Synthetic-Eddies/Prof_Mod")
@@ -19,6 +20,7 @@ file_paths = browse.source_paths(root)             # list of paths to all .f90
 obj_list = attribute.get_obj_list(file_paths)    # list of all .f90 files
 
  # Change object placement in grid (column,row)
+
 #attribute.update_box_pos(obj_list,"Eddy_Mod",10,0)
 
 #===============================================================================
@@ -28,7 +30,7 @@ obj_list = attribute.get_obj_list(file_paths)    # list of all .f90 files
 print("\nGreat program for extracting UML from Fortran.\n")
 
 # Printing objects and their levels
-#attribute.print_levels(obj_list)
+#attribute.print_info(obj_list)
 
 # Check directories for errors
 #browse.check_all(root)
