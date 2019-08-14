@@ -28,14 +28,17 @@ ALIGN_BOXES = "Diagonal"      # "Left"
 #   - height:     module box height
 #   - call:       call statements of module
 #   - type_stat:  type statements of module
+#   - row:        row placement in grid
+#   - column:     column placement in grid
 # Returns:
 #   - nothing
 # Used by:
 #   - Function for importing attributes(parameters) to module class(object)
 #-------------------------------------------------------------------------------
 class Module(object):
-  def __init__(module, type, name, use, var, meth,            \
-               level, x0, x1, y0, y1, width, height, call, type_stat):
+  def __init__(module, type, name, use, var, meth,          \
+               level, x0, x1, y0, y1, width, height,        \
+               call, type_stat, row, column):
 
     module.name      = name
     module.use       = use
@@ -51,6 +54,8 @@ class Module(object):
     module.width     = width
     module.height    = height
     module.type_stat = type_stat
+    module.row       = row
+    module.column    = column
 
 #===============================================================================
 # Defining subroutine class
@@ -71,6 +76,8 @@ class Module(object):
 #   - height:     subroutine box height
 #   - call:       call statements of subroutine
 #   - type_stat:  type statements of subroutine
+#   - row:        row placement in grid
+#   - column:     column placement in grid
 # Returns:
 #   - nothing
 # Used by:
@@ -78,7 +85,8 @@ class Module(object):
 #-------------------------------------------------------------------------------
 class Subroutine(object):
   def __init__(subroutine, type, name, use, var, meth,       \
-               level, x0, x1, y0, y1, width, height, call, type_stat):
+               level, x0, x1, y0, y1, width, height,         \
+               call, type_stat, row, column):
 
     subroutine.name      = name
     subroutine.use       = use
@@ -94,6 +102,8 @@ class Subroutine(object):
     subroutine.width     = width
     subroutine.height    = height
     subroutine.type_stat = type_stat
+    subroutine.row       = row
+    subroutine.column    = column
 
 #===============================================================================
 # Defining function class
@@ -115,6 +125,8 @@ class Subroutine(object):
 #   - fun_type:   type of function
 #   - call:       call statements of function
 #   - type_stat:  type statements of function
+#   - row:        row placement in grid
+#   - column:     column placement in grid
 # Returns:
 #   - nothing
 # Used by:
@@ -122,7 +134,8 @@ class Subroutine(object):
 #-------------------------------------------------------------------------------
 class Function(object):
   def __init__(function, type, name, use, var, meth,     \
-               level, x0, x1, y0, y1, width, height, fun_type, call, type_stat):
+               level, x0, x1, y0, y1, width, height,     \
+               fun_type, call, type_stat, row, column):
 
     function.name      = name
     function.use       = use
@@ -139,6 +152,8 @@ class Function(object):
     function.height    = height
     function.fun_type  = fun_type
     function.type_stat = type_stat
+    function.row       = row
+    function.column    = column
 
 #===============================================================================
 # Defining program class
@@ -159,6 +174,8 @@ class Function(object):
 #   - height:     program box height
 #   - call:       call statements of program
 #   - type_stat:  type statements of program
+#   - row:        row placement in grid
+#   - column:     column placement in grid
 # Returns:
 #   - nothing
 # Used by:
@@ -166,7 +183,8 @@ class Function(object):
 #-------------------------------------------------------------------------------
 class Program(object):
   def __init__(program, type, name, use, var, meth, level,     \
-               x0, x1, y0, y1, width, height, call, type_stat):
+               x0, x1, y0, y1, width, height, call,            \
+               type_stat, row, column):
 
     program.name      = name
     program.use       = use
@@ -182,6 +200,8 @@ class Program(object):
     program.width     = width
     program.height    = height
     program.type_stat = type_stat
+    program.row       = row
+    program.column    = column
 
 #===============================================================================
 # Function to check if use list is empty
@@ -227,6 +247,8 @@ def module_class(file_path):
   y1           = 0
   width        = 0
   height       = 0
+  row          = 0
+  column       = 0
 
   module = Module(type,         \
                   module_name,  \
@@ -241,7 +263,9 @@ def module_class(file_path):
                   width,        \
                   height,       \
                   call_list,    \
-                  type_stat)
+                  type_stat,    \
+                  row,          \
+                  column)
 
   return module
 
@@ -271,6 +295,8 @@ def subroutine_class(file_path):
   y1         = 0
   width      = 0
   height     = 0
+  row        = 0
+  column     = 0
 
   subroutine = Subroutine(type,       \
                           sub_name,   \
@@ -285,7 +311,9 @@ def subroutine_class(file_path):
                           width,      \
                           height,     \
                           call_list,  \
-                          type_stat)
+                          type_stat,  \
+                          row,        \
+                          column)
   return subroutine
 
 #===============================================================================
@@ -315,6 +343,8 @@ def function_class(file_path):
   y1         = 0
   width      = 0
   height     = 0
+  row        = 0
+  column     = 0
 
   function = Function(type,       \
                       fun_name,   \
@@ -330,7 +360,9 @@ def function_class(file_path):
                       height,     \
                       fun_type,   \
                       call_list,  \
-                      type_stat)
+                      type_stat,  \
+                      row,        \
+                      column)
   return function
 
 #===============================================================================
@@ -359,6 +391,8 @@ def program_class(file_path):
   y1         = 0
   width      = 0
   height     = 0
+  row        = 0
+  column     = 0
 
   program = Program(type,        \
                     prog_name,   \
@@ -373,7 +407,9 @@ def program_class(file_path):
                     width,       \
                     height,      \
                     call_list,   \
-                    type_stat)
+                    type_stat,   \
+                    row,         \
+                    column)
   return program
 
 #===============================================================================
@@ -941,6 +977,9 @@ def create_grid(obj_list):
       lista[l].x1 = lista[l].x0 + lista[l].width
       lista[l].y1 = lista[l].y0 + lista[l].height
 
+      lista[l].row    = i
+      lista[l].column = l+row
+
       updated_list.append(lista[l])
 
   return updated_list
@@ -955,7 +994,7 @@ def create_grid(obj_list):
 # Used by:
 #   - nothing (optional in main program)
 #-------------------------------------------------------------------------------
-def update_box_pos(obj_list, name, column, row):
+def update_box_pos(obj_list, name, row, column):
 
   width   = max_width(obj_list)  + 2             # height of each grid spot
   height  = max_height(obj_list) + 2             # width of each grid spot
@@ -967,23 +1006,23 @@ def update_box_pos(obj_list, name, column, row):
   updated_list = []
 
   # List with widths (columns)
-  for i in range(len(obj_list)+10):
+  for i in range(obj_list):
     widths = width * i
     width_list.append(widths)
 
   # List with heights (rows)
-  for i in range(max_lvl + 10):
+  for i in range(obj_list):
     heights = height * i
     height_list.append(heights)
 
   # Assign new coordinates
   for i in range(len(obj_list)):
     if name == obj_list[i].name:
-      obj_list[i].x0 = ((width_list[column]        \
+      obj_list[i].x0 = ((width_list[column]         \
                       +   width_list[column+1])/2)  \
                       -  (obj_list[i].width/2)
 
-      obj_list[i].y0 = ((height_list[row]          \
+      obj_list[i].y0 = ((height_list[row]           \
                       +   height_list[row+1])/2)    \
                       -  (obj_list[i].height/2)
 
@@ -1024,16 +1063,16 @@ def assign_values(obj_list):
 #-------------------------------------------------------------------------------
 def write_names(obj_list,file_name):
 
-  name_list = []                                  # initialize list
-
-  for i in range(0,len(obj_list)):                # for every object in list
-    name = obj_list[i].name                       # take name of the object
-    name_list.append(name)                        # append name to the list
-  name_list = sorted(name_list, key=str.lower)    # sort list alphabetically
-
   # Write list of all names into a .txt file
-  open(file_name, "w").write                  \
-      ("\n".join(("".join(item)) for item in name_list))
+  text_file = open(file_name,"w")
+  text_file.write("\n X  Y  Name\n")
+
+  for i in range(0,len(obj_list)):
+
+    text_file.write("\n {0}, {1}, {2}".format(obj_list[i].row,     \
+                                              obj_list[i].column,  \
+                                              obj_list[i].name))
+  text_file.close()
 
 #===============================================================================
 # Function for removing subroutine objects that are already printed

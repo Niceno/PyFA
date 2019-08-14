@@ -19,9 +19,10 @@ file_paths = browse.source_paths(root)             # list of paths to all .f90
 
 obj_list = attribute.get_obj_list(file_paths)    # list of all .f90 files
 
- # Change object placement in grid (column,row)
+ # Change object placement in grid (row,column)
 
-#attribute.update_box_pos(obj_list,"Eddy_Mod",10,0)
+#attribute.update_box_pos(obj_list,"Point_Mod",0,1)
+
 
 #===============================================================================
 # Obviously the main function
