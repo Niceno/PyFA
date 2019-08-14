@@ -1065,13 +1065,15 @@ def write_names(obj_list,file_name):
 
   # Write list of all names into a .txt file
   text_file = open(file_name,"w")
-  text_file.write("\n X  Y  Name\n")
+  text_file.write("#\n")
+  text_file.write("#  X   Y   Name\n")
+  text_file.write("#")
 
   for i in range(0,len(obj_list)):
 
-    text_file.write("\n {0}, {1}, {2}".format(obj_list[i].row,     \
-                                              obj_list[i].column,  \
-                                              obj_list[i].name))
+    text_file.write("\n {:>3} {:>3}   {}".format(obj_list[i].row,     \
+                                                 obj_list[i].column,  \
+                                                 obj_list[i].name))
   text_file.close()
 
 #===============================================================================

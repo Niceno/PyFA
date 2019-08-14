@@ -52,14 +52,34 @@ def get_mod(file_name_with_path):
 #-------------------------------------------------------------------------------
 def get_sub(file_name_with_path):
 
-  subroutine = []                               # initialize module list
+  subroutine = []
   pattern    = re.compile(".+?(?=subroutine)", re.IGNORECASE)
+  pattern2   = re.compile("^(.*[^&])\&$", re.IGNORECASE)
+  pattern3   = re.compile(".+?(?=end)", re.IGNORECASE)
+
 
   with open (file_name_with_path, 'rt') as myfile: # open file
     for line in myfile:                            # read line by line
       if pattern.search(line) != None:             # search for pattern
         if not line.startswith("!"):               # skip line starting with "!"
           subroutine.append(( line.rstrip("\n")))  # add line with patt. to list
+
+          if pattern2.search(line) != None:           # if "&" is found
+            for line in myfile:
+              if not pattern3.search(line) != None:   # if "end" is not found
+
+                new_subroutine = subroutine
+                new_subroutine.append(( line.rstrip("\n"))),
+                new_subroutine = list(new_subroutine)
+                new_subroutine = ''.join(new_subroutine)
+                new_subroutine = new_subroutine.replace(" ", "")
+                new_subroutine = re.sub("subroutine", "", new_subroutine)
+                new_subroutine = re.sub("&", "", new_subroutine)
+                subroutine[0]  = new_subroutine
+
+                if not pattern2.search(line) != None: # if "&" is not found
+                  break                               # stop this inner for loop
+                                                      # outer loop continues
 
   subroutine = [s.strip() for s in subroutine if s.strip()] # remove whitespaces
 
