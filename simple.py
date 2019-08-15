@@ -29,33 +29,43 @@ if len(sys.argv) == 1:
 
   # Get all sources
   file_paths = browse.source_paths(root)             # list of paths to all .f90
-  # print(file_paths)
+  obj_list = attribute.get_obj_list(file_paths)         # list of all objects
+  obj_list = finder.get_new_calls(file_paths,obj_list)  # list of updated objects
+
 
 #-------------------------------------------
 # Some command line arguments are specified
 #-------------------------------------------
 else:
-  if str(sys.argv[1]) == "-s" or str(sys.argv[1]) == "--sources":
-    print("List of files is specified in:", str(sys.argv[2]))
+  for j in range(1,len(sys.argv)):
 
-    with open (str(sys.argv[2]), 'rt') as myfile:    # open file
-      for line in myfile:                            # read line by line
-        if not line.startswith("#"):                 # search for pattern
-          file_paths.append(line.rstrip("\n"))
+    # Check if list of sources was specified
+    if str(sys.argv[j]) == "-s" or str(sys.argv[j]) == "--sources":
+      print("List of files is specified in:", str(sys.argv[j+1]))
 
-    file_paths = list(filter(None, file_paths))
+      with open (str(sys.argv[j+1]), 'rt') as myfile:    # open file
+        for line in myfile:                            # read line by line
+          if not line.startswith("#"):                 # search for pattern
+            file_paths.append(line.rstrip("\n"))
 
-    for i in range(0,len(file_paths)):
-      file_paths[i] = root + file_paths[i]
+      file_paths = list(filter(None, file_paths))
 
+      for i in range(0,len(file_paths)):
+        file_paths[i] = root + file_paths[i]
 
-obj_list = attribute.get_obj_list(file_paths)         # list of all objects
-obj_list = finder.get_new_calls(file_paths,obj_list)  # list of updated objects
+      obj_list = attribute.get_obj_list(file_paths)         # list of all objects
+      obj_list = finder.get_new_calls(file_paths,obj_list)  # list of updated objects
 
- # Change object placement in grid (row,column)
+    if str(sys.argv[j]) == "-h" or str(sys.argv[j]) == "--help":
+      print("Program for extracting UML diagrams for modern Fortran programs")
+      print("Author: Ivan Simcic")
+      exit()
 
-#attribute.update_box_pos(obj_list,"Point_Mod",0,1)
-
+  # If user specifed object coordinates
+  for j in range(1,len(sys.argv)):
+    if str(sys.argv[j]) == "-g" or str(sys.argv[j]) == "--grid":
+      print("Object coordinates are specified in:", str(sys.argv[j+1]))
+      finder.find_coordinates(str(sys.argv[j+1]), obj_list)
 
 
 #===============================================================================

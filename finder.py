@@ -541,7 +541,16 @@ def get_only_meth(file_name_with_path):
   return meth_list
 
 #===============================================================================
-#  Function for finding used functions
+#  Function for updating use statements
+#
+# Parameters:
+#   - file_paths:    fortran files with full paths in front
+#   - obj_list:      list of all objects
+# Returns:
+#   - obj_list:      list of all objects updated
+# Used by:
+#   - Main program
+
 #===============================================================================
 def get_new_calls(file_paths,obj_list):
 
@@ -570,6 +579,7 @@ def get_new_calls(file_paths,obj_list):
   # Put all subroutine and function names in list
   full_list_names = [*fun_list_names,*sub_list_names]
 
+  # Search through files and look for used functions and subroutines
   for i in range(0,len(file_paths)):
     for l in range(0,len(full_list_names)):
       with open(file_paths[i]) as file:                # open file
@@ -588,6 +598,25 @@ def get_new_calls(file_paths,obj_list):
                   calls = list(set(calls))
                   obj_list[o].call = calls
 
+  return obj_list
+
+#===============================================================================
+# Function for searching through object_names.txt
+#===============================================================================
+def find_coordinates(names_file, obj_list):
+
+  list = obj_list
+  with open (names_file, 'rt') as myfile:             # open file
+    for line in myfile:                               # read line by line
+      if not line.startswith("#"):
+        line = "".join(line.split())
+        data = line.split(",",2)
+
+        #print("Row:",data[0],"Column:",data[1],"Name:",data[2])
+        obj_list = attribute.update_box_pos(list,         \
+                                            data[2],      \
+                                            int(data[0]), \
+                                            int(data[1]))
   return obj_list
 
 #===============================================================================

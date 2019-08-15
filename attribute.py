@@ -1021,12 +1021,12 @@ def update_box_pos(obj_list, name, row, column):
   updated_list = []
 
   # List with widths (columns)
-  for i in range(obj_list):
+  for i in range(len(obj_list)):
     widths = width * i
     width_list.append(widths)
 
   # List with heights (rows)
-  for i in range(obj_list):
+  for i in range(len(obj_list)):
     heights = height * i
     height_list.append(heights)
 
@@ -1041,8 +1041,10 @@ def update_box_pos(obj_list, name, row, column):
                       +   height_list[row+1])/2)    \
                       -  (obj_list[i].height/2)
 
-      obj_list[i].x1 = obj_list[i].x0 + obj_list[i].width
-      obj_list[i].y1 = obj_list[i].y0 + obj_list[i].height
+      obj_list[i].x1     = obj_list[i].x0 + obj_list[i].width
+      obj_list[i].y1     = obj_list[i].y0 + obj_list[i].height
+      obj_list[i].row    = row
+      obj_list[i].column = column
 
 #===============================================================================
 # Function for assigning x1,width and height to objects
@@ -1081,12 +1083,12 @@ def write_names(obj_list,file_name):
   # Write list of all names into a .txt file
   text_file = open(file_name,"w")
   text_file.write("#\n")
-  text_file.write("#  X   Y   Name\n")
+  text_file.write("#  X,  Y,  Name\n")
   text_file.write("#")
 
   for i in range(0,len(obj_list)):
 
-    text_file.write("\n {:>3} {:>3}   {}".format(obj_list[i].row,     \
+    text_file.write("\n {:>3},{:>3},  {}".format(obj_list[i].row,     \
                                                  obj_list[i].column,  \
                                                  obj_list[i].name))
   text_file.close()
