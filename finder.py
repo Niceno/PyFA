@@ -4,6 +4,7 @@
 import re
 import xfig
 import os
+import attribute
 
 #===============================================================================
 # Function to search through .f90 file and returns module name
@@ -38,6 +39,9 @@ def get_mod(file_name_with_path):
   elif len(module) == 0:
     module_name = []
 
+  if "!" in module_name:
+    module_name = []
+
   return module_name
 
 #===============================================================================
@@ -54,24 +58,29 @@ def get_sub(file_name_with_path):
 
   subroutine = []
   pattern    = re.compile(".+?(?=subroutine)", re.IGNORECASE)
-  pattern2   = re.compile("^(.*[^&])\&$", re.IGNORECASE)
+  pattern2   = re.compile("(.*)[&]\s*$", re.IGNORECASE)
   pattern3   = re.compile(".+?(?=end)", re.IGNORECASE)
-
 
   with open (file_name_with_path, 'rt') as myfile: # open file
     for line in myfile:                            # read line by line
       if pattern.search(line) != None:             # search for pattern
         if not line.startswith("!"):               # skip line starting with "!"
+          if "!" in line:
+            line = line.split("!")[0]
           subroutine.append(( line.rstrip("\n")))  # add line with patt. to list
 
           if pattern2.search(line) != None:           # if "&" is found
             for line in myfile:
-              if not pattern3.search(line) != None:   # if "end" is not found
+              if "!" in line:
+                line = line.split("!")[0]
 
-                new_subroutine = subroutine
-                new_subroutine.append(( line.rstrip("\n"))),
-                new_subroutine = list(new_subroutine)
-                new_subroutine = ''.join(new_subroutine)
+              if not pattern3.search(line) != None:   # if "end" is not found
+                new_subroutine = subroutine[0]
+                line = line.rstrip("\n")
+                line = ''.join(line)
+                new_subroutine = new_subroutine + line
+
+                # Editing of string
                 new_subroutine = new_subroutine.replace(" ", "")
                 new_subroutine = re.sub("subroutine", "", new_subroutine)
                 new_subroutine = re.sub("&", "", new_subroutine)
@@ -109,20 +118,47 @@ def get_fun(file_name_with_path):
 
   function = []                                 # initialize
   pattern    = re.compile(".+?(?=function)", re.IGNORECASE)
+  pattern2   = re.compile("^(.*[^&])\&$", re.IGNORECASE)
+  pattern3   = re.compile(".+?(?=end)", re.IGNORECASE)
 
   with open (file_name_with_path, 'rt') as myfile: # open file
     for line in myfile:                            # read line by line
       if pattern.search(line) != None:             # search for pattern
         if not line.startswith("!"):               # skip line starting with "!"
           function.append(( line.rstrip("\n")))    # add line with patt. to list
+
+          if pattern2.search(line) != None:           # if "&" is found
+            for line in myfile:
+              if not pattern3.search(line) != None:   # if "end" is not found
+
+                new_function = function
+                new_function.append(( line.rstrip("\n"))),
+                new_function = list(new_function)
+                new_function = ''.join(new_function)
+                new_function = new_function.replace(" ", "")
+                new_function = re.sub("&", "", new_function)
+                function[0]  = new_function
+
+                if not pattern2.search(line) != None: # if "&" is not found
+                  break                               # stop this inner for loop
+                                                      # outer loop continues
+
   function = [s.strip() for s in function if s.strip()] # remove whitespaces
 
   if len(function) != 0:                      # if function is not empty
     fun_name = function[0]                    # take the first string
     if "integer function " in fun_name:
-      fun_name   = re.sub("integer function ", "", fun_name) # return function
+      fun_name   = re.sub("integer function ", "", fun_name)
     elif "logical function " in fun_name:
-      fun_name   = re.sub("logical function ", "", fun_name) # return function
+      fun_name   = re.sub("logical function ", "", fun_name)
+    elif "integerfunction" in fun_name:
+      fun_name   = re.sub("integerfunction", "", fun_name)
+    elif "logicalfunction" in fun_name:
+      fun_name   = re.sub("logicalfunction", "", fun_name)
+    elif "real function " in fun_name:
+      fun_name   = re.sub("real function ", "", fun_name)
+    elif "realfunction" in fun_name:
+      fun_name   = re.sub("realfunction", "", fun_name)
 
     if fun_name.endswith("&"):
       fun_name = fun_name + ")"
@@ -239,7 +275,7 @@ def get_call(file_name_with_path):
   # If you only want to take name of call statement without "type" or "only"
   call_name_list = [i.split()[1] for i in call_name]           # take call name
   call_name_list = ([s.strip("(") for s in call_name_list])    # remove ","
-  call_name_list = [i.rsplit("(",1)[0] for i in call_name_list]
+  call_name_list = [i.rsplit("(")[0] for i in call_name_list]
 
   if call_name_list != []:                # call_name for whole line
     call_list = call_name_list            # call_name_list - take only name
@@ -503,6 +539,56 @@ def get_only_meth(file_name_with_path):
     meth_list = [i.split()[0] for i in flat_meth_list]
 
   return meth_list
+
+#===============================================================================
+#  Function for finding used functions
+#===============================================================================
+def get_new_calls(file_paths,obj_list):
+
+  # Get all functions names from obj_list into a list
+  fun_list_names = []
+  for i in range(0,len(obj_list)):
+    if obj_list[i].type == "Function":
+      name = obj_list[i].name
+      if "(" in name:
+        name = name.split("(")
+        fun_list_names.append(name[0])
+      else:
+        fun_list_names.append(name[0])
+
+  # Get all subroutine names from obj_list into a list
+  sub_list_names = []
+  for i in range(0,len(obj_list)):
+    if obj_list[i].type == "Subroutine":
+      name = obj_list[i].name
+      if "(" in name:
+        name = name.split("(")
+        sub_list_names.append(name[0])
+      else:
+        sub_list_names.append(name[0])
+
+  # Put all subroutine and function names in list
+  full_list_names = [*fun_list_names,*sub_list_names]
+
+  for i in range(0,len(file_paths)):
+    for l in range(0,len(full_list_names)):
+      with open(file_paths[i]) as file:                # open file
+        for line in file:                              # read line by line
+          if full_list_names[l] in line:
+            for o in range(0,len(obj_list)):
+              if file_paths[i] == obj_list[o].path:
+                calls = obj_list[o].call
+                if full_list_names[l] not in obj_list[o].name:
+                  if calls == 0:
+                    calls = []
+                    calls.append(full_list_names[l])
+                  else:
+                    calls.append(full_list_names[l])
+                if calls != 0:
+                  calls = list(set(calls))
+                  obj_list[o].call = calls
+
+  return obj_list
 
 #===============================================================================
 # Function to delete spaces in all strings in a list

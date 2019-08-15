@@ -30,6 +30,7 @@ ALIGN_BOXES = "Diagonal"      # "Left"
 #   - type_stat:  type statements of module
 #   - row:        row placement in grid
 #   - column:     column placement in grid
+#   - path:       path to .f90 file
 # Returns:
 #   - nothing
 # Used by:
@@ -38,7 +39,7 @@ ALIGN_BOXES = "Diagonal"      # "Left"
 class Module(object):
   def __init__(module, type, name, use, var, meth,          \
                level, x0, x1, y0, y1, width, height,        \
-               call, type_stat, row, column):
+               call, type_stat, row, column, path):
 
     module.name      = name
     module.use       = use
@@ -56,6 +57,7 @@ class Module(object):
     module.type_stat = type_stat
     module.row       = row
     module.column    = column
+    module.path      = path
 
 #===============================================================================
 # Defining subroutine class
@@ -86,7 +88,7 @@ class Module(object):
 class Subroutine(object):
   def __init__(subroutine, type, name, use, var, meth,       \
                level, x0, x1, y0, y1, width, height,         \
-               call, type_stat, row, column):
+               call, type_stat, row, column, path):
 
     subroutine.name      = name
     subroutine.use       = use
@@ -104,6 +106,7 @@ class Subroutine(object):
     subroutine.type_stat = type_stat
     subroutine.row       = row
     subroutine.column    = column
+    subroutine.path      = path
 
 #===============================================================================
 # Defining function class
@@ -135,7 +138,7 @@ class Subroutine(object):
 class Function(object):
   def __init__(function, type, name, use, var, meth,     \
                level, x0, x1, y0, y1, width, height,     \
-               fun_type, call, type_stat, row, column):
+               fun_type, call, type_stat, row, column, path):
 
     function.name      = name
     function.use       = use
@@ -154,6 +157,7 @@ class Function(object):
     function.type_stat = type_stat
     function.row       = row
     function.column    = column
+    function.path      = path
 
 #===============================================================================
 # Defining program class
@@ -184,7 +188,7 @@ class Function(object):
 class Program(object):
   def __init__(program, type, name, use, var, meth, level,     \
                x0, x1, y0, y1, width, height, call,            \
-               type_stat, row, column):
+               type_stat, row, column, path):
 
     program.name      = name
     program.use       = use
@@ -202,6 +206,7 @@ class Program(object):
     program.type_stat = type_stat
     program.row       = row
     program.column    = column
+    program.path      = path
 
 #===============================================================================
 # Function to check if use list is empty
@@ -249,6 +254,7 @@ def module_class(file_path):
   height       = 0
   row          = 0
   column       = 0
+  path         = file_path
 
   module = Module(type,         \
                   module_name,  \
@@ -265,7 +271,8 @@ def module_class(file_path):
                   call_list,    \
                   type_stat,    \
                   row,          \
-                  column)
+                  column,       \
+                  path)
 
   return module
 
@@ -297,6 +304,7 @@ def subroutine_class(file_path):
   height     = 0
   row        = 0
   column     = 0
+  path       = file_path
 
   subroutine = Subroutine(type,       \
                           sub_name,   \
@@ -313,7 +321,8 @@ def subroutine_class(file_path):
                           call_list,  \
                           type_stat,  \
                           row,        \
-                          column)
+                          column,     \
+                          path)
   return subroutine
 
 #===============================================================================
@@ -345,6 +354,7 @@ def function_class(file_path):
   height     = 0
   row        = 0
   column     = 0
+  path       = file_path
 
   function = Function(type,       \
                       fun_name,   \
@@ -362,7 +372,9 @@ def function_class(file_path):
                       call_list,  \
                       type_stat,  \
                       row,        \
-                      column)
+                      column,       \
+                      path)
+
   return function
 
 #===============================================================================
@@ -393,6 +405,7 @@ def program_class(file_path):
   height     = 0
   row        = 0
   column     = 0
+  path       = file_path
 
   program = Program(type,        \
                     prog_name,   \
@@ -409,7 +422,8 @@ def program_class(file_path):
                     call_list,   \
                     type_stat,   \
                     row,         \
-                    column)
+                    column,       \
+                    path)
   return program
 
 #===============================================================================
@@ -438,7 +452,8 @@ def print_info(obj_list):
           "\nX0:",               obj_list[i].x0,          \
           "Y0:",                 obj_list[i].y0,          \
           "\nX1:",               obj_list[i].x1,          \
-          "Y1:",                 obj_list[i].y1)
+          "Y1:",                 obj_list[i].y1,          \
+          "File path:",          obj_list[i].path)
 
 #===============================================================================
 # Function to find maximum level of objects from list
@@ -1116,22 +1131,22 @@ def remove_unnecessary_subs(obj_list):
 # Function for creating complete and updated file list
 #
 # Parameters:
-#   - file_path:    path to .f90 file
+#   - file_paths:   paths to .f90 files
 # Returns:
 #   - obj_list:     list with all created and updated objects
 # Used by:
 #   - Main program (simple.py)
 #-------------------------------------------------------------------------------
-def get_obj_list(file_path):
+def get_obj_list(file_paths):
 
-  mod_list  = mod_list_fun(file_path)    # list of all mod classes
-  sub_list  = sub_list_fun(file_path)    # list of all sub classes
-  fun_list  = fun_list_fun(file_path)    # list of all fun classes
-  prog_list = prog_list_fun(file_path)   # list of all prog classes
+  mod_list  = mod_list_fun(file_paths)    # list of all mod classes
+  sub_list  = sub_list_fun(file_paths)    # list of all sub classes
+  fun_list  = fun_list_fun(file_paths)    # list of all fun classes
+  prog_list = prog_list_fun(file_paths)   # list of all prog classes
   obj_list = [*mod_list,   \
-               *sub_list,  \
-               *fun_list,  \
-               *prog_list]               # list of all classes(mod+sub+fun+prog)
+              *sub_list,   \
+              *fun_list,   \
+              *prog_list]                # list of all classes(mod+sub+fun+prog)
   obj_list = remove_unnecessary_subs(obj_list)
   obj_list = update(obj_list)            # updating coordinates
   arrange_by_level(obj_list)             # arranging by levels

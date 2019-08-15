@@ -1135,7 +1135,7 @@ def plot_grid(xf, obj_list):
 
   width_list    = []
   height_list   = []
-  zero_lvl_list = []
+  list_lvl      = []
 
   # List with widths (columns)
   for i in range(len(obj_list)):
@@ -1147,8 +1147,16 @@ def plot_grid(xf, obj_list):
     heights = height * i
     height_list.append(heights)
 
-  width_list  = width_list[:15] # activate if u want specific number of columns
-  height_list = height_list[:8] # activate if u want specific number of rows
+
+  for i in range(0,len(obj_list)):
+    for l in range(0,max_lvl+1):
+       if obj_list[i].level == l:
+          list_lvl.append(obj_list[i].level)
+  max_element = max(list_lvl,key=list_lvl.count)
+  occurances_of_max = list_lvl.count(max_element)
+
+  width_list  = width_list[:(occurances_of_max + max_lvl + 2)]
+  height_list = height_list[:max_lvl + 2]
 
   min_v = 0
   max_v = max(width_list)
