@@ -4,10 +4,7 @@
 import xfig
 import finder
 import browse
-#===============================================================================
-# Handy constants
-#-------------------------------------------------------------------------------
-ALIGN_BOXES = "Diagonal"      # "Left"
+import const
 
 #===============================================================================
 # Defining module class
@@ -974,9 +971,9 @@ def create_grid(obj_list):
     lista = lvl_lista[i]
 
     # Choose alignment
-    if ALIGN_BOXES == "Diagonal":
+    if const.ALIGN_BOXES == "Diagonal":
       row = i
-    elif ALIGN_BOXES == "Left":
+    elif const.ALIGN_BOXES == "Left":
       row = 0
 
     for l in range(len(lvl_lista[i])):

@@ -4,22 +4,7 @@
 import finder
 import browse
 import attribute
-#===============================================================================
-# Handy constants
-#-------------------------------------------------------------------------------
-XFS                     = 450             # xfig scale; xfig units for one cm
-UBH                     = 0.75            # unit box height
-THICKNESS               = 2               # box line thickness
-FONT_SIZE               = UBH * 0.5       # font size depending on box height
-FONT_HEADER             = "Courier-Bold"  # font for headers
-FONT_NORMAL             = "Courier"       # font for everything else
-COLOR_BOX               = "White"         # color of var,meth and use boxes
-COLOR_HEADER_MODULE     = "LtBlue"        # color of module header
-COLOR_HEADER_SUBROUTINE = "Pink2"         # color of subroutine header
-COLOR_HEADER_FUNCTION   = "Yellow"        # color of function header
-COLOR_HEADER_PROGRAM    = "Green2"        # color of program header
-OBJECT_REPRESENTATION   = "Normal"        # "Compresssed"
-OBJECT_HIERARCHY        = "Row-Based"     # "Column-Based"
+import const
 
 #===============================================================================
 # Function to choose use statements list length
@@ -162,7 +147,7 @@ def choose_width(filename):
              len(fun_type_length)]
 
   box_width = max(lengths)
-  box_width = box_width * UBH * 0.4  # gives the best ratio for width
+  box_width = box_width * const.UBH * 0.4  # gives the best ratio for width
 
   return box_width
 
@@ -515,15 +500,15 @@ def plot_program(file, x0, y0,         \
 def plot_mod_frame(file, x0, y0, box_width, box_height):
 
   file.write("2 2 0 ")
-  file.write("%3d "       % THICKNESS)
+  file.write("%3d "     % const.THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color(COLOR_HEADER_MODULE))
+  file.write("%3d "     % xfig_box_color(const.COLOR_HEADER_MODULE))
   file.write("15 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%9d %9d"   % ( x0           *XFS,  y0            *XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS,  y0            *XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d\n" % ( x0           *XFS,  y0            *XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS,  y0            *const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS,  y0            *const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d\n"% ( x0           *const.XFS,  y0            *const.XFS))
 
 #===============================================================================
 # Function to plot an empty subroutine frame
@@ -542,15 +527,15 @@ def plot_mod_frame(file, x0, y0, box_width, box_height):
 def plot_sub_frame(file, x0, y0, box_width, box_height):
 
   file.write("2 2 0 ")
-  file.write("%3d "       % THICKNESS)
+  file.write("%3d "     % const.THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color(COLOR_HEADER_SUBROUTINE))
+  file.write("%3d "     % xfig_box_color(const.COLOR_HEADER_SUBROUTINE))
   file.write("15 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%9d %9d"   % ( x0           *XFS,  y0            *XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS,  y0            *XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d\n" % ( x0           *XFS,  y0            *XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS,  y0            *const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS,  y0            *const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d\n"% ( x0           *const.XFS,  y0            *const.XFS))
 
 #===============================================================================
 # Function to plot an empty function frame
@@ -569,15 +554,15 @@ def plot_sub_frame(file, x0, y0, box_width, box_height):
 def plot_fun_frame(file, x0, y0, box_width, box_height):
 
   file.write("2 2 0 ")
-  file.write("%3d "       % THICKNESS)
+  file.write("%3d "     % const.THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color(COLOR_HEADER_FUNCTION))
+  file.write("%3d "     % xfig_box_color(const.COLOR_HEADER_FUNCTION))
   file.write("15 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%9d %9d"   % ( x0           *XFS,  y0            *XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS,  y0            *XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d\n" % ( x0           *XFS,  y0            *XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS,  y0            *const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS,  y0            *const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d\n"% ( x0           *const.XFS,  y0            *const.XFS))
 
 #===============================================================================
 # Function to plot an empty program frame
@@ -596,15 +581,15 @@ def plot_fun_frame(file, x0, y0, box_width, box_height):
 def plot_prog_frame(file, x0, y0, box_width, box_height):
 
   file.write("2 2 0 ")
-  file.write("%3d "       % THICKNESS)
+  file.write("%3d "     % const.THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color(COLOR_HEADER_PROGRAM))
+  file.write("%3d "     % xfig_box_color(const.COLOR_HEADER_PROGRAM))
   file.write("15 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%9d %9d"   % ( x0           *XFS,  y0            *XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS,  y0            *XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d\n" % ( x0           *XFS,  y0            *XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS,  y0            *const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS,  y0            *const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d\n"% ( x0           *const.XFS,  y0            *const.XFS))
 
 #===============================================================================
 # Function to plot an empty type statement box (frame without text)
@@ -627,26 +612,26 @@ def plot_type_stat_frame(file, x0, y0, box_width, box_height,  \
   type_stat_len = check_if_type_stat(object)
 
   if object.type == "Module":
-    color = COLOR_HEADER_MODULE
+    color = const.COLOR_HEADER_MODULE
   if object.type == "Subroutine":
-    color = COLOR_HEADER_SUBROUTINE
+    color = const.COLOR_HEADER_SUBROUTINE
   if object.type == "Function":
-    color = COLOR_HEADER_FUNCTION
+    color = const.COLOR_HEADER_FUNCTION
   if object.type == "Program":
-    color = COLOR_HEADER_PROGRAM
+    color = const.COLOR_HEADER_PROGRAM
 
   file.write("2 2 0 ")
-  file.write("%3d "       % THICKNESS)
+  file.write("%3d "     % const.THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color(color))
+  file.write("%3d "     % xfig_box_color(color))
   file.write("11 -1 30 0.000 0 0 -1 0 0 5\n")         # 30*5 = 150% intensity
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height           \
-                                                 +type_stat_len)*XFS))
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height           \
-                                                 +type_stat_len)*XFS))
-  file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS, (y0+box_height           \
+                                                 +type_stat_len)*const.XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS, (y0+box_height           \
+                                                 +type_stat_len)*const.XFS))
+  file.write("%9d %9d\n"% ( x0           *const.XFS, (y0+box_height)*const.XFS))
 
 #===============================================================================
 # Function to plot an empty function type box (frame without text)
@@ -670,19 +655,19 @@ def plot_fun_type_frame(file, x0, y0, box_width, box_height,  \
   type_stat_len = check_if_type_stat(object)
 
   file.write("2 2 0 ")
-  file.write("%3d "       % THICKNESS)
+  file.write("%3d "     % const.THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color(COLOR_BOX))
+  file.write("%3d "     % xfig_box_color(const.COLOR_BOX))
   file.write("11 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height           \
-                                                +fun_type_len            \
-                                                +type_stat_len)*XFS))
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height           \
-                                                 +fun_type_len           \
-                                                 +type_stat_len)*XFS))
-  file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS, (y0+box_height           \
+                                                +fun_type_len                 \
+                                                +type_stat_len)*const.XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS, (y0+box_height           \
+                                                 +fun_type_len                \
+                                                 +type_stat_len)*const.XFS))
+  file.write("%9d %9d\n"% ( x0           *const.XFS, (y0+box_height)*const.XFS))
 
 #===============================================================================
 # Function to plot an empty use statements box (frame without text)
@@ -708,21 +693,21 @@ def plot_use_frame(file, x0, y0, box_width, box_height, \
   type_stat_len = check_if_type_stat(object)
 
   file.write("2 2 0 ")
-  file.write("%3d "       % THICKNESS)
+  file.write("%3d "     % const.THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color(COLOR_BOX))
+  file.write("%3d "     % xfig_box_color(const.COLOR_BOX))
   file.write("12 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height          \
-                                                 +use_len(use_list)     \
-                                                 +fun_type_len          \
-                                                 +type_stat_len)*XFS))
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height          \
-                                                 +use_len(use_list)     \
-                                                 +fun_type_len          \
-                                                 +type_stat_len)*XFS))
-  file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS, (y0+box_height           \
+                                                 +use_len(use_list)           \
+                                                 +fun_type_len                \
+                                                 +type_stat_len)*const.XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS, (y0+box_height           \
+                                                 +use_len(use_list)           \
+                                                 +fun_type_len                \
+                                                 +type_stat_len)*const.XFS))
+  file.write("%9d %9d\n"% ( x0           *const.XFS, (y0+box_height)*const.XFS))
 
 #===============================================================================
 # Function to plot an empty variable box (frame without text)
@@ -750,23 +735,23 @@ def plot_var_frame(file, x0, y0, box_width, box_height, \
   type_stat_len = check_if_type_stat(object)
 
   file.write("2 2 0 ")
-  file.write("%3d "       % THICKNESS)
+  file.write("%3d "     % const.THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color(COLOR_BOX))
+  file.write("%3d "     % xfig_box_color(const.COLOR_BOX))
   file.write("14 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height)*XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height            \
-                                                 +len(var_list)           \
-                                                 +use_len(use_list)       \
-                                                 +fun_type_len            \
-                                                 +type_stat_len)*XFS))
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height            \
-                                                 +len(var_list)           \
-                                                 +use_len(use_list)       \
-                                                 +fun_type_len            \
-                                                 +type_stat_len)*XFS))
-  file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height)*XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS, (y0+box_height)*const.XFS))
+  file.write("%9d %9d"  % ((x0+box_width)*const.XFS, (y0+box_height           \
+                                                 +len(var_list)               \
+                                                 +use_len(use_list)           \
+                                                 +fun_type_len                \
+                                                 +type_stat_len)*const.XFS))
+  file.write("%9d %9d"  % ( x0           *const.XFS, (y0+box_height           \
+                                                 +len(var_list)               \
+                                                 +use_len(use_list)           \
+                                                 +fun_type_len                \
+                                                 +type_stat_len)*const.XFS))
+  file.write("%9d %9d\n"% ( x0           *const.XFS, (y0+box_height)*const.XFS))
 
 #===============================================================================
 # Function to plot an empty method box (frame without text)
@@ -796,37 +781,37 @@ def plot_meth_frame(file, x0, y0, box_width, box_height, \
   type_stat_len = check_if_type_stat(object)
 
   file.write("2 2 0 ")
-  file.write("%3d "       % THICKNESS)
+  file.write("%3d "       % const.THICKNESS)
   file.write("0")
-  file.write("%3d "       % xfig_box_color(COLOR_BOX))
+  file.write("%3d "       % xfig_box_color(const.COLOR_BOX))
   file.write("13 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height           \
-                                                 +len(var_list)          \
-                                                 +use_len(use_list)      \
-                                                 +fun_type_len           \
-                                                 +type_stat_len)*XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height           \
-                                                 +len(var_list)          \
-                                                 +use_len(use_list)      \
-                                                 +fun_type_len           \
-                                                 +type_stat_len)*XFS))
-  file.write("%9d %9d"   % ((x0+box_width)*XFS, (y0+box_height           \
-                                                 +len(var_list)          \
-                                                 +len(meth_list)         \
-                                                 +use_len(use_list)      \
-                                                 +fun_type_len           \
-                                                 +type_stat_len)*XFS))
-  file.write("%9d %9d"   % ( x0           *XFS, (y0+box_height           \
-                                                 +len(var_list)          \
-                                                 +len(meth_list)         \
-                                                 +use_len(use_list)      \
-                                                 +fun_type_len           \
-                                                 +type_stat_len)*XFS))
-  file.write("%9d %9d\n" % ( x0           *XFS, (y0+box_height           \
-                                                 +len(var_list)          \
-                                                 +use_len(use_list)      \
-                                                 +fun_type_len           \
-                                                 +type_stat_len)*XFS))
+  file.write("%9d %9d"   % ( x0           *const.XFS, (y0+box_height          \
+                                                 +len(var_list)               \
+                                                 +use_len(use_list)           \
+                                                 +fun_type_len                \
+                                                 +type_stat_len)*const.XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*const.XFS, (y0+box_height          \
+                                                 +len(var_list)               \
+                                                 +use_len(use_list)           \
+                                                 +fun_type_len                \
+                                                 +type_stat_len)*const.XFS))
+  file.write("%9d %9d"   % ((x0+box_width)*const.XFS, (y0+box_height          \
+                                                 +len(var_list)               \
+                                                 +len(meth_list)              \
+                                                 +use_len(use_list)           \
+                                                 +fun_type_len                \
+                                                 +type_stat_len)*const.XFS))
+  file.write("%9d %9d"   % ( x0           *const.XFS, (y0+box_height          \
+                                                 +len(var_list)               \
+                                                 +len(meth_list)              \
+                                                 +use_len(use_list)           \
+                                                 +fun_type_len                \
+                                                 +type_stat_len)*const.XFS))
+  file.write("%9d %9d\n" % ( x0           *const.XFS, (y0+box_height          \
+                                                 +len(var_list)               \
+                                                 +use_len(use_list)           \
+                                                 +fun_type_len                \
+                                                 +type_stat_len)*const.XFS))
 
 #===============================================================================
 # Function to print centered frameless text
@@ -845,16 +830,17 @@ def plot_meth_frame(file, x0, y0, box_width, box_height, \
 #-------------------------------------------------------------------------------
 def plot_text_center(file, x0, y0, box_width, box_height, text):
 
-  file.write("4 1 0 10 -1 ")              # 45 is depth
-  file.write("%5d" % xfig_font_code(FONT_HEADER))
-  file.write("%3d" % (FONT_SIZE * 36))    # font size
+  file.write("4 1 0 10 -1 ")                    # 45 is depth
+  file.write("%5d" % xfig_font_code(const.FONT_HEADER))
+  file.write("%3d" % (const.FONT_SIZE * 36))    # font size
   file.write(" 0.0000 4 ")
-  text_width  = 3                         # could be any value
-  text_height = 3                         # could be any value
-  file.write("%9d" % (text_height * XFS)) # text height in xfig units
-  file.write("%9d" % (text_width  * XFS)) # text width in xfig units
-  file.write("%9d %9d" % ( (x0+(box_width*0.5)) *XFS,  \
-                           (y0+FONT_SIZE+(box_height-FONT_SIZE)*0.5)*XFS))
+  text_width  = 3                               # could be any value
+  text_height = 3                               # could be any value
+  file.write("%9d" % (text_height * const.XFS)) # text height in xfig units
+  file.write("%9d" % (text_width  * const.XFS)) # text width in xfig units
+  file.write("%9d %9d" % ( (x0+(box_width*0.5))*const.XFS,            \
+                           (y0+const.FONT_SIZE                        \
+                          +(box_height-const.FONT_SIZE)*0.5)*const.XFS))
   file.write("%s%s\\001\n" % (" ", text))
 
 #===============================================================================
@@ -874,16 +860,17 @@ def plot_text_center(file, x0, y0, box_width, box_height, text):
 #-------------------------------------------------------------------------------
 def plot_text_left(file, x0, y0, box_width, box_height, text, font):
 
-  file.write("4 0 0 10 -1 ")              # 45 is depth
+  file.write("4 0 0 10 -1 ")                    # 45 is depth
   file.write("%5d" % xfig_font_code(font))
-  file.write("%3d" % (FONT_SIZE * 36))    # font size
+  file.write("%3d" % (const.FONT_SIZE * 36))    # font size
   file.write(" 0.0000 4 ")
-  text_width  = 3                         # could be any value
-  text_height = 3                         # could be any value
-  file.write("%9d" % (text_height * XFS)) # text height in xfig units
-  file.write("%9d" % (text_width  * XFS)) # text width in xfig units
-  file.write("%9d %9d" % ( (x0+          (box_height-FONT_SIZE)*0.5)*XFS,  \
-                           (y0+FONT_SIZE+(box_height-FONT_SIZE)*0.5)*XFS))
+  text_width  = 3                               # could be any value
+  text_height = 3                               # could be any value
+  file.write("%9d" % (text_height * const.XFS)) # text height in xfig units
+  file.write("%9d" % (text_width  * const.XFS)) # text width in xfig units
+  file.write("%9d %9d" % ( (x0+(box_height-const.FONT_SIZE)*0.5)*const.XFS,  \
+                           (y0+const.FONT_SIZE                               \
+                          +(box_height-const.FONT_SIZE)*0.5)*const.XFS))
   file.write("%s%s\\001\n" % (" ", text))
 
 #===============================================================================
@@ -901,16 +888,16 @@ def plot_text_left(file, x0, y0, box_width, box_height, text, font):
 #-------------------------------------------------------------------------------
 def plot_text_right(file, x0, y0, text):
 
-  file.write("4 2 2 500 -1 ")               # 45 is depth
-  file.write("%5d" % xfig_font_code(FONT_NORMAL))
-  file.write("%3d" % (FONT_SIZE * 36))    # font size
+  file.write("4 2 2 500 -1 ")                   # 45 is depth
+  file.write("%5d" % xfig_font_code(const.FONT_NORMAL))
+  file.write("%3d" % (const.FONT_SIZE * 36))    # font size
   file.write(" 0.0000 4 ")
-  text_width  = 3                         # could be any value
-  text_height = 3                         # could be any value
-  file.write("%9d" % (text_height * XFS)) # text height in xfig units
-  file.write("%9d" % (text_width  * XFS)) # text width in xfig units
-  file.write("%9d %9d" % ( (x0)*XFS,  \
-                           (y0)*XFS))
+  text_width  = 3                               # could be any value
+  text_height = 3                               # could be any value
+  file.write("%9d" % (text_height * const.XFS)) # text height in xfig units
+  file.write("%9d" % (text_width  * const.XFS)) # text width in xfig units
+  file.write("%9d %9d" % ( (x0)*const.XFS,  \
+                           (y0)*const.XFS))
   file.write("%s%s\\001\n" % (" ", text))
 
 #===============================================================================
@@ -936,7 +923,7 @@ def plot_spline(file, object1, object2, depth):
 
   # Last coordinate
   x6 = object2.x0
-  y6 = object2.y0 + UBH + check_if_type_stat(object2) + len(use_list)/2
+  y6 = object2.y0 + const.UBH + check_if_type_stat(object2) + len(use_list)/2
 
   # Second coordinate
   x2 = x1 + 2
@@ -961,18 +948,18 @@ def plot_spline(file, object1, object2, depth):
   file.write("\n 1 1 1.00 135.00 180.00")              # arrow settings
   file.write("\n 6 1 1.00 135.00 180.00")              # arrow settings
 
-  file.write("\n%9d %9d" % ( (x1) *XFS,  \
-                             (y1)*XFS))
-  file.write("%9d %9d" %   ( (x2) *XFS,  \
-                             (y2)*XFS))
-  file.write("%9d %9d" %   ( (x3) *XFS,  \
-                             (y3)*XFS))
-  file.write("%9d %9d" %   ( (x4) *XFS,  \
-                             (y4)*XFS))
-  file.write("%9d %9d" %   ( (x5) *XFS,  \
-                             (y5)*XFS))
-  file.write("%9d %9d" %   ( (x6) *XFS,  \
-                             (y6)*XFS))
+  file.write("\n%9d %9d" % ( (x1) *const.XFS,  \
+                             (y1)*const.XFS))
+  file.write("%9d %9d" %   ( (x2) *const.XFS,  \
+                             (y2)*const.XFS))
+  file.write("%9d %9d" %   ( (x3) *const.XFS,  \
+                             (y3)*const.XFS))
+  file.write("%9d %9d" %   ( (x4) *const.XFS,  \
+                             (y4)*const.XFS))
+  file.write("%9d %9d" %   ( (x5) *const.XFS,  \
+                             (y5)*const.XFS))
+  file.write("%9d %9d" %   ( (x6) *const.XFS,  \
+                             (y6)*const.XFS))
 
   file.write("\n 0.000 1.000 1.000 1.000 1.000 0.000\n")
 
@@ -997,7 +984,7 @@ def plot_dashed_spline(file, object1, object2, depth):
 
   # Last coordinate
   x6 = object2.x0
-  y6 = object2.y0 + UBH/2
+  y6 = object2.y0 + const.UBH/2
 
   # Second coordinate
   x2 = x1 + 2
@@ -1023,18 +1010,18 @@ def plot_dashed_spline(file, object1, object2, depth):
   file.write("\n 1 0 1.00 135.00 180.00")              # arrow settings
   file.write("\n 6 0 1.00 135.00 180.00")              # arrow settings
 
-  file.write("\n%9d %9d" % ( (x1) *XFS,  \
-                             (y1)*XFS))
-  file.write("%9d %9d" %   ( (x2) *XFS,  \
-                             (y2)*XFS))
-  file.write("%9d %9d" %   ( (x3) *XFS,  \
-                             (y3)*XFS))
-  file.write("%9d %9d" %   ( (x4) *XFS,  \
-                             (y4)*XFS))
-  file.write("%9d %9d" %   ( (x5) *XFS,  \
-                             (y5)*XFS))
-  file.write("%9d %9d" %   ( (x6) *XFS,  \
-                             (y6)*XFS))
+  file.write("\n%9d %9d" % ( (x1) *const.XFS,  \
+                             (y1)*const.XFS))
+  file.write("%9d %9d" %   ( (x2) *const.XFS,  \
+                             (y2)*const.XFS))
+  file.write("%9d %9d" %   ( (x3) *const.XFS,  \
+                             (y3)*const.XFS))
+  file.write("%9d %9d" %   ( (x4) *const.XFS,  \
+                             (y4)*const.XFS))
+  file.write("%9d %9d" %   ( (x5) *const.XFS,  \
+                             (y5)*const.XFS))
+  file.write("%9d %9d" %   ( (x6) *const.XFS,  \
+                             (y6)*const.XFS))
 
   file.write("\n 0.000 1.000 1.000 1.000 1.000 0.000\n")
 
@@ -1112,10 +1099,10 @@ def plot_line(file, x0, y0, x1, y1):
 
   file.write("2 1 0 1 2 7 500 -1 -1 0.000 0 0 -1 0 0 2")
 
-  file.write("\n%9d %9d" % ( (x0) *XFS,  \
-                             (y0)*XFS))
-  file.write("%9d %9d" %   ( (x1) *XFS,  \
-                             (y1)*XFS))
+  file.write("\n%9d %9d" % ( (x0) *const.XFS,  \
+                             (y0)*const.XFS))
+  file.write("%9d %9d" %   ( (x1) *const.XFS,  \
+                             (y1)*const.XFS))
   file.write("\n")
 
 #===============================================================================
@@ -1200,10 +1187,10 @@ def plot_mod_name(file, x0, y0, text, object):
   box_width = choose_width(object)
 
   # Plot module framing box first
-  plot_mod_frame(file, x0, y0, box_width, UBH)
+  plot_mod_frame(file, x0, y0, box_width, const.UBH)
 
   # Plot text
-  plot_text_center(file, x0, y0, box_width, UBH, text)
+  plot_text_center(file, x0, y0, box_width, const.UBH, text)
 
 #===============================================================================
 # Function to plot subroutine name box (subroutine header box)
@@ -1224,10 +1211,10 @@ def plot_sub_name(file, x0, y0, text, object):
   box_width = choose_width(object)
 
   # Plot module framing box first
-  plot_sub_frame(file, x0, y0, box_width, UBH)
+  plot_sub_frame(file, x0, y0, box_width, const.UBH)
 
   # Plot text
-  plot_text_center(file, x0, y0, box_width, UBH, text)
+  plot_text_center(file, x0, y0, box_width, const.UBH, text)
 
 #===============================================================================
 # Function to plot function name box (function header box)
@@ -1248,10 +1235,10 @@ def plot_fun_name(file, x0, y0, text, object):
   box_width = choose_width(object)
 
   # Plot module framing box first
-  plot_fun_frame(file, x0, y0, box_width, UBH)
+  plot_fun_frame(file, x0, y0, box_width, const.UBH)
 
   # Plot text
-  plot_text_center(file, x0, y0, box_width, UBH, text)
+  plot_text_center(file, x0, y0, box_width, const.UBH, text)
 
 #===============================================================================
 # Function to plot program name box (program header box)
@@ -1272,10 +1259,10 @@ def plot_prog_name(file, x0, y0, text, object):
   box_width = choose_width(object)
 
   # Plot module framing box first
-  plot_prog_frame(file, x0, y0, box_width, UBH)
+  plot_prog_frame(file, x0, y0, box_width, const.UBH)
 
   # Plot text
-  plot_text_center(file, x0, y0, box_width, UBH, text)
+  plot_text_center(file, x0, y0, box_width, const.UBH, text)
 
 #===============================================================================
 # Function to plot type statements (text)
@@ -1295,14 +1282,15 @@ def plot_type_stat_text_left(file, x0, y0, object):
   type_stat      = object.type_stat
   type_stat_len  = check_if_type_stat(object)
   box_width      = choose_width(object)
-  y_pos          = 0.25 + (y0 + FONT_SIZE + (UBH-FONT_SIZE)*0.5)
+  y_pos          = 0.25 + (y0 + const.FONT_SIZE    \
+                 + (const.UBH-const.FONT_SIZE)*0.5)
 
   type_stat_num  = list(range(0,type_stat_len))
 
   if type_stat_len != 0:
     for i in range(type_stat_len):
-      plot_text_left(file, x0, y_pos + type_stat_num[i],       \
-                     box_width, UBH, type_stat[i], FONT_HEADER)
+      plot_text_left(file, x0, y_pos + type_stat_num[i], box_width,     \
+                     const.UBH, type_stat[i], const.FONT_HEADER)
 
 #===============================================================================
 # Function to plot function type (text)
@@ -1322,9 +1310,11 @@ def plot_fun_type_text_left(file, x0, y0, object):
   fun_type      = object.fun_type
   box_width     = choose_width(object)
   type_stat_len = check_if_type_stat(object)
-  y_pos         = type_stat_len + 0.25 + (y0 + FONT_SIZE + (UBH-FONT_SIZE)*0.5)
+  y_pos         = type_stat_len + 0.25                                    \
+                + (y0 + const.FONT_SIZE + (const.UBH-const.FONT_SIZE)*0.5)
 
-  plot_text_left(file, x0, y_pos, box_width, UBH, fun_type, FONT_NORMAL)
+  plot_text_left(file, x0, y_pos, box_width,            \
+                 const.UBH, fun_type, const.FONT_NORMAL)
 
 #===============================================================================
 # Function to plot use statements (text)
@@ -1349,11 +1339,11 @@ def plot_use_text_left(file, x0, y0, \
   type_stat_len = check_if_type_stat(object)
   box_width     = choose_width(object)
   y_pos         = fun_type_len + type_stat_len + 0.25       \
-                + (y0 + FONT_SIZE + (UBH-FONT_SIZE)*0.5)
+                + (y0 + const.FONT_SIZE + (const.UBH-const.FONT_SIZE)*0.5)
 
   for i in range(len(use_list)):
     plot_text_left(file, x0, y_pos + use_list_num[i],       \
-                   box_width, UBH, use_list[i], FONT_NORMAL)
+                   box_width, const.UBH, use_list[i], const.FONT_NORMAL)
 
 #===============================================================================
 # Function to plot variables (text)
@@ -1380,11 +1370,12 @@ def plot_var_text_left(file, x0, y0, \
   fun_type_len  = check_if_function(object)
   type_stat_len = check_if_type_stat(object)
   y_pos         = fun_type_len + use_len(use_list) + type_stat_len    \
-                + 0.25 + (y0 + FONT_SIZE + (UBH-FONT_SIZE)*0.5)
+                + 0.25 + (y0 + const.FONT_SIZE                        \
+                + (const.UBH-const.FONT_SIZE)*0.5)
 
   for i in range(len(var_list)):
     plot_text_left(file, x0, y_pos + var_list_num[i],                 \
-                   box_width, UBH, var_list[i], FONT_NORMAL)
+                   box_width, const.UBH, var_list[i], const.FONT_NORMAL)
 
 #===============================================================================
 # Function to plot methods (text)
@@ -1414,11 +1405,12 @@ def plot_meth_text_left(x0, y0, xf, \
   type_stat_len = check_if_type_stat(object)
   y_pos         = fun_type_len + type_stat_len                         \
                 + len(var_list) + use_len(use_list)                    \
-                + (0.25 + (y0 + FONT_SIZE + (UBH-FONT_SIZE)*0.5))
+                + (0.25 + (y0 + const.FONT_SIZE                        \
+                + (const.UBH-const.FONT_SIZE)*0.5))
 
   for i in range(len(meth_list)):
     plot_text_left(xf, x0, y_pos + meth_list_num[i],                   \
-                   box_width, UBH, meth_list[i], FONT_NORMAL)
+                   box_width, const.UBH, meth_list[i], const.FONT_NORMAL)
 
 #===============================================================================
 # Function to plot type statements box with text
@@ -1440,7 +1432,7 @@ def plot_type_stat(file, x0, y0,   \
   box_width = choose_width(object)
 
   # Plot type statement framing box first
-  plot_type_stat_frame(file, x0, y0, box_width, UBH, object)
+  plot_type_stat_frame(file, x0, y0, box_width, const.UBH, object)
 
   # Plot text
   plot_type_stat_text_left(file, x0, y0, object)
@@ -1465,7 +1457,7 @@ def plot_fun_type_name(file, x0, y0,   \
   box_width = choose_width(object)
 
   # Plot function type framing box first
-  plot_fun_type_frame(file, x0, y0, box_width, UBH, object)
+  plot_fun_type_frame(file, x0, y0, box_width, const.UBH, object)
 
   # Plot text
   plot_fun_type_text_left(file, x0, y0, object)
@@ -1491,7 +1483,7 @@ def plot_use_name(file, x0, y0, \
   box_width = choose_width(object)
 
   # Plot use statements framing box first
-  plot_use_frame(file, x0, y0, box_width, UBH, use_list, object)
+  plot_use_frame(file, x0, y0, box_width, const.UBH, use_list, object)
 
   # Plot text
   plot_use_text_left(file, x0, y0, use_list, object)
@@ -1519,7 +1511,7 @@ def plot_var_name(file, x0, y0,       \
   box_width = choose_width(object)
 
   # Plot variable framing box first
-  plot_var_frame(file, x0, y0, box_width, UBH, var_list, use_list, object)
+  plot_var_frame(file, x0, y0, box_width, const.UBH, var_list, use_list, object)
 
   # Plot text
   plot_var_text_left(file, x0, y0, var_list, use_list, object)
@@ -1549,7 +1541,7 @@ def plot_meth_name(file, x0, y0,      \
   box_width = choose_width(object)
 
  # Plot methods framing box first
-  plot_meth_frame(file, x0, y0, box_width, UBH,           \
+  plot_meth_frame(file, x0, y0, box_width, const.UBH,           \
                   var_list, meth_list, use_list, object)
 
  # Plot text
