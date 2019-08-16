@@ -550,7 +550,6 @@ def get_only_meth(file_name_with_path):
 #   - obj_list:      list of all objects updated
 # Used by:
 #   - Main program
-
 #===============================================================================
 def get_new_calls(file_paths,obj_list):
 
@@ -601,13 +600,21 @@ def get_new_calls(file_paths,obj_list):
   return obj_list
 
 #===============================================================================
-# Function for searching through object_names.txt
+# Function for searching coordinates in file
+#
+# Parameters:
+#   - file_with_names:  file with names and coordinates
+#   - obj_list:         list of objects
+# Returns:
+#   - obj_list:         list of objects with updated placements in grid
+# Used by:
+#   - Main program
 #===============================================================================
-def find_coordinates(names_file, obj_list):
+def find_coordinates(file_with_names, obj_list):
 
   list = obj_list
-  with open (names_file, 'rt') as myfile:             # open file
-    for line in myfile:                               # read line by line
+  with open (file_with_names, 'rt') as myfile:             # open file
+    for line in myfile:                                    # read line by line
       if not line.startswith("#"):
         line = "".join(line.split())
         data = line.split(",",2)

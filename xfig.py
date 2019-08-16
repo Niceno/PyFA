@@ -211,6 +211,14 @@ def plot(file, object):
   x0          = object.x0
   y0          = object.y0
 
+  #if const.OBJECT_HIERARCHY == "Row-Based":
+#    x0          = object.x0
+#    y0          = object.y0
+
+  #if const.OBJECT_HIERARCHY == "Column-Based":
+   # x0          = object.y0
+    #y0          = object.x0
+
   # Type of object is module, assign module name
   if object.type == "Module":
     mod_name  = object.name

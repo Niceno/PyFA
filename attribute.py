@@ -243,7 +243,7 @@ def module_class(file_path):
   call_list    = finder.get_call(file_path)
   type_stat    = finder.get_type(file_path)
   level        = 0
-  x0           = 1
+  x0           = 0
   x1           = 0
   y0           = 0
   y1           = 0
@@ -293,7 +293,7 @@ def subroutine_class(file_path):
   type_stat  = finder.get_type(file_path)
   meth_list  = 0
   level      = 0
-  x0         = 1
+  x0         = 0
   x1         = 0
   y0         = 0
   y1         = 0
@@ -343,7 +343,7 @@ def function_class(file_path):
   type_stat  = finder.get_type(file_path)
   meth_list  = 0
   level      = 0
-  x0         = 1
+  x0         = 0
   x1         = 0
   y0         = 0
   y1         = 0
@@ -369,7 +369,7 @@ def function_class(file_path):
                       call_list,  \
                       type_stat,  \
                       row,        \
-                      column,       \
+                      column,     \
                       path)
 
   return function
@@ -394,7 +394,7 @@ def program_class(file_path):
   var_list   = 0
   meth_list  = 0
   level      = 0
-  x0         = 1
+  x0         = 0
   x1         = 0
   y0         = 0
   y1         = 0
@@ -419,7 +419,7 @@ def program_class(file_path):
                     call_list,   \
                     type_stat,   \
                     row,         \
-                    column,       \
+                    column,      \
                     path)
   return program
 
@@ -450,7 +450,7 @@ def print_info(obj_list):
           "Y0:",                 obj_list[i].y0,          \
           "\nX1:",               obj_list[i].x1,          \
           "Y1:",                 obj_list[i].y1,          \
-          "File path:",          obj_list[i].path)
+          "\nFile path:",        obj_list[i].path)
 
 #===============================================================================
 # Function to find maximum level of objects from list
@@ -714,7 +714,7 @@ def prog_list_fun(file_paths):
 # Parameters:
 #   - object:    object for calculating y1
 # Returns:
-#   - y1:        second coordinate on y axis (upper right corner)
+#   - y1:        second coordinate on y axis (lower corners)
 # Used by:
 #   - Function for updating object attributes
 #-------------------------------------------------------------------------------
@@ -765,6 +765,14 @@ def find_lvl_heights(obj_list, level):
       heights.append(height)
   return heights
 
+def find_lvl_widths(obj_list, level):
+  widths = []
+  for i in range(len(obj_list)):
+    if obj_list[i].level == level:
+      width = obj_list[i].width
+      widths.append(width)
+  return widths
+
 #===============================================================================
 # Function for updating (importing) coordinates of objects
 #
@@ -804,6 +812,15 @@ def lvl_height(obj_list):
 
   return heights_list
 
+def lvl_width(obj_list):
+  heights_list = [0]
+  biggest_lvl  = find_max_lvl(obj_list)
+  for i in range(biggest_lvl):
+    heights = max(find_lvl_widths(obj_list,i))
+    heights_list.append(heights)
+
+  return heights_list
+
 #===============================================================================
 # Function for updating y coordinates (arranging by levels)
 #
@@ -816,6 +833,7 @@ def lvl_height(obj_list):
 #-------------------------------------------------------------------------------
 def arrange_by_level(obj_list):
   lvl_heights = lvl_height(obj_list)
+  lvl_widths  = lvl_width(obj_list)
 
   for i in range(len(obj_list)):
     for l in range(len(lvl_heights)):
@@ -869,7 +887,6 @@ def lvl_list(obj_list,lvl):
       list.append(obj_list[i])
   for i in range(len(list)):
     list[i].x0 = x_pos(list)[i]
-
   return list
 
 #===============================================================================
@@ -1126,6 +1143,130 @@ def remove_unnecessary_subs(obj_list):
 
   return obj_list
 
+
+#===============================================================================
+# Functions for "Column-Based"
+#===============================================================================
+#-------------------------------------------------------------------------------
+# PART FOR Y ARRANGING
+
+def y_pos(obj_list):
+ # Create list with all box heights
+  box_heights = [0] + []                       # initialize box_heights list
+  for i in range(len(obj_list)):
+    box = obj_list[i].height
+    box_heights.append(box)                    # list of box_heightsof all boxes
+
+  # Create new list for boxes to be parallel
+  sum = 0
+  box_pos = []
+  for item in box_heights:
+    sum += item + 1
+    box_pos.append(sum)
+
+  return box_pos
+
+
+def lvl_list_y(obj_list,lvl):
+  list = []
+  for i in range(len(obj_list)):
+    if obj_list[i].level == lvl:
+      list.append(obj_list[i])
+  for i in range(len(list)):
+    list[i].x0 = 0
+    list[i].y0 = y_pos(list)[i]
+    list[i].x1 = 0
+    list[i].y1 = 0
+
+  return list
+
+def lvl_file_list_y(obj_list):
+  lvl_lista = []
+  lvl_num   = len(lvl_width(obj_list))
+  for i in range(lvl_num+1):
+    lvl = lvl_list_y(obj_list,i)
+    lvl_lista.append(lvl)
+  flat_list = [item for sublist in lvl_lista for item in sublist]
+
+  return flat_list
+
+#-------------------------------------------------------------------------------
+# PART FOR X ARRANGING
+def arrange_by_level_y(obj_list):
+  lvl_heights = lvl_height(obj_list)
+  lvl_widths  = lvl_width(obj_list)
+
+  for i in range(len(obj_list)):
+    for l in range(len(lvl_heights)):
+      if obj_list[i].level == l:
+        obj_list[i].x0 = obj_list[i].x0 + sum(lvl_widths[0:l+1])
+        obj_list[i].x1 = obj_list[i].x0 + obj_list[i].width
+        obj_list[i].y1 = obj_list[i].y0 + obj_list[i].height
+
+def create_grid_y(obj_list):
+  width   = max_width(obj_list)  + 2             # height of each grid spot
+  height  = max_height(obj_list) + 2             # width of each grid spot
+  max_lvl = find_max_lvl(obj_list)               # max level
+
+  width_list   = []
+  height_list  = []
+  lvl_lista    = []
+  updated_list = []
+
+  # List with widths (columns)
+  for i in range(len(obj_list) + 2):
+    widths = width * i
+    width_list.append(widths)
+
+  # List with heights (rows)
+  for i in range(len(obj_list) + 2):
+    heights = height * i
+    height_list.append(heights)
+
+  # List of lists of levels
+  for i in range(max_lvl + 2):
+    lvl = lvl_list(obj_list,i)
+    lvl_lista.append(lvl)
+
+  # Assign values to coordinates
+  for i in range(len(lvl_lista)):
+    lista = lvl_lista[i]
+
+    # Choose alignment
+    if const.ALIGN_BOXES == "Diagonal":
+      row = i
+    elif const.ALIGN_BOXES == "Left":
+      row = 0
+
+    for l in range(len(lvl_lista[i])):
+
+      lista[l].x0 = ((width_list[i]          \
+                    + width_list[i+1])/2)    \
+                    - (lista[l].width/2)
+
+      lista[l].y0 = ((height_list[l]           \
+                    + height_list[l+1])/2)     \
+                    - (lista[l].height/2)
+
+      lista[l].x1 = lista[l].x0 + lista[l].width
+      lista[l].y1 = lista[l].y0 + lista[l].height
+
+      lista[l].row    = i
+      lista[l].column = l+row
+
+      updated_list.append(lista[l])
+
+  return updated_list
+#-------------------------------------------------------------------------------
+
+def column_based(obj_list):
+
+  max_lvl = find_max_lvl(obj_list)
+  lista = lvl_file_list_y(obj_list)
+  arrange_by_level_y(lista)
+  lista = create_grid_y(lista)
+
+  return lista
 #===============================================================================
 # Function for creating complete and updated file list
 #
@@ -1152,5 +1293,8 @@ def get_obj_list(file_paths):
   obj_list = lvl_file_list(obj_list)     # put it together in list
   obj_list = assign_values(obj_list)     # assign x1,height and width
   obj_list = create_grid(obj_list)       # plot it with "grid" on
+
+  if const.OBJECT_HIERARCHY == "Column-Based":
+    obj_list = column_based(obj_list)
 
   return obj_list
