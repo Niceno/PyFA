@@ -190,8 +190,13 @@ def plot_all(file, obj_list):
   plot_all_spline(file, obj_list)
 
   # Plot grid
-  plot_grid(file, obj_list)
 
+  if const.OBJECT_HIERARCHY == "Row-Based":
+    plot_grid_row_based(file, obj_list)
+  elif const.OBJECT_HIERARCHY == "Column-Based":
+    plot_grid_column_based(file, obj_list)
+  elif const.OBJECT_HIERARCHY != "Column-Based" and "Row-Based":
+    print("WRONG OBJECT HIERARCHY! ")
 #===============================================================================
 # Plot module, subroutine or function (choose which one to plot)
 #
@@ -933,21 +938,41 @@ def plot_spline(file, object1, object2, depth):
   x6 = object2.x0
   y6 = object2.y0 + const.UBH + check_if_type_stat(object2) + len(use_list)/2
 
-  # Second coordinate
-  x2 = x1 + 2
-  y2 = y1
+  if const.OBJECT_HIERARCHY == "Row-Based":
+    # Second coordinate
+    x2 = x1 + 2
+    y2 = y1
 
-  # Third coordinate
-  x3 = object1.x1 + 3
-  y3 = object1.y1
+    # Third coordinate
+    x3 = object1.x1 + 3
+    y3 = object1.y1
 
-  # Fourth coordinate
-  x4 = object2.x0 - 3
-  y4 = object2.y0
+    # Fourth coordinate
+    x4 = object2.x0 - 3
+    y4 = object2.y0
 
-  # Fifth coordinate
-  x5 = x6 - 2
-  y5 = y6
+    # Fifth coordinate
+    x5 = x6 - 2
+    y5 = y6
+
+  elif const.OBJECT_HIERARCHY == "Column-Based":
+    # Second coordinate
+    x2 = x1 + 2
+    y2 = (object1.y0 + object1.y1)/2
+
+    # Third coordinate
+    x3 = object1.x1 + 3
+    y3 = object1.y1
+
+    # Fourth coordinate
+    x4 = object2.x0 - 3
+    y4 = object2.y0
+
+    # Fifth coordinate
+    x5 = x6 - 2
+    y5 = y6
+
+
 
   file.write("3 2 0 2 0 7 ")
   file.write("%5d" % (depth))
@@ -994,21 +1019,41 @@ def plot_dashed_spline(file, object1, object2, depth):
   x6 = object2.x0
   y6 = object2.y0 + const.UBH/2
 
-  # Second coordinate
-  x2 = x1 + 2
-  y2 = y1
 
-  # Third coordinate
-  x3 = object1.x1 + 3
-  y3 = object1.y0
+  if const.OBJECT_HIERARCHY == "Row-Based":
+    # Second coordinate
+    x2 = x1 + 2
+    y2 = y1
 
-  # Fourth coordinate
-  x4 = object2.x0 - 3
-  y4 = object2.y1
+    # Third coordinate
+    x3 = object1.x1 + 3
+    y3 = object1.y0
 
-  # Fifth coordinate
-  x5 = x6 - 2
-  y5 = y6
+    # Fourth coordinate
+    x4 = object2.x0 - 3
+    y4 = object2.y1
+
+    # Fifth coordinate
+    x5 = x6 - 2
+    y5 = y6
+
+  elif const.OBJECT_HIERARCHY == "Column-Based":
+
+    # Second coordinate
+    x2 = x1 + 2
+    y2 = y1
+
+    # Third coordinate
+    x3 = object1.x1 + 3
+    y3 = object1.y1
+
+    # Fourth coordinate
+    x4 = object2.x0 - 3
+    y4 = object2.y1
+
+    # Fifth coordinate
+    x5 = x6 - 2
+    y5 = y6
 
   file.write("3 2 1 2 0 7 ")
   file.write("%5d" % (depth))
@@ -1114,7 +1159,7 @@ def plot_line(file, x0, y0, x1, y1):
   file.write("\n")
 
 #===============================================================================
-# Function to plot grid with coordinates
+# Function to plot grid with coordinates for ROW BASED
 #
 # Parameters:
 #   - file:         Xfig file's handle
@@ -1124,7 +1169,7 @@ def plot_line(file, x0, y0, x1, y1):
 # Used by:
 #   - function for plotting everything (the entire graph)
 #-------------------------------------------------------------------------------
-def plot_grid(xf, obj_list):
+def plot_grid_row_based(xf, obj_list):
 
   width   = attribute.max_width(obj_list)  + 2      # height of each grid spot
   height  = attribute.max_height(obj_list) + 2      # width of each grid spot
@@ -1175,6 +1220,70 @@ def plot_grid(xf, obj_list):
     for row in range(0,len(height_list)-1):
       plot_text_right(xf, width_list[column]+width-0.5, height_list[row]+1,  \
                       "({}, {})".format(row, column))
+
+
+#===============================================================================
+# Function to plot grid with coordinates for COLUMN BASED
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - obj_list:     list of all objects
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting everything (the entire graph)
+#-------------------------------------------------------------------------------
+def plot_grid_column_based(xf, obj_list):
+
+  width   = attribute.max_width(obj_list)  + 2      # height of each grid spot
+  height  = attribute.max_height(obj_list) + 2      # width of each grid spot
+  max_lvl = attribute.find_max_lvl(obj_list)        # max level
+
+  width_list    = []
+  height_list   = []
+  list_lvl      = []
+
+  # List with widths (columns)
+  for i in range(max_lvl + 15):
+    widths = width * i
+    width_list.append(widths)
+
+  # List with heights (rows)
+  for i in range(len(obj_list)):
+    heights = height * i
+    height_list.append(heights)
+
+  for i in range(0,len(obj_list)):
+    for l in range(0,max_lvl+1):
+       if obj_list[i].level == l:
+          list_lvl.append(obj_list[i].level)
+  max_element = max(list_lvl,key=list_lvl.count)
+  occurances_of_max = list_lvl.count(max_element)
+
+  width_list  = width_list[:max_lvl + 2]
+  height_list = height_list[:(occurances_of_max + max_lvl + 2)]
+
+  min_v = 0
+  max_v = max(width_list)
+  min_h = 0
+  max_h = max(height_list)
+
+ # Plot grid
+
+  # Plot vertical lines
+  for i in range(0,len(width_list)):
+    plot_line(xf, width_list[i], min_h, width_list[i], max_h)
+
+  # Plot horizontal lines
+  for i in range(0,len(height_list)):
+    plot_line(xf, min_v, height_list[i], max_v, height_list[i])
+
+  # Plot coordinates of each spot in grid
+  for column in range(0,len(width_list)-1):
+    for row in range(0,len(height_list)-1):
+      plot_text_right(xf, width_list[column]+width-0.5, height_list[row]+1,  \
+                      "({}, {})".format(row, column))
+
 
 #===============================================================================
 # Function to plot module name box (module header box)
