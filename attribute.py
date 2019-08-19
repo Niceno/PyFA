@@ -961,9 +961,9 @@ def create_grid_column(obj_list):
 
     # Choose alignment
     if const.ALIGN_BOXES == "Diagonal":
-      row = i
+      column = i
     elif const.ALIGN_BOXES == "Left":
-      row = 0
+      column = 0
 
     for l in range(len(lvl_lista[i])):
 
@@ -971,15 +971,15 @@ def create_grid_column(obj_list):
                     + width_list[i+1])/2)    \
                     - (lista[l].width/2)
 
-      lista[l].y0 = ((height_list[l]           \
-                    + height_list[l+1])/2)     \
+      lista[l].y0 = ((height_list[l+column]           \
+                    + height_list[l+1+column])/2)     \
                     - (lista[l].height/2)
 
       lista[l].x1 = lista[l].x0 + lista[l].width
       lista[l].y1 = lista[l].y0 + lista[l].height
 
       lista[l].row    = i
-      lista[l].column = l+row
+      lista[l].column = l+column
 
       updated_list.append(lista[l])
 
@@ -993,7 +993,7 @@ def create_grid_column(obj_list):
 # Returns:
 #   - nothing
 # Used by:
-#   - nothing (optional in main program)
+#   - finder.py - Function for searching coordinates in file and updating them
 #-------------------------------------------------------------------------------
 def update_box_pos(obj_list, name, row, column):
 
@@ -1097,7 +1097,7 @@ def remove_unnecessary_subs(obj_list):
   return obj_list
 
 #===============================================================================
-# Function for creating complete and updated file list
+# Function for creating complete and updated object list
 #
 # Parameters:
 #   - file_paths:   paths to .f90 files
@@ -1108,21 +1108,26 @@ def remove_unnecessary_subs(obj_list):
 #-------------------------------------------------------------------------------
 def get_obj_list(file_paths):
 
-  mod_list  = mod_list_fun(file_paths)    # list of all mod classes
-  sub_list  = sub_list_fun(file_paths)    # list of all sub classes
-  fun_list  = fun_list_fun(file_paths)    # list of all fun classes
-  prog_list = prog_list_fun(file_paths)   # list of all prog classes
-  obj_list = [*mod_list,   \
-              *sub_list,   \
-              *fun_list,   \
-              *prog_list]                # list of all classes(mod+sub+fun+prog)
-  obj_list = remove_unnecessary_subs(obj_list)
-  obj_list = update(obj_list)            # updating coordinates
+  mod_list  = mod_list_fun(file_paths)   # list of all mod classes
+  sub_list  = sub_list_fun(file_paths)   # list of all sub classes
+  fun_list  = fun_list_fun(file_paths)   # list of all fun classes
+  prog_list = prog_list_fun(file_paths)  # list of all prog classes
+  obj_list  = [*mod_list,   \
+               *sub_list,   \
+               *fun_list,   \
+               *prog_list]               # list of all classes(mod+sub+fun+prog)
+  obj_list  = remove_unnecessary_subs(obj_list)
+
+  if const.OBJECT_REPRESENTATION == "Compresssed":
+    for i in range(0,len(obj_list)):
+      obj_list[i].var = 0
+
+  obj_list  = update(obj_list)
 
   if const.OBJECT_HIERARCHY == "Column-Based":
     obj_list = create_grid_column(obj_list)
   elif const.OBJECT_HIERARCHY == "Row-Based":
-    obj_list = create_grid_row(obj_list)       # plot it with "grid" on
+    obj_list = create_grid_row(obj_list)
   elif const.OBJECT_HIERARCHY != "Row-Based" and "Column-Based":
     print("Insert correct object hierarchy!")
 

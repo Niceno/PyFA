@@ -1,10 +1,12 @@
 #!/home/simcic/Programs/Anaconda3/bin/python3
-
 #===============================================================================
 # Import libraries
 #-------------------------------------------------------------------------------
-import os          # needed for getcwd
-import sys         # needed to get command line arguments
+import time
+start = time.time()  # start time measuring
+
+import os            # needed for getcwd
+import sys           # needed to get command line arguments
 import xfig
 import finder
 import browse
@@ -87,3 +89,7 @@ xfig.plot_all(xf, obj_list)
 
 #End
 xf.close()
+
+#Print out execution time
+end = time.time()
+print("Execution time:", end - start, "seconds")

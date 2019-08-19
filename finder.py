@@ -600,7 +600,7 @@ def get_new_calls(file_paths,obj_list):
   return obj_list
 
 #===============================================================================
-# Function for searching coordinates in file
+# Function for searching coordinates in file and update them
 #
 # Parameters:
 #   - file_with_names:  file with names and coordinates
@@ -618,8 +618,6 @@ def find_coordinates(file_with_names, obj_list):
       if not line.startswith("#"):
         line = "".join(line.split())
         data = line.split(",",2)
-
-        #print("Row:",data[0],"Column:",data[1],"Name:",data[2])
         obj_list = attribute.update_box_pos(list,         \
                                             data[2],      \
                                             int(data[0]), \

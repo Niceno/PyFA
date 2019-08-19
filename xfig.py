@@ -347,11 +347,12 @@ def plot_module(file, x0, y0,     \
   else:
     use_list = 0
 
-  # Plot a variable text box
-  plot_var_name(file, x0, y0,     \
-                var_list,         \
-                use_list,         \
-                object)
+  if object.var != 0:
+    # Plot a variable text box
+    plot_var_name(file, x0, y0,     \
+                  var_list,         \
+                  use_list,         \
+                  object)
 
   # Plot a method text box
   plot_meth_name(file, x0, y0,    \
@@ -401,11 +402,12 @@ def plot_subroutine(file, x0, y0,      \
   else:
     use_list = 0
 
- # Plot a variable text box
-  plot_var_name(file, x0, y0,         \
-                var_list,             \
-                use_list,             \
-                object)
+  if object.var != 0:
+    # Plot a variable text box
+    plot_var_name(file, x0, y0,         \
+                  var_list,             \
+                  use_list,             \
+                  object)
 
 #===============================================================================
 # Function to plot function box
@@ -451,11 +453,14 @@ def plot_function(file, x0, y0,       \
   else:
     use_list = 0
 
- # Plot a variable text box
-  plot_var_name(file, x0, y0,         \
-                var_list,             \
-                use_list,             \
-                object)
+  if object.var != 0:
+    # Plot a variable text box
+
+   # Plot a variable text box
+    plot_var_name(file, x0, y0,         \
+                  var_list,             \
+                  use_list,             \
+                  object)
 
 #===============================================================================
 # Function to plot program box
@@ -789,6 +794,9 @@ def plot_meth_frame(file, x0, y0, box_width, box_height, \
                     meth_list,                           \
                     use_list,                            \
                     object):
+
+  if object.var == 0:
+    var_list = []
 
   fun_type_len  = check_if_function(object)
   type_stat_len = check_if_type_stat(object)
@@ -1518,6 +1526,9 @@ def plot_meth_text_left(x0, y0, xf, \
                         meth_list,  \
                         use_list,   \
                         object):
+
+  if object.var == 0:
+    var_list = []
 
   box_width     = choose_width(object)
   meth_list_num = list(range(0,len(meth_list)))
