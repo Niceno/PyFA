@@ -1,7 +1,7 @@
 #===============================================================================
 # Module with constants
 #
-# WARNING! It must be in program folder!
+# WARNING! This file must be in program(PyFA) folder!
 #-------------------------------------------------------------------------------
 XFS                     = 450             # xfig scale; xfig units for one cm
 UBH                     = 0.75            # unit box height
@@ -15,5 +15,5 @@ COLOR_HEADER_SUBROUTINE = "Pink2"         # color of subroutine header
 COLOR_HEADER_FUNCTION   = "Yellow"        # color of function header
 COLOR_HEADER_PROGRAM    = "Green2"        # color of program header
 ALIGN_BOXES             = "Diagonal"      # Align boxes "Left" or "Diagonal"
-OBJECT_HIERARCHY        = "Row-Based"  # "Column-Based" or "Row-Based" 
+OBJECT_HIERARCHY        = "Row-Based"  # "Column-Based" or "Row-Based"
 OBJECT_REPRESENTATION   = "Normal"        # "Compresssed"

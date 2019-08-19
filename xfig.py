@@ -939,6 +939,7 @@ def plot_spline(file, object1, object2, depth):
   y6 = object2.y0 + const.UBH + check_if_type_stat(object2) + len(use_list)/2
 
   if const.OBJECT_HIERARCHY == "Row-Based":
+
     # Second coordinate
     x2 = x1 + 2
     y2 = y1
@@ -956,6 +957,7 @@ def plot_spline(file, object1, object2, depth):
     y5 = y6
 
   elif const.OBJECT_HIERARCHY == "Column-Based":
+
     # Second coordinate
     x2 = x1 + 2
     y2 = (object1.y0 + object1.y1)/2
@@ -1021,6 +1023,7 @@ def plot_dashed_spline(file, object1, object2, depth):
 
 
   if const.OBJECT_HIERARCHY == "Row-Based":
+
     # Second coordinate
     x2 = x1 + 2
     y2 = y1

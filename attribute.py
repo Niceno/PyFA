@@ -747,33 +747,6 @@ def find_y1(object):
   return y1
 
 #===============================================================================
-# Function for calculating heights of all objects at certain level
-#
-# Parameters:
-#   - obj_list:     list of objects
-#   - level:        level
-# Returns:
-#   - heights:      list of all heights at certain level
-# Used by:
-#   - Function for finding maximum height of each level
-#-------------------------------------------------------------------------------
-def find_lvl_heights(obj_list, level):
-  heights = []
-  for i in range(len(obj_list)):
-    if obj_list[i].level == level:
-      height = obj_list[i].y1 - obj_list[i].y0
-      heights.append(height)
-  return heights
-
-def find_lvl_widths(obj_list, level):
-  widths = []
-  for i in range(len(obj_list)):
-    if obj_list[i].level == level:
-      width = obj_list[i].width
-      widths.append(width)
-  return widths
-
-#===============================================================================
 # Function for updating (importing) coordinates of objects
 #
 # Parameters:
@@ -786,60 +759,15 @@ def find_lvl_widths(obj_list, level):
 def update(obj_list):
   for i in range(len(obj_list)):
 
-    obj_list[i].x0     = x_pos(obj_list)[i]                 # update x0
-    obj_list[i].x1     = xfig.choose_width(obj_list[i])     # update x1
-    obj_list[i].y0     = (obj_list[i].level*2)+1            # update y0
-    obj_list[i].y1     = find_y1(obj_list[i])               # update y1
+    obj_list[i].x0 = x_pos(obj_list)[i]                              # update x0
+    obj_list[i].x1 = xfig.choose_width(obj_list[i]) + obj_list[i].x0 # update x1
+    obj_list[i].y0 = (obj_list[i].level*2)+1                         # update y0
+    obj_list[i].y1 = find_y1(obj_list[i])                            # update y1
+
+    obj_list[i].height = obj_list[i].y1 - obj_list[i].y0
+    obj_list[i].width  = obj_list[i].x1 - obj_list[i].x0
 
   return obj_list
-
-#===============================================================================
-# Function for finding maximum height of each level
-#
-# Parameters:
-#   - obj_list:       list of objects
-# Returns:
-#   - heights_list:   list of maximum heights of each level
-# Used by:
-#   - Function for arranging objects by level (updating y coordinates)
-#-------------------------------------------------------------------------------
-def lvl_height(obj_list):
-  heights_list = [0]
-  biggest_lvl  = find_max_lvl(obj_list)
-  for i in range(biggest_lvl):
-    heights = max(find_lvl_heights(obj_list,i))
-    heights_list.append(heights)
-
-  return heights_list
-
-def lvl_width(obj_list):
-  heights_list = [0]
-  biggest_lvl  = find_max_lvl(obj_list)
-  for i in range(biggest_lvl):
-    heights = max(find_lvl_widths(obj_list,i))
-    heights_list.append(heights)
-
-  return heights_list
-
-#===============================================================================
-# Function for updating y coordinates (arranging by levels)
-#
-# Parameters:
-#   - obj_list:       list of objects
-# Returns:
-#   - nothing
-# Used by:
-#   - Function for creating complete and updated file list
-#-------------------------------------------------------------------------------
-def arrange_by_level(obj_list):
-  lvl_heights = lvl_height(obj_list)
-  lvl_widths  = lvl_width(obj_list)
-
-  for i in range(len(obj_list)):
-    for l in range(len(lvl_heights)):
-      if obj_list[i].level == l:
-        obj_list[i].y0 = obj_list[i].y0 + sum(lvl_heights[0:l+1])
-        obj_list[i].y1 = obj_list[i].y1 + sum(lvl_heights[0:l+1])
 
 #===============================================================================
 # Function to create list with positions of objects on x axis
@@ -890,27 +818,6 @@ def lvl_list(obj_list,lvl):
   return list
 
 #===============================================================================
-# Function for appending list of multiple lists into 1 list
-#
-# Parameters:
-#   - obj_list:       list with multiple lists of objects
-# Returns:
-#   - flat_list:      list with all objects
-# Used by:
-#   - Function for creating complete and updated file list
-#-------------------------------------------------------------------------------
-def lvl_file_list(obj_list):
-  lvl_lista = []
-  lvl_num   = len(lvl_height(obj_list))
-
-  for i in range(lvl_num+1):
-    lvl = lvl_list(obj_list,i)
-    lvl_lista.append(lvl)
-  flat_list = [item for sublist in lvl_lista for item in sublist]
-
-  return flat_list
-
-#===============================================================================
 # Function for finding maximum width of all objects
 #
 # Parameters:
@@ -949,7 +856,7 @@ def max_height(obj_list):
   return max_height
 
 #===============================================================================
-# Function for creating grid and updating coordinates
+# Function for creating grid and updating coordinates - (Row-Based hierarchy)
 #
 # Parameters:
 #   - obj_list:     list of objects
@@ -1014,8 +921,14 @@ def create_grid_row(obj_list):
   return updated_list
 
 #===============================================================================
-# Functions for "Column-Based"
-### NEEDS EDITING
+# Function for creating grid and updating coordinates - (Column-Based hierarchy)
+#
+# Parameters:
+#   - obj_list:     list of objects
+# Returns:
+#   - updated_list: list of objects with updated coordinates (plotting in grid)
+# Used by:
+#   - Function for creating complete and updated file list
 #===============================================================================
 def create_grid_column(obj_list):
   width   = max_width(obj_list)  + 2             # height of each grid spot
@@ -1120,25 +1033,6 @@ def update_box_pos(obj_list, name, row, column):
       obj_list[i].column = column
 
 #===============================================================================
-# Function for assigning x1,width and height to objects
-#
-# Parameters:
-#   - obj_list:     list of objects
-# Returns:
-#   - nothing
-# Used by:
-#   - Function for creating complete and updated file list
-#-------------------------------------------------------------------------------
-def assign_values(obj_list):
-
-  for i in range(len(obj_list)):
-    obj_list[i].x1     = obj_list[i].x1 + obj_list[i].x0
-    obj_list[i].width  = obj_list[i].x1 - obj_list[i].x0
-    obj_list[i].height = obj_list[i].y1 - obj_list[i].y0
-
-  return obj_list
-
-#===============================================================================
 # Function for saving names of all objects into .txt file
 #
 # Parameters:
@@ -1202,7 +1096,6 @@ def remove_unnecessary_subs(obj_list):
 
   return obj_list
 
-
 #===============================================================================
 # Function for creating complete and updated file list
 #
@@ -1225,9 +1118,6 @@ def get_obj_list(file_paths):
               *prog_list]                # list of all classes(mod+sub+fun+prog)
   obj_list = remove_unnecessary_subs(obj_list)
   obj_list = update(obj_list)            # updating coordinates
-  arrange_by_level(obj_list)             # arranging by levels
-  obj_list = lvl_file_list(obj_list)     # put it together in list
-  obj_list = assign_values(obj_list)     # assign x1,height and width
 
   if const.OBJECT_HIERARCHY == "Column-Based":
     obj_list = create_grid_column(obj_list)
