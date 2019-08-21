@@ -3,7 +3,7 @@
 # Import libraries
 #-------------------------------------------------------------------------------
 import time
-start = time.time()  # start time measuring
+start = time.time()  # start measuring time
 
 import os            # needed for getcwd
 import sys           # needed to get command line arguments
@@ -69,11 +69,13 @@ else:
 
 
 #===============================================================================
-# Obviously the main function
+# Obviously the main function for plotting
 #-------------------------------------------------------------------------------
 
 # Printing objects and their levels
 #attribute.print_info(obj_list)
+
+print(len(file_paths),len(obj_list))
 
 # Save names of all objects into .txt file
 attribute.write_names(obj_list, "object_names.txt")

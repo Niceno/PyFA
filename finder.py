@@ -12,7 +12,7 @@ import attribute
 # Parameters:
 #   - file_name_with_path:     fortran file with full path in front
 # Returns:
-#   - module_name:   name of the module, return [] if none
+#   - module_name:             name of the module, return [] if none
 # Used by:
 #   - Functions for assigning attributes to objects ! Variables in Grid_Mod
 #-------------------------------------------------------------------------------
@@ -27,14 +27,15 @@ def get_mod(file_name_with_path):
       if pattern.search(line) != None:                # search for pattern
         if not line.startswith("!"):                  # skip line start with "!"
           if not line.split(maxsplit=1)[0] == "!":    # skip line start with "!"
-            if not pattern2.search(line) != None:       # skip line with use
-              module.append(( line.rstrip("\n")))       # add lines to list
+            if not pattern2.search(line) != None:     # skip line with use
+              if not "::" in line:
+                module.append(( line.rstrip("\n")))   # add lines to list
 
   module = [s.strip() for s in module if s.strip()]   # remove whitespaces
 
   if len(module) != 0:                                # if module is not empty
     mod_string  = module[0]                           # take the first string
-    module_name = re.sub("module ", "", mod_string)   # return subroutine
+    module_name = re.sub("module ", "", mod_string)   # return module name
 
   elif len(module) == 0:
     module_name = []
@@ -50,7 +51,7 @@ def get_mod(file_name_with_path):
 # Parameters:
 #   - file_name_with_path:  fortran file with full path in front
 # Returns:
-#   - sub_name:   name of the subroutine, return 0 if none
+#   - sub_name:             name of the subroutine, return 0 if none
 # Used by:
 #   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
@@ -110,7 +111,7 @@ def get_sub(file_name_with_path):
 # Parameters:
 #   - file_name_with_path:     fortran file with full path in front
 # Returns:
-#   - fun_name:      name of the function, return 0 if none
+#   - fun_name:                name of the function, return 0 if none
 # Used by:
 #   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
@@ -177,14 +178,14 @@ def get_fun(file_name_with_path):
 # Parameters:
 #   - file_name_with_path:     fortran file with full path in front
 # Returns:
-#   - prog_name:     name of the function, return 0 if none
+#   - prog_name:               name of the function, return 0 if none
 # Used by:
 #   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
 def get_prog(file_name_with_path):
 
   program = []                                 # initialize
-  pattern    = re.compile(".+?(?=program)", re.IGNORECASE)
+  pattern    = re.compile("^\s*.program", re.IGNORECASE)
 
   with open (file_name_with_path, 'rt') as myfile: # open file
     for line in myfile:                            # read line by line
@@ -215,7 +216,7 @@ def get_prog(file_name_with_path):
 # Parameters:
 #   - file_name_with_path:     fortran file with full path in front
 # Returns:
-#   - fun_type:      type of the function, return 0 if none
+#   - fun_type:                type of the function, return 0 if none
 # Used by:
 #   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
@@ -255,7 +256,7 @@ def get_fun_type(file_name_with_path):
 # Parameters:
 #   - file_name_with_path:     fortran file with full path in front
 # Returns:
-#   - call_list:     list of call statements, return 0 if none
+#   - call_list:               list of call statements, return 0 if none
 # Used by:
 #   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
@@ -292,7 +293,7 @@ def get_call(file_name_with_path):
 # Parameters:
 #   - file_name_with_path:   fortran file with full path in front
 # Returns:
-#   - type_list:   list of type statements, return 0 if none
+#   - type_list:             list of type statements, return 0 if none
 # Used by:
 #   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
@@ -336,7 +337,7 @@ def get_type(file_name_with_path):
 # Parameters:
 #   - file_name_with_path:    fortran file with full path in front
 # Returns:
-#   - use_list:     list of use statements, return 0 if none
+#   - use_list:               list of use statements, return 0 if none
 # Used by:
 #   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
@@ -344,13 +345,16 @@ def get_use(file_name_with_path):
 
   use_name = []
 
-  pattern   = re.compile("(use)\s", re.IGNORECASE)
+  pattern    = re.compile("(use)\s", re.IGNORECASE)
+  pattern2   = re.compile("!.*(use)\s", re.IGNORECASE)
 
   with open (file_name_with_path, 'rt') as myfile: # open file
     for line in myfile:                            # read line by line
       if pattern.search(line) != None:             # search for pattern
         if not line.startswith("!"):               # skip line starting with "!"
-          use_name.append(( line.rstrip("\n")))    # add line with patt. to list
+          if not line.split(maxsplit=1)[0] == "!": # skip line start with "!"
+            if not pattern2.search(line) != None:
+              use_name.append(( line.rstrip("\n")))# add line with patt. to list
 
   use_name = [s.strip() for s in use_name if s.strip()] # remove whitespace
 
@@ -366,8 +370,8 @@ def get_use(file_name_with_path):
     string = string.split('!')[0]
     use_list.append(string)
 
-  if use_list != []:                # use_name for whole line
-    use_list = use_list             # use_name_list - take only name
+  if use_list != []:
+    use_list = use_list
   else:
     use_list = 0
 
@@ -379,39 +383,31 @@ def get_use(file_name_with_path):
 # Parameters:
 #   - file_name_with_path:    fortran file with full path in front
 # Returns:
-#   - var_list:     list of all variables
+#   - var_list:               list of all variables
 # Used by:
 #   - Function for deciding which variables to print
 #-------------------------------------------------------------------------------
 def get_all_var(file_name_with_path):
 
   # Find all var names
+  vars           = []
+  flat_list      = []
 
-  vars = []
   with open(file_name_with_path) as file:         # open file
     for line in file:                             # read line by line
       vars_help = re.findall("(?<=:: ).*$", line) # looking for line with ::
       vars.append(vars_help)                      # list of lists of vars
-  vars2 = [x for x in vars if x != []]            # remove empty lists
+  vars_clean = [x for x in vars if x != []]       # remove empty lists
 
-  flat_list = []                              # create a list of strings of vars
-  for sublist in vars2:                       # instead of having lists in lists
-      for item in sublist:
+  for sublist in vars_clean:                  # create a list of strings of vars
+      for item in sublist:                    # instead of having lists in lists
           flat_list.append(item)
 
-  var_name_list = [i.split("!")[0] for i in flat_list]     # takes from :: to !
-  var_name_list = clean_list(var_name_list)                # deletes spaces
-  var_name_list = [":: " + suit for suit in var_name_list] # adds ":: "
-                                                           # to every var
-  var_name_list2 = []
-  for i in range(len(var_name_list)):
-    string = var_name_list[i]
-    string = string.split('!')[0]
-    var_name_list2.append(string)
-
+  var_name_list = [i.split("!")[0] for i in flat_list]     # take from :: to !
+  var_name_list = clean_whitespaces(var_name_list)         # delete all spaces
+  var_name_list = [":: " + name for name in var_name_list] # adds ":: " to vars
 
   # Find all var types
-
   var_type = []
   pattern  = re.compile("::", re.IGNORECASE)
 
@@ -426,7 +422,7 @@ def get_all_var(file_name_with_path):
   var_type_list = ([s.strip(",") for s in var_type_list])    # remove ","
 
   # Merge var names and var types into one var list
-  var_list = [var_type_list[i] + var_name_list2[i] \
+  var_list = [var_type_list[i] + var_name_list[i] \
              for i in range(len(var_type_list))]
 
   return var_list
@@ -437,7 +433,7 @@ def get_all_var(file_name_with_path):
 # Parameters:
 #   - file_name_with_path:        fortran file with full path in front
 # Returns:
-#   - sub_var_list:     list of global variables in subroutines
+#   - sub_var_list:               list of global variables in subroutines
 # Used by:
 #   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
@@ -449,6 +445,7 @@ def get_var(file_name_with_path):
 
     sub_var_list = []
     result = re.search("\((.*)\)", sub_name)
+
     if result:
       sub_var_list = result.group(0)
 
@@ -472,7 +469,7 @@ def get_var(file_name_with_path):
 # Parameters:
 #   - file_name_with_path:     fortran file with full path in front
 # Returns:
-#   - meth_list:     list of all methods(module functions)
+#   - meth_list:               list of all methods(module functions)
 # Used by:
 #   - Functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
@@ -484,8 +481,8 @@ def get_meth(file_name_with_path):
   with open(file_name_with_path) as file:                # open file
     for line in file:                                    # read line by line
       meths = re.findall("(?<=_Mod/)(.*)(?=.f90)", line) # search _Mod and .f90
-      methods.append(meths)                       # add those lines to list
-  methods2 = [x for x in methods if x != []]      # remove empty lists
+      methods.append(meths)                              # add lines to list
+  methods2 = [x for x in methods if x != []]             # remove empty lists
 
   flat_meth_list = []                        # create only one list with strings
   for sublist in methods2:                   # instead of list with lists
@@ -522,8 +519,8 @@ def get_only_meth(file_name_with_path):
   with open(file_name_with_path) as file:                # open file
     for line in file:                                    # read line by line
       meths = re.findall("(?<=_Mod/)(.*)(?=.f90)", line) # search _Mod and .f90
-      methods.append(meths)                       # add those lines to list
-  methods2 = [x for x in methods if x != []]      # remove empty lists
+      methods.append(meths)                              # add lines to list
+  methods2 = [x for x in methods if x != []]             # remove empty lists
 
   flat_meth_list = []                        # create only one list with strings
   for sublist in methods2:                   # instead of list with lists
@@ -581,8 +578,8 @@ def get_new_calls(file_paths,obj_list):
   # Search through files and look for used functions and subroutines
   for i in range(0,len(file_paths)):
     for l in range(0,len(full_list_names)):
-      with open(file_paths[i]) as file:                # open file
-        for line in file:                              # read line by line
+      with open(file_paths[i]) as file:
+        for line in file:
           if full_list_names[l] in line:
             for o in range(0,len(obj_list)):
               if file_paths[i] == obj_list[o].path:
@@ -608,7 +605,7 @@ def get_new_calls(file_paths,obj_list):
 # Returns:
 #   - obj_list:         list of objects with updated placements in grid
 # Used by:
-#   - Main program
+#   - Main program (function for changing object placement in grid)
 #===============================================================================
 def find_coordinates(file_with_names, obj_list):
 
@@ -618,9 +615,9 @@ def find_coordinates(file_with_names, obj_list):
       if not line.startswith("#"):
         line = "".join(line.split())
         data = line.split(",",2)
-        obj_list = attribute.update_box_pos(list,         \
-                                            data[2],      \
-                                            int(data[0]), \
+        obj_list = attribute.update_box_pos(list,          \
+                                            data[2],       \
+                                            int(data[0]),  \
                                             int(data[1]))
   return obj_list
 
@@ -634,11 +631,11 @@ def find_coordinates(file_with_names, obj_list):
 # Used by:
 #   - Function "get_all_var"
 #-------------------------------------------------------------------------------
-def clean_list(list_item):
+def clean_whitespaces(list_item):
   if isinstance(list_item, list):
     for index in range(len(list_item)):
       if isinstance(list_item[index], list):
-        list_item[index] = clean_list(list_item[index])
+        list_item[index] = clean_whitespaces(list_item[index])
       if not isinstance(list_item[index], (int, tuple, float, list)):
         list_item[index] = list_item[index].strip()
   return list_item
