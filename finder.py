@@ -396,6 +396,9 @@ def get_all_var(file_name_with_path):
   with open(file_name_with_path) as file:         # open file
     for line in file:                             # read line by line
       vars_help = re.findall("(?<=:: ).*$", line) # looking for line with ::
+      if vars_help != []:
+        if vars_help[0].endswith("&"):
+          print(vars_help)
       vars.append(vars_help)                      # list of lists of vars
   vars_clean = [x for x in vars if x != []]       # remove empty lists
 

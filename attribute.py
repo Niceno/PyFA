@@ -640,6 +640,7 @@ def mod_list_fun(file_paths):
   for i in range(len(file_paths)):
     module_name = finder.get_mod(file_paths[i]) # find modules from file paths
     sub_name = finder.get_sub(file_paths[i])    # find subs from file paths
+
     if module_name != []:                       # if it is module append to list
       modules_list.append(module_class(file_paths[i]))
   mod_list = mod_lvl(modules_list)
@@ -1087,7 +1088,16 @@ def remove_unnecessary_subs(obj_list):
   # List of indexes of all unwanted subroutines
   for i in range(0,len(obj_list)):
     for m in range(0,len(meth_list)):
-      if meth_list[m] in obj_list[i].name:
+      method = meth_list[m]
+      name   = obj_list[i].name
+      name2  = ""
+      if "/" in method:
+        method = method.split("/", 1)[-1]
+      if "(" in name:
+        name = name.split("(", 1)[0]
+      if "Mod_" in name:
+        name2 = name.split("Mod_", 1)[-1]
+      if name == method or name2 == method:
         indexes.append(i)
 
   # Delete unwanted subroutines from objects list
@@ -1116,6 +1126,7 @@ def get_obj_list(file_paths):
                *sub_list,   \
                *fun_list,   \
                *prog_list]               # list of all classes(mod+sub+fun+prog)
+
   obj_list  = remove_unnecessary_subs(obj_list)
 
   if const.OBJECT_REPRESENTATION == "Compresssed":
@@ -1130,5 +1141,6 @@ def get_obj_list(file_paths):
     obj_list = create_grid_row(obj_list)
   elif const.OBJECT_HIERARCHY != "Row-Based" and "Column-Based":
     print("Insert correct object hierarchy!")
+    obj_list = create_grid_row(obj_list)
 
   return obj_list

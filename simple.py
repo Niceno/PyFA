@@ -75,8 +75,6 @@ else:
 # Printing objects and their levels
 #attribute.print_info(obj_list)
 
-print(len(file_paths),len(obj_list))
-
 # Save names of all objects into .txt file
 attribute.write_names(obj_list, "object_names.txt")
 
