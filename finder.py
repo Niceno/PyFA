@@ -322,8 +322,8 @@ def get_type(file_name_with_path):
     string = string.split('!')[0]
     type_list.append(string)
 
-  if type_list != []:           # type_list      - whole string
-    type_list = type_list       # true_type_list - take only name
+  if type_list != []:
+    type_list = type_list
     type_list = list(set(type_list))
 
   else:
@@ -390,9 +390,7 @@ def get_use(file_name_with_path):
 def get_all_var(file_name_with_path):
 
   # Find all var names
-  vars           = []
-  flat_list      = []
-  new_test_var   = []
+  var_name_list   = []
   pattern        = re.compile("::(.*)", re.IGNORECASE)
   pattern2       = re.compile("(.*)[&]\s*$", re.IGNORECASE)
 
@@ -400,43 +398,43 @@ def get_all_var(file_name_with_path):
   with open (file_name_with_path, 'rt') as myfile: # open file
     for line in myfile:                            # read line by line
       if pattern.search(line) != None:             # search for pattern
-        line = line.split("::")[1]
+        line = line.split("::")[1]                 # split line by "::"
         if not line.startswith("!"):               # skip line starting with "!"
-          if "!" in line:
-            line = line.split("!")[0]
-          new_test = line.rstrip("\n")             # add line  patt. to list
+          if "!" in line:                          # if "!" is found
+            line = line.split("!")[0]              # split by "!" and take 1st
+          var_name = line.rstrip("\n")
 
-          if not pattern2.search(new_test) != None:       # if "&" is not found
-            new_test_var.append(new_test)
+          if not pattern2.search(var_name) != None:  # if "&" is not found
+            var_name_list.append(var_name)           # append var to list
 
-          if pattern2.search(new_test) != None:           # if "&" is found
+          if pattern2.search(var_name) != None:      # if "&" is found
+            long_vars = []                           # list with vars with &
+            long_vars.append(var_name)               # append to new list
 
-            long_vars = []
-            long_vars.append(new_test)
-            for line in myfile:
-              if "::" in line:
-                line = line.split("::")[1]
-              if "!" in line:
-                line = line.split("!")[0]
+            for new_line in myfile:                  # read line by line
+              if "::" in new_line:                   # if "::" is found in line
+                new_line = new_line.split("::")[1]   # split and take 2nd
+              if "!" in new_line:                    # if "!" is found in line
+                new_line = new_line.split("!")[0]    # split and take 1st
 
-              line = line.rstrip("\n")
-              line = ''.join(line)
-              new_var = line.lstrip()
-              long_vars.append(new_var)
+              new_line = new_line.rstrip("\n")
+              new_var  = new_line.lstrip()
+              long_vars.append(new_var)              # append to long var list
 
-              if not pattern2.search(new_var) != None:
-                break                               # stop this inner for loop
+              if not pattern2.search(new_var) != None:   # if "&" is not found
+                break                                    # stop inner for loop
 
-            new_test = ''.join(long_vars)
-            new_test = new_test.replace("&","")
-            new_test = new_test.replace(" ","")
-            new_test = new_test.replace(",",", ")
-            new_test = new_test.replace("%"," % ")
-            new_test = new_test.replace(":",": ")
-            new_test_var.append(new_test)
+            # Put long vars into 1 string and edit
+            var_name = ''.join(long_vars)
+            var_name = var_name.replace("&","")
+            var_name = var_name.replace(" ","")
+            var_name = var_name.replace(",",", ")
+            var_name = var_name.replace("%"," % ")
+            var_name = var_name.replace(":",": ")
+            var_name_list.append(var_name)
 
-  new_test_var = [s.strip() for s in new_test_var if s.strip()]
-  new_test_var = [":: " + name for name in new_test_var]
+  var_name_list = [s.strip() for s in var_name_list if s.strip()]
+  var_name_list = [":: " + name for name in var_name_list]
 
   # Find all var types
   var_type = []
@@ -453,7 +451,7 @@ def get_all_var(file_name_with_path):
   var_type_list = ([s.strip(",") for s in var_type_list])    # remove ","
 
   # Merge var names and var types into one var list
-  var_list = [var_type_list[i]  + new_test_var[i] \
+  var_list = [var_type_list[i]  + var_name_list[i] \
              for i in range(len(var_type_list))]
 
   return var_list
@@ -641,8 +639,8 @@ def get_new_calls(file_paths,obj_list):
 def find_coordinates(file_with_names, obj_list):
 
   list = obj_list
-  with open (file_with_names, 'rt') as myfile:             # open file
-    for line in myfile:                                    # read line by line
+  with open (file_with_names, 'rt') as myfile:
+    for line in myfile:
       if not line.startswith("#"):
         line = "".join(line.split())
         data = line.split(",",2)
