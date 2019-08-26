@@ -392,23 +392,51 @@ def get_all_var(file_name_with_path):
   # Find all var names
   vars           = []
   flat_list      = []
+  new_test_var   = []
+  pattern        = re.compile("::(.*)", re.IGNORECASE)
+  pattern2       = re.compile("(.*)[&]\s*$", re.IGNORECASE)
 
-  with open(file_name_with_path) as file:         # open file
-    for line in file:                             # read line by line
-      vars_help = re.findall("(?<=:: ).*$", line) # looking for line with ::
-      if vars_help != []:
-        if vars_help[0].endswith("&"):
-          print(vars_help)
-      vars.append(vars_help)                      # list of lists of vars
-  vars_clean = [x for x in vars if x != []]       # remove empty lists
+  # Find names of variables
+  with open (file_name_with_path, 'rt') as myfile: # open file
+    for line in myfile:                            # read line by line
+      if pattern.search(line) != None:             # search for pattern
+        line = line.split("::")[1]
+        if not line.startswith("!"):               # skip line starting with "!"
+          if "!" in line:
+            line = line.split("!")[0]
+          new_test = line.rstrip("\n")             # add line  patt. to list
 
-  for sublist in vars_clean:                  # create a list of strings of vars
-      for item in sublist:                    # instead of having lists in lists
-          flat_list.append(item)
+          if not pattern2.search(new_test) != None:       # if "&" is not found
+            new_test_var.append(new_test)
 
-  var_name_list = [i.split("!")[0] for i in flat_list]     # take from :: to !
-  var_name_list = clean_whitespaces(var_name_list)         # delete all spaces
-  var_name_list = [":: " + name for name in var_name_list] # adds ":: " to vars
+          if pattern2.search(new_test) != None:           # if "&" is found
+
+            long_vars = []
+            long_vars.append(new_test)
+            for line in myfile:
+              if "::" in line:
+                line = line.split("::")[1]
+              if "!" in line:
+                line = line.split("!")[0]
+
+              line = line.rstrip("\n")
+              line = ''.join(line)
+              new_var = line.lstrip()
+              long_vars.append(new_var)
+
+              if not pattern2.search(new_var) != None:
+                break                               # stop this inner for loop
+
+            new_test = ''.join(long_vars)
+            new_test = new_test.replace("&","")
+            new_test = new_test.replace(" ","")
+            new_test = new_test.replace(",",", ")
+            new_test = new_test.replace("%"," % ")
+            new_test = new_test.replace(":",": ")
+            new_test_var.append(new_test)
+
+  new_test_var = [s.strip() for s in new_test_var if s.strip()]
+  new_test_var = [":: " + name for name in new_test_var]
 
   # Find all var types
   var_type = []
@@ -425,7 +453,7 @@ def get_all_var(file_name_with_path):
   var_type_list = ([s.strip(",") for s in var_type_list])    # remove ","
 
   # Merge var names and var types into one var list
-  var_list = [var_type_list[i] + var_name_list[i] \
+  var_list = [var_type_list[i]  + new_test_var[i] \
              for i in range(len(var_type_list))]
 
   return var_list
