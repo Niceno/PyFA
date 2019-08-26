@@ -3,6 +3,7 @@
 # Import libraries
 #-------------------------------------------------------------------------------
 import time
+import const
 start = time.time()  # start measuring time
 
 import os            # needed for getcwd
@@ -21,6 +22,9 @@ root = os.getcwd() + "/"
 print("\nAnalyzing Fortan sources in: " + root)
 
 file_paths = []
+attribute.align_boxes             = "Diagonal"           # Align boxes "Left" or "Diagonal"
+attribute.object_hierarchy        = "Column-Based"   # "Column-Based" or "Row-Based"
+attribute.object_representation   = "Compresssed"    # "Compresssed" or "Normal"
 
 #-----------------------------------------
 # Call without any command line arguments
@@ -67,6 +71,10 @@ else:
       print("\nObject coordinates are specified in:", str(sys.argv[j+1]),"\n")
       finder.find_coordinates(str(sys.argv[j+1]), obj_list)
 
+  # Add options for:
+  # -a | --align                  = diagonal or left
+  # -oh | --object_hierarchy      = column or row
+  # -or | --object_representation = normal or compact
 
 #===============================================================================
 # Obviously the main function for plotting
@@ -74,7 +82,6 @@ else:
 
 # Printing objects and their levels
 #attribute.print_info(obj_list)
-
 # Save names of all objects into .txt file
 attribute.write_names(obj_list, "object_names.txt")
 

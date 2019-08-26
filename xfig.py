@@ -191,11 +191,11 @@ def plot_all(file, obj_list):
 
   # Plot grid
 
-  if const.OBJECT_HIERARCHY == "Row-Based":
+  if attribute.object_hierarchy == "Row-Based":
     plot_grid_row_based(file, obj_list)
-  elif const.OBJECT_HIERARCHY == "Column-Based":
+  elif attribute.object_hierarchy == "Column-Based":
     plot_grid_column_based(file, obj_list)
-  elif const.OBJECT_HIERARCHY != "Column-Based" and "Row-Based":
+  elif attribute.object_hierarchy != "Column-Based" and "Row-Based":
     print("WRONG OBJECT HIERARCHY! ")
 #===============================================================================
 # Plot module, subroutine or function (choose which one to plot)
@@ -346,12 +346,13 @@ def plot_module(file, x0, y0,     \
                   use_list,         \
                   object)
 
-  # Plot a method text box
-  plot_meth_name(file, x0, y0,    \
-                 var_list,        \
-                 meth_list,       \
-                 use_list,        \
-                 object)
+  if object.meth != 0:
+    # Plot a method text box
+    plot_meth_name(file, x0, y0,    \
+                   var_list,        \
+                   meth_list,       \
+                   use_list,        \
+                   object)
 
 #===============================================================================
 # Function to plot subroutine box
@@ -936,7 +937,7 @@ def plot_spline(file, object1, object2, depth):
   x6 = object2.x0
   y6 = object2.y0 + const.UBH + check_if_type_stat(object2) + len(use_list)/2
 
-  if const.OBJECT_HIERARCHY == "Row-Based":
+  if attribute.object_hierarchy == "Row-Based":
 
     # Second coordinate
     x2 = x1 + 2
@@ -954,7 +955,7 @@ def plot_spline(file, object1, object2, depth):
     x5 = x6 - 2
     y5 = y6
 
-  elif const.OBJECT_HIERARCHY == "Column-Based":
+  elif attribute.object_hierarchy == "Column-Based":
 
     # Second coordinate
     x2 = x1 + 2
@@ -1020,7 +1021,7 @@ def plot_dashed_spline(file, object1, object2, depth):
   y6 = object2.y0 + const.UBH/2
 
 
-  if const.OBJECT_HIERARCHY == "Row-Based":
+  if attribute.object_hierarchy == "Row-Based":
 
     # Second coordinate
     x2 = x1 + 2
@@ -1038,7 +1039,7 @@ def plot_dashed_spline(file, object1, object2, depth):
     x5 = x6 - 2
     y5 = y6
 
-  elif const.OBJECT_HIERARCHY == "Column-Based":
+  elif attribute.object_hierarchy == "Column-Based":
 
     # Second coordinate
     x2 = x1 + 2

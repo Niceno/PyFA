@@ -117,7 +117,7 @@ def get_sub(file_name_with_path):
 #-------------------------------------------------------------------------------
 def get_fun(file_name_with_path):
 
-  function = []                                 # initialize
+  function   = []
   pattern    = re.compile(".+?(?=function)", re.IGNORECASE)
   pattern2   = re.compile("^(.*[^&])\&$", re.IGNORECASE)
   pattern3   = re.compile(".+?(?=end)", re.IGNORECASE)
@@ -126,7 +126,10 @@ def get_fun(file_name_with_path):
     for line in myfile:                            # read line by line
       if pattern.search(line) != None:             # search for pattern
         if not line.startswith("!"):               # skip line starting with "!"
-          function.append(( line.rstrip("\n")))    # add line with patt. to list
+          if "!" in line:
+            line = line.split("!")[0]
+          if not "print" in line:
+            function.append(( line.rstrip("\n")))    # add line with patt. to list
 
           if pattern2.search(line) != None:           # if "&" is found
             for line in myfile:
@@ -148,24 +151,18 @@ def get_fun(file_name_with_path):
 
   if len(function) != 0:                      # if function is not empty
     fun_name = function[0]                    # take the first string
-    if "integer function " in fun_name:
-      fun_name   = re.sub("integer function ", "", fun_name)
-    elif "logical function " in fun_name:
-      fun_name   = re.sub("logical function ", "", fun_name)
-    elif "integerfunction" in fun_name:
-      fun_name   = re.sub("integerfunction", "", fun_name)
-    elif "logicalfunction" in fun_name:
-      fun_name   = re.sub("logicalfunction", "", fun_name)
-    elif "real function " in fun_name:
-      fun_name   = re.sub("real function ", "", fun_name)
-    elif "realfunction" in fun_name:
-      fun_name   = re.sub("realfunction", "", fun_name)
 
-    if fun_name.endswith("&"):
-      fun_name = fun_name + ")"
-
-    if fun_name.startswith("!"):
+    if "function" in fun_name:
+      fun_name = fun_name.split("function",1)[1]
+    else:
       fun_name = 0
+
+    if fun_name != 0:
+      if fun_name.endswith("&"):
+        fun_name = fun_name + ")"
+
+      if fun_name.startswith("!"):
+        fun_name = 0
 
   elif len(function) == 0:
     fun_name = 0

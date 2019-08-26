@@ -621,7 +621,7 @@ def prog_lvl(program_list, file_paths):
           prog_lvl = prog_lvl
 
         prog_lvl = max(prog_lvl)   # take the biggest used prog level from list
-        program_list[i].level = prog_lvl + 2   # add 2 levels to max level
+        program_list[i].level = prog_lvl + 1   # add 2 levels to max level
   return program_list
 
 #===============================================================================
@@ -896,9 +896,9 @@ def create_grid_row(obj_list):
     lista = lvl_lista[i]
 
     # Choose alignment
-    if const.ALIGN_BOXES == "Diagonal":
+    if align_boxes == "Diagonal":
       row = i
-    elif const.ALIGN_BOXES == "Left":
+    elif align_boxes == "Left":
       row = 0
 
     for l in range(len(lvl_lista[i])):
@@ -961,9 +961,9 @@ def create_grid_column(obj_list):
     lista = lvl_lista[i]
 
     # Choose alignment
-    if const.ALIGN_BOXES == "Diagonal":
+    if align_boxes == "Diagonal":
       column = i
-    elif const.ALIGN_BOXES == "Left":
+    elif align_boxes == "Left":
       column = 0
 
     for l in range(len(lvl_lista[i])):
@@ -1129,17 +1129,18 @@ def get_obj_list(file_paths):
 
   obj_list  = remove_unnecessary_subs(obj_list)
 
-  if const.OBJECT_REPRESENTATION == "Compresssed":
+  if object_representation == "Compresssed":
     for i in range(0,len(obj_list)):
-      obj_list[i].var = 0
+      obj_list[i].var  = 0
+      obj_list[i].meth = 0
 
   obj_list  = update(obj_list)
 
-  if const.OBJECT_HIERARCHY == "Column-Based":
+  if object_hierarchy == "Column-Based":
     obj_list = create_grid_column(obj_list)
-  elif const.OBJECT_HIERARCHY == "Row-Based":
+  elif object_hierarchy == "Row-Based":
     obj_list = create_grid_row(obj_list)
-  elif const.OBJECT_HIERARCHY != "Row-Based" and "Column-Based":
+  elif object_hierarchy != "Row-Based" and "Column-Based":
     print("Insert correct object hierarchy!")
     obj_list = create_grid_row(obj_list)
 
