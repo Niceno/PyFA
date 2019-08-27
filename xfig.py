@@ -1263,7 +1263,7 @@ def plot_grid_column_based(xf, obj_list):
   occurances_of_max = list_lvl.count(max_element)
 
   width_list  = width_list[:max_lvl + 2]
-  height_list = height_list[:(occurances_of_max + max_lvl + 2)]
+  height_list = height_list[:(occurances_of_max + 2)]
 
   min_v = 0
   max_v = max(width_list)
