@@ -1060,6 +1060,8 @@ def write_names(obj_list,file_name):
                                                  obj_list[i].column,  \
                                                  obj_list[i].name))
   text_file.close()
+  print("File", const.OBJ_FILE_NAME, \
+        "with object coordinates has been created!")
 
 #===============================================================================
 # Function for removing subroutine objects that are already printed
