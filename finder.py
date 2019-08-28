@@ -5,6 +5,7 @@ import re
 import xfig
 import os
 import attribute
+import sys
 
 #===============================================================================
 # Function to search through .f90 file and returns module name
@@ -636,7 +637,12 @@ def get_new_calls(file_paths,obj_list):
 def find_coordinates(file_with_names, obj_list):
 
   list = obj_list
-  with open (file_with_names, 'rt') as myfile:
+  try: myfile = open(file_with_names, 'rt')
+  except:
+    print("File", file_with_names, "can't be found!  Exiting")
+    sys.exit()
+
+  with myfile:
     for line in myfile:
       if not line.startswith("#"):
         line = "".join(line.split())
@@ -645,6 +651,8 @@ def find_coordinates(file_with_names, obj_list):
                                             data[2],       \
                                             int(data[0]),  \
                                             int(data[1]))
+  myfile.close()
+
   return obj_list
 
 #===============================================================================

@@ -1033,6 +1033,7 @@ def update_box_pos(obj_list, name, row, column):
       obj_list[i].row    = row
       obj_list[i].column = column
 
+  return obj_list
 #===============================================================================
 # Function for saving names of all objects into .txt file
 #
