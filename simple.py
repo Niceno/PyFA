@@ -23,13 +23,20 @@ print("\nAnalyzing Fortan sources in: " + root)
 
 # Initialize
 file_paths = []
+obj_list   = []
+
 attribute.align_boxes             = "Diagonal"
 attribute.object_hierarchy        = "Row-Based"
 attribute.object_representation   = "Normal"
-myfile                            = "Not-Specified"
+attribute.grid                    = "None"
+src_list                          = "None"
 grid                              = "Grid-Off"
-file_paths = []
-obj_list   = []
+
+or_specified = "None"
+oh_specified = "None"
+s_specified  = "None"
+g_specified  = "None"
+a_specified  = "None"
 
 #-------------------------------------------
 # Browse through command line arguments
@@ -46,8 +53,6 @@ for j in range(1,len(sys.argv),2):
     print("\nValid options are:\n")
     print("  -s,  --sources [FILE]                 \
            Choose source list with paths for plotting")
-    print("  -g,  --grid [FILE]                    \
-           Plot with user specifed objects coordinates")
     print("\n  -a,  --align [ACTION]                 \
            Plot by specified object alignment: ")
     print("                                        \
@@ -68,7 +73,7 @@ for j in range(1,len(sys.argv),2):
             'compact' for compact representation")
     print("\nNote: Specifying -g neglects options -a and -oh")
     print("\nExample1: simple.py -s source.list -a left")
-    print("Example2: simple.py -a left")
+    print("Example2: simple.py -a left\n")
 
     exit()
 
@@ -78,8 +83,10 @@ for j in range(1,len(sys.argv),2):
     if str(sys.argv[j]) == "-a" or \
        str(sys.argv[j]) == "--align":
       if str(sys.argv[j+1]) == "diagonal":
+        a_specified = "Diagonal"
         attribute.align_boxes  = "Diagonal"
       elif str(sys.argv[j+1]) == "left":
+        a_specified = "Left"
         attribute.align_boxes  = "Left"
       else:
         print("Incorrect switch:", sys.argv[j+1], "after", sys.argv[j])
@@ -91,8 +98,10 @@ for j in range(1,len(sys.argv),2):
     elif str(sys.argv[j]) == "-oh" or            \
          str(sys.argv[j]) == "--object_hierarchy":
       if str(sys.argv[j+1]) == "column":
+        oh_specified = "Column-Based"
         attribute.object_hierarchy  = "Column-Based"
       elif str(sys.argv[j+1]) == "row":
+        oh_specified = "Row-Based"
         attribute.object_hierarchy  = "Row-Based"
       else:
         print("Incorrect switch:", sys.argv[j+1], "after", sys.argv[j])
@@ -104,8 +113,10 @@ for j in range(1,len(sys.argv),2):
     elif str(sys.argv[j]) == "-or" or                 \
          str(sys.argv[j]) == "--object_representation":
       if str(sys.argv[j+1]) == "normal":
+        or_specified = "Normal"
         attribute.object_representation  = "Normal"
       elif str(sys.argv[j+1]) == "compact":
+        or_specified = "Compresssed"
         attribute.object_representation  = "Compresssed"
       else:
         print("Incorrect switch:", sys.argv[j+1], "after", sys.argv[j])
@@ -116,38 +127,13 @@ for j in range(1,len(sys.argv),2):
     elif str(sys.argv[j]) == "-s" or    \
          str(sys.argv[j]) == "--sources":
 
-      # Get list of objects from source.list
-      try: myfile = open (str(sys.argv[j+1]), 'rt')
-      except:
-        print("File", sys.argv[j+1], "can't be found!  Exiting")
-        sys.exit()
-
-      with myfile:
-        for line in myfile:
-          if not line.startswith("#"):
-            file_paths.append(line.rstrip("\n"))
-
-      file_paths = list(filter(None, file_paths))
-
-      for i in range(0,len(file_paths)):
-        file_paths[i] = root + file_paths[i]
-
-      obj_list = attribute.get_obj_list(file_paths)
-      obj_list = finder.get_new_calls(file_paths,obj_list)
-
+      s_specified = sys.argv[j+1]
       print("List of files is specified in:", str(sys.argv[j+1]),"\n")
 
     elif str(sys.argv[j]) == "-g" or    \
          str(sys.argv[j]) == "--grid":
 
-      file_paths = browse.source_paths(root)
-      obj_list   = attribute.get_obj_list(file_paths)
-      obj_list   = finder.get_new_calls(file_paths,obj_list)
-      obj_list   = finder.find_coordinates(str(sys.argv[j+1]), obj_list)
-      grid       = "Grid-On"
-
-      print("obj_list from 151 ", obj_list)
-
+      g_specified = sys.argv[j+1]
       print("\nObject coordinates are specified in:", str(sys.argv[j+1]),"\n")
 
     else:
@@ -155,7 +141,44 @@ for j in range(1,len(sys.argv),2):
       print("Exiting the program")
       sys.exit()
 
-if myfile == "Not-Specified" and grid == "Grid-Off":
+# Tu, s obzirom na vrijednosti: a_specified, g_specified, or_specified ...
+
+if s_specified != "None":
+
+  # Get list of objects from source.list
+  try: src_list = open (s_specified, 'rt')
+  except:
+    print("File", s_specified, "can't be found!  Exiting")
+    sys.exit()
+
+  with src_list:
+    for line in src_list:
+      if not line.startswith("#"):
+        file_paths.append(line.rstrip("\n"))
+
+  file_paths = list(filter(None, file_paths))
+
+  for i in range(0,len(file_paths)):
+    file_paths[i] = root + file_paths[i]
+
+  obj_list = attribute.get_obj_list(file_paths)
+  obj_list = finder.get_new_calls(file_paths,obj_list)
+
+
+if g_specified != "None":
+  file_paths = browse.source_paths(root)
+  obj_list   = attribute.get_obj_list(file_paths)
+  obj_list   = finder.get_new_calls(file_paths, obj_list)
+  attribute.grid = "Default"
+
+  if oh_specified == "Row-Based" or "None":
+    obj_list   = finder.find_coordinates(g_specified, obj_list)
+    grid       = "Grid-On"
+  if oh_specified == "Column-Based":
+    obj_list   = finder.find_coordinates(g_specified, obj_list)
+    grid       = "Grid-On"
+
+if src_list == "None" and grid == "Grid-Off":
   print("List of sources not specifed, browsing through all")
   file_paths = browse.source_paths(root)
   obj_list   = attribute.get_obj_list(file_paths)
@@ -165,8 +188,9 @@ if myfile == "Not-Specified" and grid == "Grid-Off":
 # Obviously the main function for plotting
 #-------------------------------------------------------------------------------
 
-# Save names of all objects into .txt file
-attribute.write_names(obj_list, const.OBJ_FILE_NAME)
+# Save names and coordinates of all objects into .txt file
+if g_specified == "None":
+  attribute.write_names(obj_list, const.OBJ_FILE_NAME)
 
 # Open Xfig file
 xf = open(const.FIG_FILE_NAME, "w")

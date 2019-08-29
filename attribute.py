@@ -794,7 +794,6 @@ def x_pos(obj_list):
   for item in box_widths:
     sum += item + 1
     box_pos.append(sum)
-
   return box_pos
 
 #===============================================================================
@@ -818,6 +817,14 @@ def lvl_list(obj_list,lvl):
     list[i].x0 = x_pos(list)[i]
   return list
 
+def row_list(obj_list,row):
+  list = []
+  for i in range(len(obj_list)):
+    if obj_list[i].row == row:
+      list.append(obj_list[i])
+  return list
+
+
 #===============================================================================
 # Function for finding maximum width of all objects
 #
@@ -831,7 +838,7 @@ def lvl_list(obj_list,lvl):
 def max_width(obj_list):
   widths_list = []
   for i in range(len(obj_list)):
-    widths = obj_list[i].x1 - obj_list[i].x0
+    widths = obj_list[i].width
     widths_list.append(widths)
 
   max_width = max(widths_list)
@@ -872,19 +879,22 @@ def create_grid_row(obj_list):
   max_lvl = find_max_lvl(obj_list)               # max level
 
   width_list   = []
-  height_list  = []
   lvl_lista    = []
   updated_list = []
+  lvl_heights = [0]
+
+  # List with heights (rows)
+  for i in range(0,max_lvl+1):
+    list_of_level = lvl_list(obj_list, i)
+    level_height  = max_height(list_of_level) + 2
+    lvl_heights.append(level_height)
+
+  heights_new = [sum(lvl_heights[:i+1]) for i in range(len(lvl_heights))]
 
   # List with widths (columns)
   for i in range(len(obj_list) + 2):
     widths = width * i
     width_list.append(widths)
-
-  # List with heights (rows)
-  for i in range(max_lvl + 2):
-    heights = height * i
-    height_list.append(heights)
 
   # List of lists of levels
   for i in range(max_lvl + 2):
@@ -907,8 +917,8 @@ def create_grid_row(obj_list):
                     + width_list[l+1+row])/2)    \
                     - (lista[l].width/2)
 
-      lista[l].y0 = ((height_list[i]           \
-                    + height_list[i+1])/2)     \
+      lista[l].y0 = ((heights_new[i]           \
+                    + heights_new[i+1])/2)     \
                     - (lista[l].height/2)
 
       lista[l].x1 = lista[l].x0 + lista[l].width
@@ -940,6 +950,7 @@ def create_grid_column(obj_list):
   height_list  = []
   lvl_lista    = []
   updated_list = []
+  lvl_heights = [0]
 
   # List with widths (columns)
   for i in range(len(obj_list) + 2):
@@ -947,9 +958,12 @@ def create_grid_column(obj_list):
     width_list.append(widths)
 
   # List with heights (rows)
-  for i in range(len(obj_list) + 2):
-    heights = height * i
-    height_list.append(heights)
+  for i in range(0,max_lvl+1):
+    list_of_level = lvl_list(obj_list, i)
+    level_height  = max_height(list_of_level) + 2
+    lvl_heights.append(level_height)
+  lvl_heights.append(lvl_heights[-1])
+  heights_new = [sum(lvl_heights[:i+1]) for i in range(len(lvl_heights))]
 
   # List of lists of levels
   for i in range(max_lvl + 2):
@@ -959,7 +973,6 @@ def create_grid_column(obj_list):
   # Assign values to coordinates
   for i in range(len(lvl_lista)):
     lista = lvl_lista[i]
-
     # Choose alignment
     if align_boxes == "Diagonal":
       column = i
@@ -972,8 +985,75 @@ def create_grid_column(obj_list):
                     + width_list[i+1])/2)    \
                     - (lista[l].width/2)
 
-      lista[l].y0 = ((height_list[l+column]           \
-                    + height_list[l+1+column])/2)     \
+      lista[l].y0 = ((heights_new[l+column]           \
+                    + heights_new[l+1+column])/2)     \
+                    - (lista[l].height/2)
+
+      lista[l].x1 = lista[l].x0 + lista[l].width
+      lista[l].y1 = lista[l].y0 + lista[l].height
+
+      lista[l].row    = i+l
+      lista[l].column = l+column
+
+      updated_list.append(lista[l])
+
+################################################################################
+#  Iterate again after rows and columns are updated
+################################################################################
+  width_list   = []
+  lvl_lista    = []
+  updated_list2 = []
+  lvl_heights = [0]
+  columns = []
+  rows = []
+
+  max_column = []
+  for i in range(len(obj_list)):
+    lvl = obj_list[i].column
+    columns.append(lvl)
+  max_column = max(columns)
+
+  max_row = []
+  for i in range(len(obj_list)):
+    lvl = obj_list[i].row
+    rows.append(lvl)
+  max_row = max(rows)
+
+  # List with widths (columns)
+  for i in range(max_column + 2):
+    widths = width * i
+    width_list.append(widths)
+
+  # List with heights (rows)
+  for i in range(0,max_row+1):
+    list_of_level = row_list(obj_list, i)
+    level_height  = max_height(list_of_level) + 2
+    lvl_heights.append(level_height)
+  lvl_heights.append(lvl_heights[-1])
+  heights_new = [sum(lvl_heights[:i+1]) for i in range(len(lvl_heights))]
+
+  # List of lists of levels
+  for i in range(max_row + 2):
+    lvl = lvl_list(obj_list,i)
+    lvl_lista.append(lvl)
+
+  # Assign values to coordinates
+  for i in range(len(lvl_lista)):
+    lista = lvl_lista[i]
+    # Choose alignment
+    if align_boxes == "Diagonal":
+      column = i
+    elif align_boxes == "Left":
+      column = 0
+
+    for l in range(len(lvl_lista[i])):
+
+      lista[l].x0 = ((width_list[i]          \
+                    + width_list[i+1])/2)    \
+                    - (lista[l].width/2)
+
+      lista[l].y0 = ((heights_new[l+column]           \
+                    + heights_new[l+1+column])/2)     \
                     - (lista[l].height/2)
 
       lista[l].x1 = lista[l].x0 + lista[l].width
@@ -982,9 +1062,10 @@ def create_grid_column(obj_list):
       lista[l].row    = i
       lista[l].column = l+column
 
-      updated_list.append(lista[l])
+      updated_list2.append(lista[l])
+      xfig.list_of_heights_from_attribute = heights_new
 
-  return updated_list
+  return updated_list2
 
 #===============================================================================
 # Function for updating only 1 box by row and column (change placement in grid)
@@ -1019,7 +1100,8 @@ def update_box_pos(obj_list, name, row, column):
 
   # Assign new coordinates
   for i in range(len(obj_list)):
-    if name == obj_list[i].name:
+    object_name = obj_list[i].name.replace(" ", "")
+    if name == object_name:
       obj_list[i].x0 = ((width_list[column]         \
                       +   width_list[column+1])/2)  \
                       -  (obj_list[i].width/2)

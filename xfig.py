@@ -191,12 +191,15 @@ def plot_all(file, obj_list):
   plot_all_spline(file, obj_list)
 
   # Plot grid
-  if attribute.object_hierarchy == "Row-Based":
-    plot_grid_row_based(file, obj_list)
-  elif attribute.object_hierarchy == "Column-Based":
-    plot_grid_column_based(file, obj_list)
-  elif attribute.object_hierarchy != "Column-Based" and "Row-Based":
-    print("WRONG OBJECT HIERARCHY! ")
+  if attribute.grid == "Default":
+    plot_grid_default(file,obj_list)
+  else:
+    if attribute.object_hierarchy == "Row-Based":
+      plot_grid_row_based(file, obj_list)
+    elif attribute.object_hierarchy == "Column-Based":
+      plot_grid_column_based(file, obj_list)
+    elif attribute.object_hierarchy != "Column-Based" and "Row-Based":
+      print("WRONG OBJECT HIERARCHY! ")
 
 #===============================================================================
 # Plot module, subroutine or function (choose which one to plot)
@@ -1181,6 +1184,7 @@ def plot_grid_row_based(xf, obj_list):
   width_list    = []
   height_list   = []
   list_lvl      = []
+  lvl_heights   = [0]
 
   # List with widths (columns)
   for i in range(len(obj_list)):
@@ -1193,6 +1197,14 @@ def plot_grid_row_based(xf, obj_list):
     height_list.append(heights)
 
 
+  for i in range(0,max_lvl+1):
+    list_of_level = attribute.lvl_list(obj_list, i)
+    level_height  = attribute.max_height(list_of_level) + 2
+    lvl_heights.append(level_height)
+
+  heights_new = [sum(lvl_heights[:i+1]) for i in range(len(lvl_heights))]
+
+
   for i in range(0,len(obj_list)):
     for l in range(0,max_lvl+1):
        if obj_list[i].level == l:
@@ -1200,13 +1212,13 @@ def plot_grid_row_based(xf, obj_list):
   max_element = max(list_lvl,key=list_lvl.count)
   occurances_of_max = list_lvl.count(max_element)
 
-  width_list  = width_list[:(occurances_of_max + 2)]
+  width_list  = width_list[:(occurances_of_max + 1)]
   height_list = height_list[:max_lvl + 2]
 
   min_v = 0
   max_v = max(width_list)
   min_h = 0
-  max_h = max(height_list)
+  max_h = max(heights_new)
 
  # Plot grid
 
@@ -1216,16 +1228,16 @@ def plot_grid_row_based(xf, obj_list):
 
   # Plot horizontal lines
   for i in range(0,len(height_list)):
-    plot_line(xf, min_v, height_list[i], max_v, height_list[i])
+    plot_line(xf, min_v, heights_new[i], max_v, heights_new[i])
 
   # Plot coordinates of each spot in grid
   for column in range(0,len(width_list)-1):
     for row in range(0,len(height_list)-1):
-      plot_text_right(xf, width_list[column]+width-0.5, height_list[row]+1,  \
+      plot_text_right(xf, width_list[column]+width-0.5, heights_new[row]+1,  \
                       "({}, {})".format(row, column))
 
   # Plot legend
-  plot_legend(xf, obj_list, width_list[0]+1, height_list[0]+1)
+  plot_legend(xf, obj_list, width_list[0]+1, heights_new[-2]+1)
 
 #===============================================================================
 # Function to plot grid with coordinates for COLUMN BASED
@@ -1247,6 +1259,7 @@ def plot_grid_column_based(xf, obj_list):
   width_list    = []
   height_list   = []
   list_lvl      = []
+  lvl_heights = [0]
 
   # List with widths (columns)
   for i in range(max_lvl + 15):
@@ -1254,9 +1267,14 @@ def plot_grid_column_based(xf, obj_list):
     width_list.append(widths)
 
   # List with heights (rows)
-  for i in range(len(obj_list)):
-    heights = height * i
-    height_list.append(heights)
+  for i in range(0,max_lvl+1):
+    list_of_level = attribute.lvl_list(obj_list, i)
+    level_height  = attribute.max_height(list_of_level) + 2
+    lvl_heights.append(level_height)
+
+  lvl_heights.append(lvl_heights[-1])
+  heights_new = [sum(lvl_heights[:i+1]) for i in range(len(lvl_heights))]
+
 
   for i in range(0,len(obj_list)):
     for l in range(0,max_lvl+1):
@@ -1267,6 +1285,96 @@ def plot_grid_column_based(xf, obj_list):
 
   width_list  = width_list[:max_lvl + 2]
   height_list = height_list[:(occurances_of_max + 2)]
+
+  heights_list = list_of_heights_from_attribute[:-1]
+  min_v = 0
+  max_v = max(width_list)
+  min_h = 0
+  max_h = max(heights_list)
+
+ # Plot grid
+
+  # Plot vertical lines
+  for i in range(0,len(width_list)):
+    plot_line(xf, width_list[i], min_h, width_list[i], max_h)
+
+  # Plot horizontal lines
+  for i in range(0,len(heights_list)):
+    plot_line(xf, min_v, heights_list[i], max_v, heights_list[i])
+
+  # Plot coordinates of each spot in grid
+  for column in range(0,len(width_list)-1):
+    for row in range(0,len(heights_list)-1):
+      plot_text_right(xf, width_list[column]+width-0.5, heights_list[row]+1,\
+                      "({}, {})".format(row, column))
+
+  # Plot legend
+  plot_legend(xf, obj_list, width_list[-2]+1, heights_list[0]+1)
+
+#===============================================================================
+# Function to plot grid with coordinates
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - obj_list:     list of all objects
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting everything (the entire graph)
+#-------------------------------------------------------------------------------
+def plot_grid_default(xf, obj_list):
+
+  width   = attribute.max_width(obj_list)  + 2      # height of each grid spot
+  height  = attribute.max_height(obj_list) + 2      # width of each grid spot
+  max_lvl = attribute.find_max_lvl(obj_list)        # max level
+
+  width_list    = []
+  height_list   = []
+  list_lvl      = []
+
+  # List with widths (columns)
+  for i in range(len(obj_list)):
+    widths = width * i
+    width_list.append(widths)
+
+  # List with heights (rows)
+  for i in range(max_lvl + 15):
+    heights = height * i
+    height_list.append(heights)
+
+  for i in range(0,len(obj_list)):
+    for l in range(0,max_lvl+1):
+       if obj_list[i].level == l:
+          list_lvl.append(obj_list[i].level)
+  max_element = max(list_lvl,key=list_lvl.count)
+  occurances_of_max = list_lvl.count(max_element)
+  max_column = occurances_of_max + max_lvl + 2
+
+  # Functions for deciding how many rows to plot
+  x1_list = []
+  for i in range(0,len(obj_list)):
+    x1_list.append(obj_list[i].x1)
+  max_x1 =  max(x1_list)
+  width_list_sort = sorted(x for x in width_list if x > max_x1)
+  number =  [x for x in width_list_sort  if x == width_list_sort[0]][0]
+  for i in range(0,len(width_list)):
+    if number == width_list[i]:
+      max_column = i
+
+  # Functions for deciding how many columns to plot
+  y1_list = []
+  max_row = max_lvl + 2
+  for i in range(0,len(obj_list)):
+    y1_list.append(obj_list[i].y1)
+  max_y1 =  max(y1_list)
+  height_list_sort = sorted(x for x in height_list if x > max_y1)
+  number =  [x for x in height_list_sort  if x == height_list_sort[0]][0]
+  for i in range(0,len(width_list)):
+    if number == height_list[i]:
+      max_row = i
+
+  width_list  = width_list[:(max_column+1)]
+  height_list = height_list[:max_row + 1]
 
   min_v = 0
   max_v = max(width_list)
@@ -1289,8 +1397,6 @@ def plot_grid_column_based(xf, obj_list):
       plot_text_right(xf, width_list[column]+width-0.5, height_list[row]+1,  \
                       "({}, {})".format(row, column))
 
-  # Plot legend
-  plot_legend(xf, obj_list, width_list[0]+1, height_list[0]+1)
 
 #===============================================================================
 # Function to plot module name box (module header box)

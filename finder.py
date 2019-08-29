@@ -101,6 +101,11 @@ def get_sub(file_name_with_path):
     if sub_name.endswith("&"):
       sub_name = sub_name + ")"
 
+    if "recursive" in sub_name:
+      sub_name = re.sub("recursive","",sub_name)
+      sub_name = sub_name.lstrip()
+      sub_name = sub_name.rstrip()
+
   elif len(subroutine) == 0:
     sub_name = 0
 
@@ -155,6 +160,9 @@ def get_fun(file_name_with_path):
 
     if "function" in fun_name:
       fun_name = fun_name.split("function",1)[1]
+      fun_name = fun_name.lstrip()
+      fun_name = fun_name.rstrip()
+
     else:
       fun_name = 0
 
