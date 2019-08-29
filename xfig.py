@@ -1002,6 +1002,53 @@ def plot_spline(file, object1, object2, depth):
   file.write("\n 0.000 1.000 1.000 1.000 1.000 0.000\n")
 
 #===============================================================================
+# Function to plot spline (with 2 coordinates)
+#
+# Parameters:
+#   - file:       Xfig file's handle
+#   - obj_list:
+#   - x0:         first coordinate on x axis
+#   - y0:         first coordinate on y axis
+
+# Returns:
+#   - nothing
+# Used by:
+#   - function for plotting spline connections for legend
+#-------------------------------------------------------------------------------
+def plot_spline_legend(file, obj_list, x0, y0):
+
+  x1 = x0 + 7
+
+  file.write("3 0 0 1 0 7 ")
+  file.write("%5d" % (50))
+  file.write(" -1 -1 0.000 0 1 1 2")                   # 6 --> number of points
+
+  file.write("\n 1 1 2.00 120.00 120.00")              # arrow settings
+  file.write("\n 6 1 2.00 120.00 120.00")              # arrow settings
+  file.write("\n%9d %9d" % ( (x0) *XFS,  \
+                             (y0)*XFS))
+  file.write("%9d %9d" %   ( (x1) *XFS,  \
+                             (y0)*XFS))
+  file.write("\n 0.000 0.000\n")
+
+  ###############################################################################
+def plot_dashed_spline_legend(file, obj_list, x0, y0):
+
+  x1 = x0 + 7
+
+  file.write("3 0 1 1 0 7 ")
+  file.write("%5d" % (50))
+  file.write(" -1 -1 4.000 0 1 1 2")                   # 6 --> number of points
+
+  file.write("\n 1 0 2.00 120.00 120.00")              # arrow settings
+  file.write("\n 6 0 2.00 120.00 120.00")              # arrow settings
+  file.write("\n%9d %9d" % ( (x0) *XFS,  \
+                             (y0)*XFS))
+  file.write("%9d %9d" %   ( (x1) *XFS,  \
+                             (y0)*XFS))
+  file.write("\n 0.000 0.000\n")
+
+#===============================================================================
 # Function to plot spline (with 6 coordinates)
 #
 # Parameters:
@@ -1785,11 +1832,20 @@ def plot_meth_name(file, x0, y0,      \
 # Function to plot legend
 def plot_legend(file, obj_list, x0, y0):
 
+  text_width   = 5
+  text_height  = 1
+
   object =  attribute.Program("Legend",        \
-                              "Subroutine",    \
+                              "              Subroutine",    \
                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-  plot_mod_name(file,  x0,  y0,                 "   Module   ",     object)
-  plot_sub_name(file,  x0,  y0+const.UBH,       "   Subroutine   ", object)
-  plot_fun_name(file,  x0,  y0+(const.UBH)*2,   "   Function   ",   object)
-  plot_prog_name(file, x0,  y0+(const.UBH)*3,   "   Program   ",    object)
+  plot_mod_name(file,  x0,  y0,               "Module",    object)
+  plot_sub_name(file,  x0,  y0+const.UBH,     "Subroutine", object)
+  plot_fun_name(file,  x0,  y0+(const.UBH)*2, "Function",   object)
+  plot_prog_name(file, x0,  y0+(const.UBH)*3, "Program",    object)
+  plot_spline_legend(file, obj_list, x0, y0+4)
+  plot_dashed_spline_legend(file, obj_list, x0, y0+5)
+  plot_text_center(file, x0+1, y0+3.2, text_width, \
+                   text_height, "Use statements")
+  plot_text_center(file, x0+1, y0+4.2, text_width, \
+                   text_height, "Call statements")
