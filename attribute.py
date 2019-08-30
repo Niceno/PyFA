@@ -817,13 +817,25 @@ def lvl_list(obj_list,lvl):
     list[i].x0 = x_pos(list)[i]
   return list
 
+#===============================================================================
+# Function for creating lists of objects at specific row
+#  and updating x coordinates
+#
+# Parameters:
+#   - obj_list:     list of objects
+#   - row:          row
+# Returns:
+#   - list:         list of objects with updated x0 coordinate
+# Used by:
+#   - Function for creating lists of classes at specific row
+#-------------------------------------------------------------------------------
+
 def row_list(obj_list,row):
   list = []
   for i in range(len(obj_list)):
     if obj_list[i].row == row:
       list.append(obj_list[i])
   return list
-
 
 #===============================================================================
 # Function for finding maximum width of all objects
@@ -1073,7 +1085,7 @@ def create_grid_column(obj_list):
 # Parameters:
 #   - obj_list:     list of objects
 # Returns:
-#   - nothing
+#   - list of objects
 # Used by:
 #   - finder.py - Function for searching coordinates in file and updating them
 #-------------------------------------------------------------------------------
