@@ -32,18 +32,14 @@ attribute.grid                    = "None"
 src_list                          = "None"
 grid                              = "Grid-Off"
 
-or_specified = "None"
 oh_specified = "None"
 s_specified  = "None"
 g_specified  = "None"
-a_specified  = "None"
 
 #-------------------------------------------
 # Browse through command line arguments
 #-------------------------------------------
 for j in range(1,len(sys.argv),2):
-
-  print("At argument:", sys.argv[j])
 
   # Check if help was specified
   if str(sys.argv[j]) == "-h" or str(sys.argv[j]) == "--help":
@@ -53,27 +49,26 @@ for j in range(1,len(sys.argv),2):
     print("\nValid options are:\n")
     print("  -s,  --sources [FILE]                 \
            Choose source list with paths for plotting")
-    print("\n  -a,  --align [ACTION]                 \
+    print("\n  -a,  --align [SWITCH]                 \
            Plot by specified object alignment: ")
     print("                                        \
-            'left'     for left alignment")
+            'straight' for straight alignment")
     print("                                        \
             'diagonal' for diagonal alignment")
-    print("  -oh, --object_hierarchy [ACTION]      \
+    print("  -oh, --object_hierarchy [SWITCH]      \
            Plot by specified object hierarchy: ")
     print("                                        \
             'row'    for row based hierarchy")
     print("                                        \
             'column' for column based hierarchy")
-    print("  -or, --object_representation [ACTION] \
+    print("  -or, --object_representation [SWITCH] \
            Plot by specified object hierarchy: ")
     print("                                        \
             'normal'  for normal representation")
     print("                                        \
             'compact' for compact representation")
-    print("\nNote: Specifying -g neglects options -a and -oh")
-    print("\nExample1: simple.py -s source.list -a left")
-    print("Example2: simple.py -a left\n")
+    print("\nExample1: simple.py -s source.list -a straight")
+    print("Example2: simple.py -a straight\n")
 
     exit()
 
@@ -83,14 +78,12 @@ for j in range(1,len(sys.argv),2):
     if str(sys.argv[j]) == "-a" or \
        str(sys.argv[j]) == "--align":
       if str(sys.argv[j+1]) == "diagonal":
-        a_specified = "Diagonal"
         attribute.align_boxes  = "Diagonal"
-      elif str(sys.argv[j+1]) == "left":
-        a_specified = "Left"
+      elif str(sys.argv[j+1]) == "straight":
         attribute.align_boxes  = "Left"
       else:
         print("Incorrect switch:", sys.argv[j+1], "after", sys.argv[j])
-        print("Allowed switches are 'left' or 'diagonal'")
+        print("Allowed switches are 'straight' or 'diagonal'")
         print("Exiting the program")
         sys.exit()
 
@@ -113,10 +106,8 @@ for j in range(1,len(sys.argv),2):
     elif str(sys.argv[j]) == "-or" or                 \
          str(sys.argv[j]) == "--object_representation":
       if str(sys.argv[j+1]) == "normal":
-        or_specified = "Normal"
         attribute.object_representation  = "Normal"
       elif str(sys.argv[j+1]) == "compact":
-        or_specified = "Compresssed"
         attribute.object_representation  = "Compresssed"
       else:
         print("Incorrect switch:", sys.argv[j+1], "after", sys.argv[j])
@@ -141,7 +132,7 @@ for j in range(1,len(sys.argv),2):
       print("Exiting the program")
       sys.exit()
 
-# Tu, s obzirom na vrijednosti: a_specified, g_specified, or_specified ...
+# Tu, s obzirom na vrijednosti: g_specified, oh_specified ...
 
 if s_specified != "None":
 
@@ -188,9 +179,9 @@ if src_list == "None" and grid == "Grid-Off":
 # Obviously the main function for plotting
 #-------------------------------------------------------------------------------
 
-# Save names and coordinates of all objects into .txt file
-if g_specified == "None":
-  attribute.write_names(obj_list, const.OBJ_FILE_NAME)
+# Save names and coordinates of all objects into .txt file (hidden option)
+# if g_specified == "None":
+#   attribute.write_names(obj_list, const.OBJ_FILE_NAME)
 
 # Open Xfig file
 xf = open(const.FIG_FILE_NAME, "w")

@@ -473,9 +473,9 @@ def plot_function(file, x0, y0,       \
 #   - function for plotting module/subroutine/function/program
 #-------------------------------------------------------------------------------
 def plot_program(file, x0, y0,         \
-                    program_name,      \
-                    use_list,          \
-                    object):
+                 program_name,         \
+                 use_list,             \
+                 object):
 
   # Plot a header text box
   plot_prog_name(file, x0, y0,         \
@@ -1259,7 +1259,14 @@ def plot_grid_row_based(xf, obj_list):
   max_element = max(list_lvl,key=list_lvl.count)
   occurances_of_max = list_lvl.count(max_element)
 
-  width_list  = width_list[:(occurances_of_max + 1)]
+  columns    = []
+  max_column = []
+  for i in range(len(obj_list)):
+    lvl = obj_list[i].column
+    columns.append(lvl)
+  max_column = max(columns)
+
+  width_list  = width_list[:(max_column + 2)]
   height_list = height_list[:max_lvl + 2]
 
   min_v = 0
@@ -1284,7 +1291,7 @@ def plot_grid_row_based(xf, obj_list):
                       "({}, {})".format(row, column))
 
   # Plot legend
-  plot_legend(xf, obj_list, width_list[0]+1, heights_new[-2]+1)
+  plot_legend(xf, obj_list, width_list[0]+1, heights_new[-1]+1)
 
 #===============================================================================
 # Function to plot grid with coordinates for COLUMN BASED
@@ -1306,7 +1313,7 @@ def plot_grid_column_based(xf, obj_list):
   width_list    = []
   height_list   = []
   list_lvl      = []
-  lvl_heights = [0]
+  lvl_heights   = [0]
 
   # List with widths (columns)
   for i in range(max_lvl + 15):
@@ -1356,7 +1363,7 @@ def plot_grid_column_based(xf, obj_list):
                       "({}, {})".format(row, column))
 
   # Plot legend
-  plot_legend(xf, obj_list, width_list[-2]+1, heights_list[0]+1)
+  plot_legend(xf, obj_list, width_list[-1]+1, heights_list[0]+1)
 
 #===============================================================================
 # Function to plot grid with coordinates
@@ -1835,7 +1842,7 @@ def plot_legend(file, obj_list, x0, y0):
   text_width   = 5
   text_height  = 1
 
-  object =  attribute.Program("Legend",        \
+  object =  attribute.Program("Legend",                      \
                               "              Subroutine",    \
                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
