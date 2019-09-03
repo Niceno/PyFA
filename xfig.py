@@ -114,7 +114,7 @@ def xfig_box_color(name):
 # Warning:
 #   - Uses ghost parameter 0.4 to convert width from characters to Xfig units
 #-------------------------------------------------------------------------------
-def choose_width(filename):
+def find_width(filename):
 
   var_list     = filename.var
   meth_list    = filename.meth
@@ -1468,7 +1468,7 @@ def plot_grid_default(xf, obj_list):
 #-------------------------------------------------------------------------------
 def plot_mod_name(file, x0, y0, text, object):
 
-  box_width = choose_width(object)
+  box_width = find_width(object)
 
   # Plot module framing box first
   plot_mod_frame(file, x0, y0, box_width, const.UBH)
@@ -1492,7 +1492,7 @@ def plot_mod_name(file, x0, y0, text, object):
 #-------------------------------------------------------------------------------
 def plot_sub_name(file, x0, y0, text, object):
 
-  box_width = choose_width(object)
+  box_width = find_width(object)
 
   # Plot module framing box first
   plot_sub_frame(file, x0, y0, box_width, const.UBH)
@@ -1516,7 +1516,7 @@ def plot_sub_name(file, x0, y0, text, object):
 #-------------------------------------------------------------------------------
 def plot_fun_name(file, x0, y0, text, object):
 
-  box_width = choose_width(object)
+  box_width = find_width(object)
 
   # Plot module framing box first
   plot_fun_frame(file, x0, y0, box_width, const.UBH)
@@ -1540,7 +1540,7 @@ def plot_fun_name(file, x0, y0, text, object):
 #-------------------------------------------------------------------------------
 def plot_prog_name(file, x0, y0, text, object):
 
-  box_width = choose_width(object)
+  box_width = find_width(object)
 
   # Plot module framing box first
   plot_prog_frame(file, x0, y0, box_width, const.UBH)
@@ -1565,7 +1565,7 @@ def plot_type_stat_text_left(file, x0, y0, object):
 
   type_stat      = object.type_stat
   type_stat_len  = check_if_type_stat(object)
-  box_width      = choose_width(object)
+  box_width      = find_width(object)
   y_pos          = 0.25 + (y0 + const.FONT_SIZE    \
                  + (const.UBH-const.FONT_SIZE)*0.5)
 
@@ -1592,7 +1592,7 @@ def plot_type_stat_text_left(file, x0, y0, object):
 def plot_fun_type_text_left(file, x0, y0, object):
 
   fun_type      = object.fun_type
-  box_width     = choose_width(object)
+  box_width     = find_width(object)
   type_stat_len = check_if_type_stat(object)
   y_pos         = type_stat_len + 0.25                                    \
                 + (y0 + const.FONT_SIZE + (const.UBH-const.FONT_SIZE)*0.5)
@@ -1621,7 +1621,7 @@ def plot_use_text_left(file, x0, y0, \
   use_list_num  = list(range(0,len(use_list)))
   fun_type_len  = check_if_function(object)
   type_stat_len = check_if_type_stat(object)
-  box_width     = choose_width(object)
+  box_width     = find_width(object)
   y_pos         = fun_type_len + type_stat_len + 0.25       \
                 + (y0 + const.FONT_SIZE + (const.UBH-const.FONT_SIZE)*0.5)
 
@@ -1649,7 +1649,7 @@ def plot_var_text_left(file, x0, y0, \
                        use_list,     \
                        object):
 
-  box_width     = choose_width(object)
+  box_width     = find_width(object)
   var_list_num  = list(range(0,len(var_list)))
   fun_type_len  = check_if_function(object)
   type_stat_len = check_if_type_stat(object)
@@ -1686,7 +1686,7 @@ def plot_meth_text_left(x0, y0, xf, \
   if object.var == 0:
     var_list = []
 
-  box_width     = choose_width(object)
+  box_width     = find_width(object)
   meth_list_num = list(range(0,len(meth_list)))
   fun_type_len  = check_if_function(object)
   type_stat_len = check_if_type_stat(object)
@@ -1716,7 +1716,7 @@ def plot_meth_text_left(x0, y0, xf, \
 def plot_type_stat(file, x0, y0,   \
                    object):
 
-  box_width = choose_width(object)
+  box_width = find_width(object)
 
   # Plot type statement framing box first
   plot_type_stat_frame(file, x0, y0, box_width, const.UBH, object)
@@ -1741,7 +1741,7 @@ def plot_type_stat(file, x0, y0,   \
 def plot_fun_type_name(file, x0, y0,   \
                        object):
 
-  box_width = choose_width(object)
+  box_width = find_width(object)
 
   # Plot function type framing box first
   plot_fun_type_frame(file, x0, y0, box_width, const.UBH, object)
@@ -1767,7 +1767,7 @@ def plot_use_name(file, x0, y0, \
                   use_list,     \
                   object):
 
-  box_width = choose_width(object)
+  box_width = find_width(object)
 
   # Plot use statements framing box first
   plot_use_frame(file, x0, y0, box_width, const.UBH, use_list, object)
@@ -1795,7 +1795,7 @@ def plot_var_name(file, x0, y0,       \
                   use_list,           \
                   object):
 
-  box_width = choose_width(object)
+  box_width = find_width(object)
 
   # Plot variable framing box first
   plot_var_frame(file, x0, y0, box_width, const.UBH, var_list, use_list, object)
@@ -1825,7 +1825,7 @@ def plot_meth_name(file, x0, y0,      \
                    use_list,          \
                    object):
 
-  box_width = choose_width(object)
+  box_width = find_width(object)
 
  # Plot methods framing box first
   plot_meth_frame(file, x0, y0, box_width, const.UBH,           \

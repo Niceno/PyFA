@@ -761,7 +761,7 @@ def update(obj_list):
   for i in range(len(obj_list)):
 
     obj_list[i].x0 = x_pos(obj_list)[i]                              # update x0
-    obj_list[i].x1 = xfig.choose_width(obj_list[i]) + obj_list[i].x0 # update x1
+    obj_list[i].x1 = xfig.find_width(obj_list[i]) + obj_list[i].x0 # update x1
     obj_list[i].y0 = (obj_list[i].level*2)+1                         # update y0
     obj_list[i].y1 = find_y1(obj_list[i])                            # update y1
 
@@ -785,7 +785,7 @@ def x_pos(obj_list):
   # Create list with all box widths
   box_widths = [0] + []                       # initialize box_widths list
   for i in range(len(obj_list)):
-    box = xfig.choose_width(obj_list[i])
+    box = xfig.find_width(obj_list[i])
     box_widths.append(box)                    # list of box widths of all boxes
 
   # Create new list for boxes to be parallel
