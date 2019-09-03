@@ -179,6 +179,10 @@ if src_list == "None" and grid == "Grid-Off":
   obj_list   = attribute.get_obj_list(file_paths)
   obj_list   = finder.get_new_calls(file_paths,obj_list)
 
+print("Number of objects", len(obj_list))
+
+xfig.find_coordinates(obj_list)
+
 #===============================================================================
 # Obviously the main function for plotting
 #-------------------------------------------------------------------------------
