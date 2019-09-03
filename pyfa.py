@@ -19,7 +19,7 @@ start = time.time()  # start measuring time
 
 # Set the current directory as the root
 root = os.getcwd() + "/"
-print("\nAnalyzing Fortan sources in: " + root)
+print("Analyzing Fortan sources in: " + root)
 
 # Initialize
 file_paths = []
@@ -172,6 +172,10 @@ if g_specified != "None":
 if src_list == "None" and grid == "Grid-Off":
   print("List of sources not specifed, browsing through all")
   file_paths = browse.source_paths(root)
+  if not file_paths:
+    print("No Fortran sources found!")
+    print("Exiting the program")
+    sys.exit()
   obj_list   = attribute.get_obj_list(file_paths)
   obj_list   = finder.get_new_calls(file_paths,obj_list)
 
