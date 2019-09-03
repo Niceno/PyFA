@@ -710,44 +710,6 @@ def prog_list_fun(file_paths):
   return program_list
 
 #===============================================================================
-# Function for calculating y1 coordinate
-#
-# Parameters:
-#   - object:    object for calculating y1
-# Returns:
-#   - y1:        second coordinate on y axis (lower corners)
-# Used by:
-#   - Function for updating object attributes
-#-------------------------------------------------------------------------------
-def find_y1(object):
-
-  UBH          = 0.75
-  use_list     = object.use
-  var_list     = object.var
-  meth_list    = object.meth
-  call_list    = object.call
-  type_list    = object.type_stat
-  len_fun_type = 0
-
-  if use_list == "None":
-    use_list = []
-  if var_list == 0:
-    var_list = []
-  if meth_list == 0:
-    meth_list = []
-  if type_list == 0:
-    type_list = []
-  if object.type == "Function":
-    fun_type = object.fun_type
-    if fun_type != 0:
-      len_fun_type = 1
-
-  y1 = object.y0 + UBH + len(var_list) + len(meth_list) + len(use_list)    \
-     + len(type_list) + len_fun_type
-
-  return y1
-
-#===============================================================================
 # Function for updating (importing) coordinates of objects
 #
 # Parameters:
@@ -761,9 +723,9 @@ def update(obj_list):
   for i in range(len(obj_list)):
 
     obj_list[i].x0 = x_pos(obj_list)[i]                              # update x0
-    obj_list[i].x1 = xfig.find_width(obj_list[i]) + obj_list[i].x0 # update x1
+    obj_list[i].x1 = xfig.find_width(obj_list[i]) + obj_list[i].x0   # update x1
     obj_list[i].y0 = (obj_list[i].level*2)+1                         # update y0
-    obj_list[i].y1 = find_y1(obj_list[i])                            # update y1
+    obj_list[i].y1 = xfig.find_height(obj_list[i]) + obj_list[i].y0  # update y1
 
     obj_list[i].height = obj_list[i].y1 - obj_list[i].y0
     obj_list[i].width  = obj_list[i].x1 - obj_list[i].x0
