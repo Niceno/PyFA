@@ -719,7 +719,7 @@ def prog_list_fun(file_paths):
 # Used by:
 #   - Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
-def update(obj_list):
+def update_coordinates_and_widths(obj_list):
   for i in range(len(obj_list)):
 
     obj_list[i].x0 = x_pos(obj_list)[i]                              # update x0
@@ -1255,7 +1255,7 @@ def get_obj_list(file_paths):
       obj_list[i].var  = 0
       obj_list[i].meth = 0
 
-  obj_list  = update(obj_list)
+  obj_list = update_coordinates_and_widths(obj_list)
 
   if object_hierarchy == "Column-Based":
     obj_list = create_grid_column(obj_list)
