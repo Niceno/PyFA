@@ -25,16 +25,14 @@ print("Analyzing Fortan sources in: " + root)
 file_paths = []
 obj_list   = []
 
-attribute.align_boxes             = "Diagonal"
-attribute.object_hierarchy        = "Row-Based"
-attribute.object_representation   = "Normal"
-attribute.grid                    = "None"
-src_list                          = "None"
-grid                              = "Grid-Off"
+attribute.align_boxes           = "Diagonal"
+attribute.object_hierarchy      = "Row-Based"
+attribute.object_representation = "Reduced"
+attribute.box_margins           = const.BOX_MARGINS
 
-oh_specified = "None"
-s_specified  = "None"
-g_specified  = "None"
+src_file    = "None"
+s_specified = "None"
+c_specified = "None"
 
 #-------------------------------------------
 # Browse through command line arguments
@@ -45,30 +43,38 @@ for j in range(1,len(sys.argv),2):
   if str(sys.argv[j]) == "-h" or str(sys.argv[j]) == "--help":
     print("\nProgram for extracting UML diagrams for modern Fortran programs")
     print("\nAuthor: Ivan Simcic")
-    print("\nUsage: simple.py [OPTIONS]")
+    print("\nUsage: pyfa.py [OPTIONS]")
     print("\nValid options are:\n")
-    print("  -s,  --sources [FILE]                 \
-           Choose source list with paths for plotting")
-    print("\n  -a,  --align [SWITCH]                 \
+    print("  -a, --align [SWITCH]                  \
            Plot by specified object alignment: ")
     print("                                        \
             'straight' for straight alignment")
     print("                                        \
             'diagonal' for diagonal alignment")
-    print("  -oh, --object_hierarchy [SWITCH]      \
+    print("  -c, --coordinates [FILE]              \
+           Read object coordinates from the file")
+    print("  -d, --detail_level [SWITCH]           \
+           Plot by specified object detail: ")
+    print("                                        \
+            'normal'  for normal representation")
+    print("                                        \
+            'reduced' for reduced representation")
+    print("                                        \
+            'minimal' for minimal representation")
+    print("  -h, --help                            \
+           Displays this help screen")
+    print("  -m, --margins [MARGIN]                \
+           Set margin in cm for individual boxes")
+    print("  -o, --object_hierarchy [SWITCH]       \
            Plot by specified object hierarchy: ")
     print("                                        \
             'row'    for row based hierarchy")
     print("                                        \
             'column' for column based hierarchy")
-    print("  -or, --object_representation [SWITCH] \
-           Plot by specified object hierarchy: ")
-    print("                                        \
-            'normal'  for normal representation")
-    print("                                        \
-            'compact' for compact representation")
-    print("\nExample1: simple.py -s source.list -a straight")
-    print("Example2: simple.py -a straight\n")
+    print("  -s, --sources [FILE]                  \
+           Choose source list with paths for plotting")
+    print("\nExample1: pyfa.py -s source.list -a straight")
+    print("Example2: pyfa.py -a straight\n")
 
     exit()
 
@@ -88,13 +94,11 @@ for j in range(1,len(sys.argv),2):
         sys.exit()
 
     # Check if object hierarchy was specified
-    elif str(sys.argv[j]) == "-oh" or            \
+    elif str(sys.argv[j]) == "-o" or            \
          str(sys.argv[j]) == "--object_hierarchy":
       if str(sys.argv[j+1]) == "column":
-        oh_specified = "Column-Based"
         attribute.object_hierarchy  = "Column-Based"
       elif str(sys.argv[j+1]) == "row":
-        oh_specified = "Row-Based"
         attribute.object_hierarchy  = "Row-Based"
       else:
         print("Incorrect switch:", sys.argv[j+1], "after", sys.argv[j])
@@ -103,47 +107,58 @@ for j in range(1,len(sys.argv),2):
         sys.exit()
 
     # Check if object representation was specified
-    elif str(sys.argv[j]) == "-or" or                 \
-         str(sys.argv[j]) == "--object_representation":
+    elif str(sys.argv[j]) == "-d" or                 \
+         str(sys.argv[j]) == "--detail_level":
       if str(sys.argv[j+1]) == "normal":
         attribute.object_representation  = "Normal"
-      elif str(sys.argv[j+1]) == "compact":
-        attribute.object_representation  = "Compresssed"
+      elif str(sys.argv[j+1]) == "reduced":
+        attribute.object_representation  = "Reduced"
+      elif str(sys.argv[j+1]) == "minimal":
+        attribute.object_representation  = "Minimal"
       else:
         print("Incorrect switch:", sys.argv[j+1], "after", sys.argv[j])
-        print("Allowed switches are: 'normal' or 'compact'")
+        print("Allowed switches are: 'normal', 'reduced' or 'minimal'")
         print("Exiting the program")
         sys.exit()
 
+    # Check if margins were specified
+    elif str(sys.argv[j]) == "-m" or    \
+         str(sys.argv[j]) == "--margins":
+
+      attribute.box_margins = float(sys.argv[j+1])
+      print("Box margins are set to:", str(sys.argv[j+1]))
+
+    # Check if list of sources were specified
     elif str(sys.argv[j]) == "-s" or    \
          str(sys.argv[j]) == "--sources":
 
       s_specified = sys.argv[j+1]
       print("List of files is specified in:", str(sys.argv[j+1]),"\n")
 
-    elif str(sys.argv[j]) == "-g" or    \
-         str(sys.argv[j]) == "--grid":
+    # Check if file with object coordinates was specified
+    elif str(sys.argv[j]) == "-c" or    \
+         str(sys.argv[j]) == "--coordinates":
 
-      g_specified = sys.argv[j+1]
-      print("\nObject coordinates are specified in:", str(sys.argv[j+1]),"\n")
+      c_specified = sys.argv[j+1]
+      print("Object coordinates are specified in:", str(sys.argv[j+1]))
 
     else:
       print("Unknow option:", sys.argv[j])
       print("Exiting the program")
       sys.exit()
 
-# Tu, s obzirom na vrijednosti: g_specified, oh_specified ...
+# Tu, s obzirom na vrijednosti: c_specified ...
 
 if s_specified != "None":
 
   # Get list of objects from source.list
-  try: src_list = open (s_specified, 'rt')
+  try: src_file = open (s_specified, 'rt')
   except:
     print("File", s_specified, "can't be found!  Exiting")
     sys.exit()
 
-  with src_list:
-    for line in src_list:
+  with src_file:
+    for line in src_file:
       if not line.startswith("#"):
         file_paths.append(line.rstrip("\n"))
 
@@ -156,20 +171,13 @@ if s_specified != "None":
   obj_list = finder.get_new_calls(file_paths,obj_list)
 
 
-if g_specified != "None":
+if c_specified != "None":
   file_paths = browse.source_paths(root)
   obj_list   = attribute.get_obj_list(file_paths)
   obj_list   = finder.get_new_calls(file_paths, obj_list)
-  attribute.grid = "Default"
+  obj_list   = finder.load_logical_coordinates(c_specified, obj_list)
 
-  if oh_specified == "Row-Based" or "None":
-    obj_list   = finder.find_coordinates(g_specified, obj_list)
-    grid       = "Grid-On"
-  if oh_specified == "Column-Based":
-    obj_list   = finder.find_coordinates(g_specified, obj_list)
-    grid       = "Grid-On"
-
-if src_list == "None" and grid == "Grid-Off":
+if src_file == "None" and c_specified == "None":
   print("List of sources not specifed, browsing through all")
   file_paths = browse.source_paths(root)
   if not file_paths:
@@ -188,7 +196,7 @@ xfig.find_coordinates(obj_list)
 #-------------------------------------------------------------------------------
 
 # Save names and coordinates of all objects into .txt file (hidden option)
-if g_specified == "None":
+if c_specified == "None":
   attribute.save_logical_coordinates(obj_list, const.OBJ_FILE_NAME)
 
 # Open Xfig file
