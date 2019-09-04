@@ -642,7 +642,7 @@ def get_new_calls(file_paths,obj_list):
 # Used by:
 #   - Main program (function for changing object placement in grid)
 #===============================================================================
-def find_coordinates(file_with_names, obj_list):
+def load_logical_coordinates(file_with_names, obj_list):
 
   list = obj_list
   try: myfile = open(file_with_names, 'rt')
@@ -657,8 +657,8 @@ def find_coordinates(file_with_names, obj_list):
         data = line.split(",",2)
         obj_list = attribute.update_box_pos(list,          \
                                             data[2],       \
-                                            int(data[0]),  \
-                                            int(data[1]))
+                                            int(data[1]),  \
+                                            int(data[0]))
   myfile.close()
 
   return obj_list
