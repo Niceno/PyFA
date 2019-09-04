@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 #===============================================================================
 # Import libraries
 #-------------------------------------------------------------------------------
@@ -11,11 +12,8 @@ import finder
 import browse
 import attribute
 
-start = time.time()  # start measuring time
-
-#===============================================================================
-# Lists
-#-------------------------------------------------------------------------------
+# Start measuring time
+start = time.time()
 
 # Set the current directory as the root
 root = os.getcwd() + "/"
@@ -34,9 +32,11 @@ src_file    = "None"
 s_specified = "None"
 c_specified = "None"
 
-#-------------------------------------------
+#---------------------------------------
+#
 # Browse through command line arguments
-#-------------------------------------------
+#
+#---------------------------------------
 for j in range(1,len(sys.argv),2):
 
   # Check if help was specified
@@ -147,9 +147,24 @@ for j in range(1,len(sys.argv),2):
       print("Exiting the program")
       sys.exit()
 
-# Tu, s obzirom na vrijednosti: c_specified ...
+#----------------
+#
+# Main algorithm
+#
+#----------------
 
-if s_specified != "None":
+#---------------------------------------------------------------
+# List of sources was not specified, browse the whole directory
+#---------------------------------------------------------------
+if s_specified == "None":
+
+  print("List of sources not specifed, browsing through all")
+  file_paths = browse.source_paths(root)
+
+#---------------------------------------------
+# List of sources was specified, read from it
+#---------------------------------------------
+else:
 
   # Get list of objects from source.list
   try: src_file = open (s_specified, 'rt')
@@ -167,37 +182,38 @@ if s_specified != "None":
   for i in range(0,len(file_paths)):
     file_paths[i] = root + file_paths[i]
 
-  obj_list = attribute.get_obj_list(file_paths)
-  obj_list = finder.get_new_calls(file_paths,obj_list)
+#--------------------------------------------------------------------
+# For all cases, take object list from file paths and work out calls
+#--------------------------------------------------------------------
+obj_list = attribute.get_obj_list(file_paths)
+obj_list = finder.get_new_calls(file_paths, obj_list)
 
-
+#-------------------------------------------------
+# If logical coordinates specified, load them now
+# (These should over-write those specified above)
+#-------------------------------------------------
 if c_specified != "None":
-  file_paths = browse.source_paths(root)
-  obj_list   = attribute.get_obj_list(file_paths)
-  obj_list   = finder.get_new_calls(file_paths, obj_list)
-  obj_list   = finder.load_logical_coordinates(c_specified, obj_list)
+  obj_list = finder.load_logical_coordinates(c_specified, obj_list)
 
 if src_file == "None" and c_specified == "None":
-  print("List of sources not specifed, browsing through all")
   file_paths = browse.source_paths(root)
   if not file_paths:
     print("No Fortran sources found!")
     print("Exiting the program")
     sys.exit()
-  obj_list   = attribute.get_obj_list(file_paths)
-  obj_list   = finder.get_new_calls(file_paths,obj_list)
 
-print("Number of objects", len(obj_list))
-
-xfig.find_coordinates(obj_list)
-
-#===============================================================================
-# Obviously the main function for plotting
-#-------------------------------------------------------------------------------
-
-# Save names and coordinates of all objects into .txt file (hidden option)
+# Save names and coordinates of all objects into file
 if c_specified == "None":
   attribute.save_logical_coordinates(obj_list, const.OBJ_FILE_NAME)
+
+#------------------------------------------
+#
+# Obviously the main function for plotting
+#
+#------------------------------------------
+
+# Find object coordinates in Xfig units
+xfig.find_coordinates(obj_list)
 
 # Open Xfig file
 xf = open(const.FIG_FILE_NAME, "w")
