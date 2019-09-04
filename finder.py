@@ -680,4 +680,5 @@ def clean_whitespaces(list_item):
         list_item[index] = clean_whitespaces(list_item[index])
       if not isinstance(list_item[index], (int, tuple, float, list)):
         list_item[index] = list_item[index].strip()
+
   return list_item
