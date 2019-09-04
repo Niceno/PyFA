@@ -188,8 +188,8 @@ xfig.find_coordinates(obj_list)
 #-------------------------------------------------------------------------------
 
 # Save names and coordinates of all objects into .txt file (hidden option)
-# if g_specified == "None":
-#   attribute.write_names(obj_list, const.OBJ_FILE_NAME)
+if g_specified == "None":
+  attribute.write_names(obj_list, const.OBJ_FILE_NAME)
 
 # Open Xfig file
 xf = open(const.FIG_FILE_NAME, "w")
