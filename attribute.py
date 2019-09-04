@@ -842,7 +842,7 @@ def max_height(obj_list):
 # Used by:
 #   - Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
-def create_grid_row(obj_list):
+def place_objects_row(obj_list):
 
   max_lvl = find_max_lvl(obj_list)               # max level
 
@@ -883,7 +883,7 @@ def create_grid_row(obj_list):
 # Used by:
 #   - Function for creating complete and updated file list
 #===============================================================================
-def create_grid_column(obj_list):
+def place_objects_column(obj_list):
 
   max_lvl = find_max_lvl(obj_list)               # max level
 
@@ -925,39 +925,10 @@ def create_grid_column(obj_list):
 #-------------------------------------------------------------------------------
 def update_box_pos(obj_list, name, row, column):
 
-  width   = max_width(obj_list)  + 2             # height of each grid spot
-  height  = max_height(obj_list) + 2             # width of each grid spot
-  max_lvl = find_max_lvl(obj_list)               # max level
-
-  width_list   = []
-  height_list  = []
-  lvl_lista    = []
-  updated_list = []
-
-  # List with widths (columns)
-  for i in range(len(obj_list)):
-    widths = width * i
-    width_list.append(widths)
-
-  # List with heights (rows)
-  for i in range(len(obj_list)):
-    heights = height * i
-    height_list.append(heights)
-
   # Assign new coordinates
   for i in range(len(obj_list)):
     object_name = obj_list[i].name.replace(" ", "")
     if name == object_name:
-      obj_list[i].x0 = ((width_list[column]           \
-                      +   width_list[column+1])*0.5)  \
-                      -  (obj_list[i].width*0.5)
-
-      obj_list[i].y0 = ((height_list[row]             \
-                      +   height_list[row+1])*0.5)    \
-                      -  (obj_list[i].height*0.5)
-
-      obj_list[i].x1     = obj_list[i].x0 + obj_list[i].width
-      obj_list[i].y1     = obj_list[i].y0 + obj_list[i].height
       obj_list[i].row    = row
       obj_list[i].column = column
 
@@ -1061,7 +1032,11 @@ def get_obj_list(file_paths):
 
   obj_list  = remove_unnecessary_subs(obj_list)
 
-  if object_representation == "Compresssed":
+  if object_representation == "Reduced":
+    for i in range(0,len(obj_list)):
+      obj_list[i].var = 0
+
+  if object_representation == "Minimal":
     for i in range(0,len(obj_list)):
       obj_list[i].var  = 0
       obj_list[i].meth = 0
@@ -1069,9 +1044,9 @@ def get_obj_list(file_paths):
   obj_list = update_dimensions(obj_list)
 
   if object_hierarchy == "Column-Based":
-    obj_list = create_grid_column(obj_list)
+    obj_list = place_objects_column(obj_list)
   elif object_hierarchy == "Row-Based":
-    obj_list = create_grid_row(obj_list)
+    obj_list = place_objects_row(obj_list)
 
   return obj_list
 
