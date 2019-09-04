@@ -45,34 +45,34 @@ for j in range(1,len(sys.argv),2):
     print("\nAuthor: Ivan Simcic")
     print("\nUsage: pyfa.py [OPTIONS]")
     print("\nValid options are:\n")
-    print("  -a, --align [SWITCH]                  \
-           Plot by specified object alignment: ")
-    print("                                        \
-            'straight' for straight alignment")
-    print("                                        \
-            'diagonal' for diagonal alignment")
-    print("  -c, --coordinates [FILE]              \
-           Read object coordinates from the file")
-    print("  -d, --detail_level [SWITCH]           \
-           Plot by specified object detail: ")
-    print("                                        \
-            'normal'  for normal representation")
-    print("                                        \
-            'reduced' for reduced representation")
-    print("                                        \
-            'minimal' for minimal representation")
-    print("  -h, --help                            \
-           Displays this help screen")
-    print("  -m, --margins [MARGIN]                \
-           Set margin in cm for individual boxes")
-    print("  -o, --object_hierarchy [SWITCH]       \
-           Plot by specified object hierarchy: ")
-    print("                                        \
-            'row'    for row based hierarchy")
-    print("                                        \
-            'column' for column based hierarchy")
-    print("  -s, --sources [FILE]                  \
-           Choose source list with paths for plotting")
+    print("  -a, --align [SWITCH]            \
+    Plot by specified object alignment: ")
+    print("                                  \
+     'straight' for straight alignment")
+    print("                                  \
+     'diagonal' for diagonal alignment")
+    print("  -c, --coordinates [FILE]        \
+    Read object coordinates from the file")
+    print("  -d, --detail_level [SWITCH]     \
+    Plot by specified object detail: ")
+    print("                                  \
+     'normal'  for normal representation")
+    print("                                  \
+     'reduced' for reduced representation")
+    print("                                  \
+     'minimal' for minimal representation")
+    print("  -h, --help                      \
+    Displays this help screen")
+    print("  -m, --margins [MARGIN]          \
+    Set margin in cm for individual boxes")
+    print("  -o, --object_hierarchy [SWITCH] \
+    Plot by specified object hierarchy: ")
+    print("                                  \
+     'row'    for row based hierarchy")
+    print("                                  \
+     'column' for column based hierarchy")
+    print("  -s, --sources [FILE]            \
+    Choose source list with paths for plotting")
     print("\nExample1: pyfa.py -s source.list -a straight")
     print("Example2: pyfa.py -a straight\n")
 
@@ -133,7 +133,7 @@ for j in range(1,len(sys.argv),2):
          str(sys.argv[j]) == "--sources":
 
       s_specified = sys.argv[j+1]
-      print("List of files is specified in:", str(sys.argv[j+1]),"\n")
+      print("List of files is specified in:", str(sys.argv[j+1]))
 
     # Check if file with object coordinates was specified
     elif str(sys.argv[j]) == "-c" or    \
