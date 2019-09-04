@@ -1716,8 +1716,10 @@ def find_coordinates(obj_list):
   for o in range(len(obj_list)):
     row = obj_list[o].row
     col = obj_list[o].column
-    widths[col]  = max(widths [col], find_width (obj_list[o])+const.BOX_MARGIN)
-    heights[row] = max(heights[row], find_height(obj_list[o])+const.BOX_MARGIN)
+    widths[col]  = max(widths [col], find_width (obj_list[o])  \
+                 + attribute.box_margins)
+    heights[row] = max(heights[row], find_height(obj_list[o])  \
+                 + attribute.box_margins)
 
   for o in range(len(obj_list)):
     row = obj_list[o].row
