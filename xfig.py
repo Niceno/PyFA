@@ -1654,11 +1654,11 @@ def plot_meth_name(file, x0, y0,      \
 
   box_width = find_width(object)
 
- # Plot methods framing box first
+  # Plot methods framing box first
   plot_meth_frame(file, x0, y0, box_width, const_UBH,           \
                   var_list, meth_list, use_list, object)
 
- # Plot text
+  # Plot text
   plot_meth_text_left(x0, y0, file, var_list, meth_list, use_list, object)
 
 
