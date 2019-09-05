@@ -1206,7 +1206,10 @@ def plot_all_spline(file, obj_list):
       used = used.strip("use ")
       for m in range(len(mod_objects)):
         if used == mod_objects[m].name:
-          plot_spline(file, mod_objects[m],use_objects[i], depth_list_use[m])
+          plot_spline(file,               \
+                      mod_objects[m],     \
+                      use_objects[i],     \
+                      depth_list_use[m])
 
   # Plotting connections for call statements
   for i in range(len(call_objects)):
@@ -1215,8 +1218,10 @@ def plot_all_spline(file, obj_list):
       called = call[k]
       for m in range(len(obj_list)):
         if called in obj_list[m].name:
-          plot_dashed_spline(file, call_objects[i],            \
-                             obj_list[m], depth_list_call[i])
+          plot_dashed_spline(file,               \
+                             call_objects[i],    \
+                             obj_list[m],        \
+                             depth_list_call[i])
 
 #===============================================================================
 # Function to plot line
