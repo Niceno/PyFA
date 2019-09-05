@@ -193,7 +193,7 @@ obj_list = finder.get_new_calls(file_paths, obj_list)
 # (These should over-write those specified above)
 #-------------------------------------------------
 if c_specified != "None":
-  obj_list = finder.load_logical_coordinates(c_specified, obj_list)
+  obj_list = attribute.load_logical_coordinates(c_specified, obj_list)
 
 if src_file == "None" and c_specified == "None":
   file_paths = browse.source_paths(root)
@@ -202,7 +202,9 @@ if src_file == "None" and c_specified == "None":
     print("Exiting the program")
     sys.exit()
 
-# Save names and coordinates of all objects into file
+#----------------------------------------------------------
+# If logical coordinates were not specified, save them now
+#----------------------------------------------------------
 if c_specified == "None":
   attribute.save_logical_coordinates(obj_list, const.OBJ_FILE_NAME)
 
