@@ -583,7 +583,7 @@ def get_only_meth(file_name_with_path):
 # Used by:
 #   - Main program
 #===============================================================================
-def get_new_calls(file_paths,obj_list):
+def get_new_calls(file_paths, obj_list, obj_memb):
 
   # Get all functions names from obj_list into a list
   fun_list_names = []
@@ -608,26 +608,44 @@ def get_new_calls(file_paths,obj_list):
         sub_list_names.append(name[0])
 
   # Put all subroutine and function names in list
-  full_list_names = [*fun_list_names,*sub_list_names]
+  calling_names = [*fun_list_names, *sub_list_names]
 
-  # Search through files and look for used functions and subroutines
-  for i in range(0,len(file_paths)):
-    for l in range(0,len(full_list_names)):
-      with open(file_paths[i]) as file:
+  print("fun_list_names = ", fun_list_names)
+  print("sub_list_names = ", sub_list_names)
+
+  print("file_paths = ", file_paths)
+
+  # Search through all non-memer objects
+  for o in range(0,len( (obj_list) )):           # through objects
+    obj_list[o].call = []
+    file_path = obj_list[o].path
+    for c in range(0,len(calling_names)):        # c - calling counter
+      with open(file_path) as file:              # open each file
         for line in file:
-          if full_list_names[l] in line:
-            for o in range(0,len(obj_list)):
-              if file_paths[i] == obj_list[o].path:
-                calls = obj_list[o].call
-                if full_list_names[l] not in obj_list[o].name:
-                  if calls == 0:
-                    calls = []
-                    calls.append(full_list_names[l])
-                  else:
-                    calls.append(full_list_names[l])
-                if calls != 0:
-                  calls = list(set(calls))
-                  obj_list[o].call = calls
+          line = line.split('!',          1)[0]  # remove comment
+          line = line.split('function',   1)[0]  # remove lines defining ...
+          line = line.split('subroutine', 1)[0]  # ... functions or subroutines
+          if calling_names[c] in line and "_Mod_" not in line:
+            print("Object: ", obj_list[o].name, "calls", calling_names[c])
+            obj_list[o].call.append(calling_names[c])
+
+  # Search through all non-memer objects
+  for o in range(0,len( (obj_memb) )):           # through objects
+    mod = obj_memb[o].in_module
+    file_path = obj_memb[o].path
+    for c in range(0,len(calling_names)):        # c - calling counter
+      with open(file_path) as file:              # open each file
+        for line in file:
+          line = line.split('!',          1)[0]  # remove comment
+          line = line.split('function',   1)[0]  # remove lines defining ...
+          line = line.split('subroutine', 1)[0]  # ... functions or subroutines
+          if calling_names[c] in line and "_Mod_" not in line:
+            print("Object: ", obj_memb[o].name, "calls", calling_names[c])
+            mod.call.append(calling_names[c])
+
+  # Remove duplicate entries from the list
+  for o in range(0,len( (obj_list) )):
+    obj_list[o].call = list(dict.fromkeys(obj_list[o].call))
 
   return obj_list
 

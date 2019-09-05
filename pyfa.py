@@ -185,8 +185,8 @@ else:
 #--------------------------------------------------------------------
 # For all cases, take object list from file paths and work out calls
 #--------------------------------------------------------------------
-obj_list = attribute.get_obj_list(file_paths)
-obj_list = finder.get_new_calls(file_paths, obj_list)
+obj_list, obj_memb = attribute.get_obj_lists(file_paths)
+obj_list = finder.get_new_calls(file_paths, obj_list, obj_memb)
 
 #-------------------------------------------------
 # If logical coordinates specified, load them now

@@ -104,6 +104,7 @@ class Subroutine(object):
     subroutine.row       = row
     subroutine.column    = column
     subroutine.path      = path
+    subroutine.in_module = []
 
 #===============================================================================
 # Defining function class
@@ -155,6 +156,7 @@ class Function(object):
     function.row       = row
     function.column    = column
     function.path      = path
+    function.in_module = []
 
 #===============================================================================
 # Defining program class
@@ -1008,38 +1010,25 @@ def load_logical_coordinates(file_with_names, obj_list):
 # Used by:
 #   - Function for creating complete and updated file list
 #-------------------------------------------------------------------------------
-def remove_unnecessary_subs(obj_list):
+def classify_objects(obj_list):
 
-  meth_list = []            # list of all methods
-  indexes   = []            # list of indexes of all unwanted subroutines
+  obj_used = []
+  obj_memb = []
 
-  for i in range(0,len(obj_list)):
-    if obj_list[i].type == "Module":
-      meth_list.append(obj_list[i].meth)
+  for o in range(0,len(obj_list)):
+    if "_Mod_" in obj_list[o].name:
+      obj_memb.append(obj_list[o])
+    else:
+      obj_used.append(obj_list[o])
 
-  # Flat list of all methods in modules
-  meth_list = [item for sublist in meth_list for item in sublist]
+  for om in range(0, len(obj_memb)):
+    i = obj_memb[om].name.find("_Mod_")
+    mod_name = obj_memb[om].name[0:i+4]
+    for ou in range(0,len(obj_used)):
+      if obj_used[ou].name == mod_name:
+        obj_memb[om].in_module = obj_used[ou]
 
-  # List of indexes of all unwanted subroutines
-  for i in range(0,len(obj_list)):
-    for m in range(0,len(meth_list)):
-      method = meth_list[m]
-      name   = obj_list[i].name
-      name2  = ""
-      if "/" in method:
-        method = method.split("/", 1)[-1]
-      if "(" in name:
-        name = name.split("(", 1)[0]
-      if "Mod_" in name:
-        name2 = name.split("Mod_", 1)[-1]
-      if name == method or name2 == method:
-        indexes.append(i)
-
-  # Delete unwanted subroutines from objects list
-  for index in sorted(indexes, reverse=True):
-    del obj_list[index]
-
-  return obj_list
+  return obj_used, obj_memb
 
 #===============================================================================
 # Function for creating complete and updated object list
@@ -1051,7 +1040,7 @@ def remove_unnecessary_subs(obj_list):
 # Used by:
 #   - Main program (simple.py)
 #-------------------------------------------------------------------------------
-def get_obj_list(file_paths):
+def get_obj_lists(file_paths):
 
   mod_list  = mod_list_fun(file_paths)   # list of all mod classes
   sub_list  = sub_list_fun(file_paths)   # list of all sub classes
@@ -1062,7 +1051,7 @@ def get_obj_list(file_paths):
                *fun_list,   \
                *prog_list]               # list of all classes(mod+sub+fun+prog)
 
-  obj_list  = remove_unnecessary_subs(obj_list)
+  obj_list, obj_memb  = classify_objects(obj_list)
 
   if object_representation == "Reduced":
     for i in range(0,len(obj_list)):
@@ -1080,5 +1069,5 @@ def get_obj_list(file_paths):
   elif object_hierarchy == "Row-Based":
     obj_list = place_objects_row(obj_list)
 
-  return obj_list
+  return obj_list, obj_memb
 
