@@ -610,24 +610,19 @@ def get_new_calls(file_paths, obj_list, obj_memb):
   # Put all subroutine and function names in list
   calling_names = [*fun_list_names, *sub_list_names]
 
-  print("fun_list_names = ", fun_list_names)
-  print("sub_list_names = ", sub_list_names)
-
-  print("file_paths = ", file_paths)
-
   # Search through all non-memer objects
   for o in range(0,len( (obj_list) )):           # through objects
     obj_list[o].call = []
     file_path = obj_list[o].path
     for c in range(0,len(calling_names)):        # c - calling counter
-      with open(file_path) as file:              # open each file
-        for line in file:
-          line = line.split('!',          1)[0]  # remove comment
-          line = line.split('function',   1)[0]  # remove lines defining ...
-          line = line.split('subroutine', 1)[0]  # ... functions or subroutines
-          if calling_names[c] in line and "_Mod_" not in line:
-            print("Object: ", obj_list[o].name, "calls", calling_names[c])
-            obj_list[o].call.append(calling_names[c])
+      if calling_names[c] not in file_path:
+        with open(file_path) as file:              # open each file
+          for line in file:
+            line = line.split('!',          1)[0]  # remove comment
+            line = line.split('function',   1)[0]  # remove lines defining ...
+            line = line.split('subroutine', 1)[0]  # ... functions or subs
+            if calling_names[c] in line and "_Mod_" not in line:
+              obj_list[o].call.append(calling_names[c])
 
   # Search through all non-memer objects
   for o in range(0,len( (obj_memb) )):           # through objects
@@ -640,7 +635,6 @@ def get_new_calls(file_paths, obj_list, obj_memb):
           line = line.split('function',   1)[0]  # remove lines defining ...
           line = line.split('subroutine', 1)[0]  # ... functions or subroutines
           if calling_names[c] in line and "_Mod_" not in line:
-            print("Object: ", obj_memb[o].name, "calls", calling_names[c])
             mod.call.append(calling_names[c])
 
   # Remove duplicate entries from the list
