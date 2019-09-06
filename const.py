@@ -1,7 +1,7 @@
 #===============================================================================
 # Module with constants
 #-------------------------------------------------------------------------------
-BOX_MARGINS             = 3                    # box margins in cm (presumably)
+BOX_MARGINS             = 1.5                  # box margins in cm (presumably)
 UNIT_BOX_HEIGHT         = 0.75                 # unit box height
 THICKNESS               = 2                    # box line thickness
 FIG_FILE_NAME           = "pyfa.fig"           # xfig output file name

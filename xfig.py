@@ -1075,7 +1075,7 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
     step_y    = []
     step_dist = []
 
-    stride = const_UBH * 2
+    stride = attribute.box_margins * 0.5
 
     # Step 0                        # Step 1
     step_x.append(x[-1] + stride);  step_x.append(x[-1] + stride)
@@ -1126,7 +1126,7 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
     dist.append(min(step_dist))
 
     # Check if converged
-    if dist[-1] < (2 * const_UBH):
+    if dist[-1] < (attribute.box_margins * 0.5):
       x = x[:-2]
       y = y[:-2]
       break
@@ -1752,9 +1752,9 @@ def find_coordinates(obj_list):
     row = obj_list[o].row
     col = obj_list[o].column
     widths[col]  = max(widths [col], find_width (obj_list[o])  \
-                 + attribute.box_margins)
+                 + attribute.box_margins * 2.0)
     heights[row] = max(heights[row], find_height(obj_list[o])  \
-                 + attribute.box_margins)
+                 + attribute.box_margins * 2.0)
 
   for o in range(len(obj_list)):
     row = obj_list[o].row
