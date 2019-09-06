@@ -14,4 +14,7 @@ COLOR_HEADER_MODULE     = "LtBlue"             # color of module header
 COLOR_HEADER_SUBROUTINE = "Pink2"              # color of subroutine header
 COLOR_HEADER_FUNCTION   = "Yellow"             # color of function header
 COLOR_HEADER_PROGRAM    = "Green2"             # color of program header
+STARTING_LAYER_USE      = 100
+STARTING_LAYER_CALL     = 200
+LAYER_GRID_CALLS        = 500
 XFIG_SCALE              = 450                  # xfig units for one cm
