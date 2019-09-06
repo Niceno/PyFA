@@ -1,6 +1,7 @@
 #===============================================================================
 # Import libraries
 #-------------------------------------------------------------------------------
+import math
 import finder
 import browse
 import attribute
@@ -116,7 +117,7 @@ def xfig_box_color(name):
 #-------------------------------------------------------------------------------
 def find_height(object):
 
-  UBH          = 0.75
+  const_UBH          = 0.75
   use_list     = object.use
   var_list     = object.var
   meth_list    = object.meth
@@ -137,7 +138,7 @@ def find_height(object):
     if fun_type != 0:
       len_fun_type = 1
 
-  height = UBH + len(var_list) + len(meth_list) + len(use_list)    \
+  height = const_UBH + len(var_list) + len(meth_list) + len(use_list)    \
          + len(type_list) + len_fun_type
 
   return height
@@ -961,77 +962,187 @@ def plot_text_right(file, x0, y0, text):
 # Used by:
 #   - function for plotting spline connections
 #-------------------------------------------------------------------------------
-def plot_spline(file, object1, object2, depth):
+def plot_spline(file, obj_list, object1, object2, line_type, depth):
 
-  use_list = object2.use
-
-  # First coordinate at half of the box
+  # First coordinate at half of the box (same for both line_types)
   x1 = object1.x1
   y1 = (object1.y0 + object1.y1)*0.5
 
   # Last coordinate
-  x6 = object2.x0
-  y6 = object2.y0 + const_UBH + check_if_type_stat(object2) + len(use_list)*0.5
+  if line_type == "Continuous":
+    x6 = object2.x0
+    y6 = object2.y0 + const_UBH                    \
+                    + check_if_type_stat(object2)  \
+                    + len(object2.use)*0.5
+  else:
+    x6 = object2.x0
+    y6 = object2.y0 + const_UBH*0.5
 
   if attribute.object_hierarchy == "Row-Based":
 
-    # Second coordinate
-    x2 = x1 + 2
+    # Second coordinate (same for both line_types)
+    x2 = x1 + 2*const_UBH
     y2 = y1
 
-    # Third coordinate
-    x3 = object1.x1 + 3
-    y3 = object1.y1
-
-    # Fourth coordinate
-    x4 = object2.x0 - 3
-    y4 = object2.y0
-
-    # Fifth coordinate
-    x5 = x6 - 2
+    # Fifth coordinate (same for both line_types)
+    x5 = x6 - 2*const_UBH
     y5 = y6
+
+    x, y = walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list)
 
   elif attribute.object_hierarchy == "Column-Based":
 
     # Second coordinate
-    x2 = x1 + 2
-    y2 = (object1.y0 + object1.y1)*0.5
+    if line_type == "Continuous":
+      x2 = x1 + 2*const_UBH
+      y2 = (object1.y0 + object1.y1)*0.5
+    else:
+      x2 = x1 + 2*const_UBH
+      y2 = y1
 
-    # Third coordinate
-    x3 = object1.x1 + 3
-    y3 = object1.y1
-
-    # Fourth coordinate
-    x4 = object2.x0 - 3
-    y4 = object2.y0
-
-    # Fifth coordinate
-    x5 = x6 - 2
+    # Fifth coordinate (same for both line_types)
+    x5 = x6 - 2*const_UBH
     y5 = y6
 
+    x, y = walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list)
 
+  # Start writing a spline
+  if line_type == "Continuous":
+    file.write("3 2 0 2 0 7 ")
+    file.write("%5d" % (depth))
+    file.write(" -1 -1 0.000 0 1 1 %6d" % len(x))
+  else:
+    file.write("3 2 1 2 0 7 ")
+    file.write("%5d" % (depth))
+    file.write(" -1 -1 8.000 0 1 1 %6d" % len(x))  # 8.000 is dash length
 
-  file.write("3 2 0 2 0 7 ")
-  file.write("%5d" % (depth))
-  file.write(" -1 -1 0.000 0 1 1 6")                   # 6 --> number of points
+  # Arrow settings
+  if line_type == "Continuous":
+    file.write("\n 1 1 1.00 135.00 180.00")
+    file.write("\n 6 1 1.00 135.00 180.00")
+  else:
+    file.write("\n 1 0 1.00 135.00 180.00")
+    file.write("\n 6 0 1.00 135.00 180.00")
 
-  file.write("\n 1 1 1.00 135.00 180.00")              # arrow settings
-  file.write("\n 6 1 1.00 135.00 180.00")              # arrow settings
+  cnt = 0
+  for i in range(len(x)):
+    if cnt % 4 == 0:
+      file.write("\n       ")
+    file.write(" %9d %9d" % ( x[i] * const_XFS, y[i] * const_XFS))
+    cnt = cnt + 1
 
-  file.write("\n%9d %9d" % ( (x1) * const_XFS,  \
-                             (y1) * const_XFS))
-  file.write("%9d %9d" %   ( (x2) * const_XFS,  \
-                             (y2) * const_XFS))
-  file.write("%9d %9d" %   ( (x3) * const_XFS,  \
-                             (y3) * const_XFS))
-  file.write("%9d %9d" %   ( (x4) * const_XFS,  \
-                             (y4) * const_XFS))
-  file.write("%9d %9d" %   ( (x5) * const_XFS,  \
-                             (y5) * const_XFS))
-  file.write("%9d %9d" %   ( (x6) * const_XFS,  \
-                             (y6) * const_XFS))
+  cnt = 0
+  for i in range(len(x)):
+    if cnt % 4 == 0:
+      file.write("\n       ")
+    if i == 0 or i == len(x)-1:
+      file.write(" 0.000")
+    else:
+      file.write(" 1.000")
+    cnt = cnt + 1
 
-  file.write("\n 0.000 1.000 1.000 1.000 1.000 0.000\n")
+  file.write("\n")
+
+#===============================================================================
+# Walk from one object to another, avoiding all objects in the graph
+#
+# Parameters:
+#   - x1, y1, ... x6, y6:  coordinates the way Ivan introduced them
+#   - obj_list:            list of all objects
+# Returns:
+#   - x, y:                coordinates with all steps from one object to another
+#-------------------------------------------------------------------------------
+def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
+
+  # Walk
+  x    = []
+  y    = []
+  dist = []
+
+  x.append(x1)
+  y.append(y1)
+
+  x.append(x2)
+  y.append(y2)
+
+  #-----------
+  #
+  # Main loop
+  #
+  #-----------
+  for i in range(0, 128):
+
+    #--------------------------   3 2 1
+    # Set eight possible direc    4 c 0
+    #--------------------------   5 6 7
+    step_x    = []
+    step_y    = []
+    step_dist = []
+
+    stride = const_UBH * 2
+
+    # Step 0                        # Step 1
+    step_x.append(x[-1] + stride);  step_x.append(x[-1] + stride)
+    step_y.append(y[-1]);           step_y.append(y[-1] + stride)
+
+    # Step 2                        # Step 3
+    step_x.append(x[-1]);           step_x.append(x[-1] - stride)
+    step_y.append(y[-1] + stride);  step_y.append(y[-1] + stride)
+
+    # Step 4                        # Step 5
+    step_x.append(x[-1] - stride);  step_x.append(x[-1] - stride)
+    step_y.append(y[-1]);           step_y.append(y[-1] - stride)
+
+    # Step 6                        # Step 7
+    step_x.append(x[-1]);           step_x.append(x[-1] + stride)
+    step_y.append(y[-1] - stride);  step_y.append(y[-1] - stride)
+
+    #---------------------------------------------------
+    # Eliminate steps which would fall in other objects
+    #---------------------------------------------------
+    eliminate_steps = []
+    for o in range(len(obj_list)):
+      for s in range(len(step_x)-1, -1, -1):
+        if step_x[s] >= obj_list[o].x0 and \
+           step_x[s] <= obj_list[o].x1 and \
+           step_y[s] >= obj_list[o].y0 and \
+           step_y[s] <= obj_list[o].y1:
+          eliminate_steps.append(s)
+    for e in range(len(eliminate_steps)):
+      step_x.pop(eliminate_steps[e])
+      step_y.pop(eliminate_steps[e])
+
+    #-----------------------------------------
+    # From the remaining (possible) steps, do
+    # find the one closest to the destination
+    #-----------------------------------------
+    for s in range(len(step_x)):
+      dx = step_x[s] - x5
+      dy = step_y[s] - y5
+      step_dist.append(math.sqrt(dx*dx + dy*dy))
+
+    # Index of direction with minimum distance
+    min_dist = step_dist.index(min(step_dist))
+
+    x.   append(step_x[min_dist])
+    y.   append(step_y[min_dist])
+    dist.append(min(step_dist))
+
+    # print("current ditance = ", dist[-1])
+
+    if len(dist) > 2:
+      if dist[-1] > dist[-2]:
+        x = x[:-2]
+        y = y[:-2]
+        break
+
+  x.append(x5)
+  y.append(y5)
+
+  x.append(x6)
+  y.append(y6)
+
+  return x, y
 
 #===============================================================================
 # Function to plot spline (with 2 coordinates)
@@ -1047,120 +1158,31 @@ def plot_spline(file, object1, object2, depth):
 # Used by:
 #   - function for plotting spline connections for legend
 #-------------------------------------------------------------------------------
-def plot_spline_legend(file, obj_list, x0, y0):
+def plot_spline_legend(file, obj_list, x0, y0, line_type):
 
-  x1 = x0 + 7
+  x1 = x0 + 7   # ghost number
 
-  file.write("3 0 0 1 0 7 ")
-  file.write("%5d" % (50))
-  file.write(" -1 -1 0.000 0 1 1 2")                   # 6 --> number of points
+  if line_type == "Continuous":
+    file.write("3 0 0 1 0 7 ")
+    file.write("%5d" % (50))
+    file.write(" -1 -1 0.000 0 1 1 2")             # 2 --> number of points
+  else:
+    file.write("3 0 1 1 0 7 ")
+    file.write("%5d" % (50))
+    file.write(" -1 -1 4.000 0 1 1 2")             # 2 --> number of points
 
-  file.write("\n 1 1 2.00 120.00 120.00")              # arrow settings
-  file.write("\n 6 1 2.00 120.00 120.00")              # arrow settings
+  if line_type == "Continuous":
+    file.write("\n 1 1 2.00 120.00 120.00")        # arrow settings
+    file.write("\n 6 1 2.00 120.00 120.00")        # arrow settings
+  else:
+    file.write("\n 1 0 2.00 120.00 120.00")        # arrow settings
+    file.write("\n 6 0 2.00 120.00 120.00")        # arrow settings
+
   file.write("\n%9d %9d" % ( (x0) * const_XFS,  \
                              (y0) * const_XFS))
   file.write("%9d %9d" %   ( (x1) * const_XFS,  \
                              (y0) * const_XFS))
   file.write("\n 0.000 0.000\n")
-
-  ###############################################################################
-def plot_dashed_spline_legend(file, obj_list, x0, y0):
-
-  x1 = x0 + 7
-
-  file.write("3 0 1 1 0 7 ")
-  file.write("%5d" % (50))
-  file.write(" -1 -1 4.000 0 1 1 2")                   # 6 --> number of points
-
-  file.write("\n 1 0 2.00 120.00 120.00")              # arrow settings
-  file.write("\n 6 0 2.00 120.00 120.00")              # arrow settings
-  file.write("\n%9d %9d" % ( (x0) * const_XFS,  \
-                             (y0) * const_XFS))
-  file.write("%9d %9d" %   ( (x1) * const_XFS,  \
-                             (y0) * const_XFS))
-  file.write("\n 0.000 0.000\n")
-
-#===============================================================================
-# Function to plot spline (with 6 coordinates)
-#
-# Parameters:
-#   - file:     Xfig file's handle
-#   - object1:  starting object (spline starts at the rigth side of this object)
-#   - object2:  ending object   (spline ends at the left side of this object)
-#   - depth:    depth of plotted spline
-# Returns:
-#   - nothing
-# Used by:
-#   - function for plotting spline connections
-#-------------------------------------------------------------------------------
-def plot_dashed_spline(file, object1, object2, depth):
-
-  # First coordinate
-  x1 = object1.x1
-  y1 = (object1.y0 + object1.y1)*0.5
-
-  # Last coordinate
-  x6 = object2.x0
-  y6 = object2.y0 + const_UBH*0.5
-
-  if attribute.object_hierarchy == "Row-Based":
-
-    # Second coordinate
-    x2 = x1 + 2
-    y2 = y1
-
-    # Third coordinate
-    x3 = object1.x1 + 3
-    y3 = object1.y0
-
-    # Fourth coordinate
-    x4 = object2.x0 - 3
-    y4 = object2.y1
-
-    # Fifth coordinate
-    x5 = x6 - 2
-    y5 = y6
-
-  elif attribute.object_hierarchy == "Column-Based":
-
-    # Second coordinate
-    x2 = x1 + 2
-    y2 = y1
-
-    # Third coordinate
-    x3 = object1.x1 + 3
-    y3 = object1.y1
-
-    # Fourth coordinate
-    x4 = object2.x0 - 3
-    y4 = object2.y1
-
-    # Fifth coordinate
-    x5 = x6 - 2
-    y5 = y6
-
-  file.write("3 2 1 2 0 7 ")
-  file.write("%5d" % (depth))
-  file.write(" -1 -1 8.000 0 1 1 6")                   # 6 --> number of points
-                                                       # 8 --> dash length
-
-  file.write("\n 1 0 1.00 135.00 180.00")              # arrow settings
-  file.write("\n 6 0 1.00 135.00 180.00")              # arrow settings
-
-  file.write("\n%9d %9d" % ( (x1) * const_XFS,  \
-                             (y1) * const_XFS))
-  file.write("%9d %9d" %   ( (x2) * const_XFS,  \
-                             (y2) * const_XFS))
-  file.write("%9d %9d" %   ( (x3) * const_XFS,  \
-                             (y3) * const_XFS))
-  file.write("%9d %9d" %   ( (x4) * const_XFS,  \
-                             (y4) * const_XFS))
-  file.write("%9d %9d" %   ( (x5) * const_XFS,  \
-                             (y5) * const_XFS))
-  file.write("%9d %9d" %   ( (x6) * const_XFS,  \
-                             (y6) * const_XFS))
-
-  file.write("\n 0.000 1.000 1.000 1.000 1.000 0.000\n")
 
 #===============================================================================
 # Function for plotting all spline connections
@@ -1207,8 +1229,10 @@ def plot_all_spline(file, obj_list):
       for m in range(len(mod_objects)):
         if used == mod_objects[m].name:
           plot_spline(file,               \
+                      obj_list,           \
                       mod_objects[m],     \
                       use_objects[i],     \
+                      "Continuous",       \
                       depth_list_use[m])
 
   # Plotting connections for call statements
@@ -1218,10 +1242,12 @@ def plot_all_spline(file, obj_list):
       called = call[k]
       for m in range(len(obj_list)):
         if called in obj_list[m].name:
-          plot_dashed_spline(file,               \
-                             call_objects[i],    \
-                             obj_list[m],        \
-                             depth_list_call[i])
+          plot_spline(file,             \
+                      obj_list,         \
+                      call_objects[i],  \
+                      obj_list[m],      \
+                      "Dashed",         \
+                      depth_list_call[i])
 
 #===============================================================================
 # Function to plot line
@@ -1678,8 +1704,8 @@ def plot_meth_name(file, x0, y0,      \
 #-------------------------------------------------------------------------------
 def plot_legend(file, obj_list, x0, y0):
 
-  text_width   = 5
-  text_height  = 1
+  text_width   = 5  # ghost number
+  text_height  = 1  # ghost number
 
   object =  attribute.Program("Legend",                      \
                               "              Subroutine",    \
@@ -1689,8 +1715,8 @@ def plot_legend(file, obj_list, x0, y0):
   plot_sub_name(file,  x0,  y0+const_UBH,     "Subroutine", object)
   plot_fun_name(file,  x0,  y0+(const_UBH)*2, "Function",   object)
   plot_prog_name(file, x0,  y0+(const_UBH)*3, "Program",    object)
-  plot_spline_legend(file, obj_list, x0, y0+4)
-  plot_dashed_spline_legend(file, obj_list, x0, y0+5)
+  plot_spline_legend(file, obj_list, x0, y0+4, "Continuous")
+  plot_spline_legend(file, obj_list, x0, y0+5, "Dashed")
   plot_text_center(file, x0+1, y0+3.2, text_width, \
                    text_height, "Use statements")
   plot_text_center(file, x0+1, y0+4.2, text_width, \
