@@ -966,18 +966,27 @@ def plot_text_right(file, x0, y0, text):
 #-------------------------------------------------------------------------------
 def plot_spline(file, obj_list, object1, object2, line_type, depth):
 
-  offset = attribute.box_margins  # * 0.5
+  offset = attribute.box_margins * 1.00
 
-  if object1.x1 < object2.x0:
-    x1 = object1.x1          # start at the right hand side of the object1
-    x2 = x1 + offset         # continue to the right
-    x6 = object2.x0          # end on the left hand side of object1
-    x5 = x6 - offset         # come from left side
+  # print("Connecting ", object1.name, "and", object2.name)
+
+  if object1.column == object2.column:
+    x1 = object1.x0   # start at the left hand side of the object1
+    x2 = x1 - offset  # continue to the left
+    x6 = object2.x0   # end on the left hand side of object1
+    x5 = x6 - offset  # come from left side
+
+  elif object1.column < object2.column:
+    x1 = object1.x1   # start at the right hand side of the object1
+    x2 = x1 + offset  # continue to the right
+    x6 = object2.x0   # end on the left hand side of object1
+    x5 = x6 - offset  # come from left side
+
   else:
-    x1 = object1.x0          # start at the left hand side of the object1
-    x2 = x1 - offset         # continue to the left
-    x6 = object2.x1          # end on the right hand side of object2
-    x5 = x6 + offset         # come from right side
+    x1 = object1.x0   # start at the left hand side of the object1
+    x2 = x1 - offset  # continue to the left
+    x6 = object2.x1   # end on the right hand side of object2
+    x5 = x6 + offset  # come from right side
 
   # First height depends on line_type
   if line_type == "Continuous":
@@ -1002,10 +1011,7 @@ def plot_spline(file, obj_list, object1, object2, line_type, depth):
   y5 = y6
 
   # Walk!
-  print("Connecting ", object1.name, "and", object2.name)
   x, y = walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list)
-# if object1.name == "Tripos" and object2.name == "Setup_Chains(mesh)":
-#   exit()
 
   # Start writing a spline
   if line_type == "Continuous":
