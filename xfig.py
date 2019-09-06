@@ -7,8 +7,11 @@ import browse
 import attribute
 import const
 import grid
-from const import XFIG_SCALE      as const_XFS
-from const import UNIT_BOX_HEIGHT as const_UBH
+from const import XFIG_SCALE          as const_XFS
+from const import UNIT_BOX_HEIGHT     as const_UBH
+from const import STARTING_LAYER_USE  as const_SLU
+from const import STARTING_LAYER_CALL as const_SLC
+from const import UNIT_BOX_HEIGHT     as const_UBH
 
 #===============================================================================
 # Function to choose use statements list length
@@ -117,7 +120,6 @@ def xfig_box_color(name):
 #-------------------------------------------------------------------------------
 def find_height(object):
 
-  const_UBH          = 0.75
   use_list     = object.use
   var_list     = object.var
   meth_list    = object.meth
@@ -964,54 +966,48 @@ def plot_text_right(file, x0, y0, text):
 #-------------------------------------------------------------------------------
 def plot_spline(file, obj_list, object1, object2, line_type, depth):
 
-  # First coordinate at half of the box (same for both line_types)
-  x1 = object1.x1
-  y1 = (object1.y0 + object1.y1)*0.5
+  if object1.x1 < object2.x0:
+    x1 = object1.x1          # start at the right hand side of the object1
+    x2 = x1 + 2 * const_UBH  # continue to the right
+    x6 = object2.x0          # end on the left hand side of object1
+    x5 = x6 - 2 * const_UBH  # come from left side
+  else:
+    x1 = object1.x0          # start at the left hand side of the object1
+    x2 = x1 - 2 * const_UBH  # continue to the left
+    x6 = object2.x1          # end on the right hand side of object2
+    x5 = x6 + 2 * const_UBH  # come from right side
 
-  # Last coordinate
+  # First height depends on line_type
   if line_type == "Continuous":
-    x6 = object2.x0
+    y1 = (object1.y0 + object1.y1) * 0.5   # starts in the middle of object1
+  elif line_type == "Dashed":
+    y1 = object1.y0 + const_UBH * 0.5      # starts from the middle of header
+
+  # Second coordinate should be the same as first
+  y2 = y1
+
+  # Last coordinate for continous lines (use statements)
+  if line_type == "Continuous":
     y6 = object2.y0 + const_UBH                    \
                     + check_if_type_stat(object2)  \
                     + len(object2.use)*0.5
-  else:
-    x6 = object2.x0
-    y6 = object2.y0 + const_UBH*0.5
 
-  if attribute.object_hierarchy == "Row-Based":
+  # Last coordinate for dashed lines (call statements)
+  elif line_type == "Dashed":
+    y6 = object2.y0 + const_UBH * 0.5  # hits in the middle of the header
 
-    # Second coordinate (same for both line_types)
-    x2 = x1 + 2*const_UBH
-    y2 = y1
+  # Penultimate coordinate should be the same as last
+  y5 = y6
 
-    # Fifth coordinate (same for both line_types)
-    x5 = x6 - 2*const_UBH
-    y5 = y6
-
-    x, y = walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list)
-
-  elif attribute.object_hierarchy == "Column-Based":
-
-    # Second coordinate
-    if line_type == "Continuous":
-      x2 = x1 + 2*const_UBH
-      y2 = (object1.y0 + object1.y1)*0.5
-    else:
-      x2 = x1 + 2*const_UBH
-      y2 = y1
-
-    # Fifth coordinate (same for both line_types)
-    x5 = x6 - 2*const_UBH
-    y5 = y6
-
-    x, y = walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list)
+  # Walk!
+  x, y = walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list)
 
   # Start writing a spline
   if line_type == "Continuous":
     file.write("3 2 0 2 0 7 ")
     file.write("%5d" % (depth))
     file.write(" -1 -1 0.000 0 1 1 %6d" % len(x))
-  else:
+  elif line_type == "Dashed":
     file.write("3 2 1 2 0 7 ")
     file.write("%5d" % (depth))
     file.write(" -1 -1 8.000 0 1 1 %6d" % len(x))  # 8.000 is dash length
@@ -1020,7 +1016,7 @@ def plot_spline(file, obj_list, object1, object2, line_type, depth):
   if line_type == "Continuous":
     file.write("\n 1 1 1.00 135.00 180.00")
     file.write("\n 6 1 1.00 135.00 180.00")
-  else:
+  elif line_type == "Dashed":
     file.write("\n 1 0 1.00 135.00 180.00")
     file.write("\n 6 0 1.00 135.00 180.00")
 
@@ -1102,12 +1098,13 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
     #---------------------------------------------------
     eliminate_steps = []
     for o in range(len(obj_list)):
-      for s in range(len(step_x)-1, -1, -1):
+      for s in range(len(step_x)):
         if step_x[s] >= obj_list[o].x0 and \
            step_x[s] <= obj_list[o].x1 and \
            step_y[s] >= obj_list[o].y0 and \
            step_y[s] <= obj_list[o].y1:
           eliminate_steps.append(s)
+    eliminate_steps.sort(reverse = True)
     for e in range(len(eliminate_steps)):
       step_x.pop(eliminate_steps[e])
       step_y.pop(eliminate_steps[e])
@@ -1128,12 +1125,17 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
     y.   append(step_y[min_dist])
     dist.append(min(step_dist))
 
-    # print("current ditance = ", dist[-1])
+    # Check if converged
+    if dist[-1] < (2 * const_UBH):
+      x = x[:-2]
+      y = y[:-2]
+      break
 
+    # Check if it wobbles
     if len(dist) > 2:
       if dist[-1] > dist[-2]:
-        x = x[:-2]
-        y = y[:-2]
+        x = x[:-3]
+        y = y[:-3]
         break
 
   x.append(x5)
@@ -1217,8 +1219,10 @@ def plot_all_spline(file, obj_list):
       call_objects.append(obj_list[i])
 
 
-  depth_list_use = list(range(101,101+len(mod_objects)))   # depths for modules
-  depth_list_call = list(range(201,201+len(call_objects))) # depths for calls
+  depth_list_use  = list(range(const_SLU,    \
+                               const_SLU + len(mod_objects)))
+  depth_list_call = list(range(const_SLC,    \
+                               const_SLC + len(call_objects)))
 
   # Plotting connections for use statements
   for i in range(len(use_objects)):
