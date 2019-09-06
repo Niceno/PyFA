@@ -966,16 +966,18 @@ def plot_text_right(file, x0, y0, text):
 #-------------------------------------------------------------------------------
 def plot_spline(file, obj_list, object1, object2, line_type, depth):
 
+  offset = attribute.box_margins  # * 0.5
+
   if object1.x1 < object2.x0:
     x1 = object1.x1          # start at the right hand side of the object1
-    x2 = x1 + 2 * const_UBH  # continue to the right
+    x2 = x1 + offset         # continue to the right
     x6 = object2.x0          # end on the left hand side of object1
-    x5 = x6 - 2 * const_UBH  # come from left side
+    x5 = x6 - offset         # come from left side
   else:
     x1 = object1.x0          # start at the left hand side of the object1
-    x2 = x1 - 2 * const_UBH  # continue to the left
+    x2 = x1 - offset         # continue to the left
     x6 = object2.x1          # end on the right hand side of object2
-    x5 = x6 + 2 * const_UBH  # come from right side
+    x5 = x6 + offset         # come from right side
 
   # First height depends on line_type
   if line_type == "Continuous":
@@ -1000,7 +1002,10 @@ def plot_spline(file, obj_list, object1, object2, line_type, depth):
   y5 = y6
 
   # Walk!
+  print("Connecting ", object1.name, "and", object2.name)
   x, y = walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list)
+# if object1.name == "Tripos" and object2.name == "Setup_Chains(mesh)":
+#   exit()
 
   # Start writing a spline
   if line_type == "Continuous":
@@ -1099,11 +1104,23 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
     eliminate_steps = []
     for o in range(len(obj_list)):
       for s in range(len(step_x)):
-        if step_x[s] >= obj_list[o].x0 and \
-           step_x[s] <= obj_list[o].x1 and \
-           step_y[s] >= obj_list[o].y0 and \
-           step_y[s] <= obj_list[o].y1:
+        if step_x[s] >= (obj_list[o].x0 - stride * 0.5) and \
+           step_x[s] <= (obj_list[o].x1 + stride * 0.5) and \
+           step_y[s] >= (obj_list[o].y0 - stride * 0.5) and \
+           step_y[s] <= (obj_list[o].y1 + stride * 0.5):
           eliminate_steps.append(s)
+    eliminate_steps.sort(reverse = True)
+    for e in range(len(eliminate_steps)):
+      step_x.pop(eliminate_steps[e])
+      step_y.pop(eliminate_steps[e])
+
+    #-------------------------------------
+    # Eliminate steps which would go back
+    #-------------------------------------
+    eliminate_steps = []
+    for s in range(len(step_x)):
+      if step_x[s] == x[-2] and step_y[s] == y[-2]:
+        eliminate_steps.append(s)
     eliminate_steps.sort(reverse = True)
     for e in range(len(eliminate_steps)):
       step_x.pop(eliminate_steps[e])
@@ -1131,12 +1148,13 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
       y = y[:-2]
       break
 
-    # Check if it wobbles
+    # Check if it wobbles (only if you are close)
     if len(dist) > 2:
-      if dist[-1] > dist[-2]:
-        x = x[:-3]
-        y = y[:-3]
-        break
+      if dist[-1] < (attribute.box_margins):
+        if dist[-1] > dist[-2]:
+          x = x[:-3]
+          y = y[:-3]
+          break
 
   x.append(x5)
   y.append(y5)
