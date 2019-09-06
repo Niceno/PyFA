@@ -587,8 +587,8 @@ def get_new_calls(file_paths, obj_list, obj_memb):
 
   # Get all functions names from obj_list into a list
   fun_list_names = []
-  for i in range(0,len(obj_list)):
-    if obj_list[i].type == "Function":
+  for o in range(len(obj_list)):
+    if obj_list[o].type == "Function":
       name = obj_list[i].name
       if "(" in name:
         name = name.split("(")
@@ -598,9 +598,9 @@ def get_new_calls(file_paths, obj_list, obj_memb):
 
   # Get all subroutine names from obj_list into a list
   sub_list_names = []
-  for i in range(0,len(obj_list)):
-    if obj_list[i].type == "Subroutine":
-      name = obj_list[i].name
+  for o in range(len(obj_list)):
+    if obj_list[o].type == "Subroutine":
+      name = obj_list[o].name
       if "(" in name:
         name = name.split("(")
         sub_list_names.append(name[0])
@@ -611,10 +611,10 @@ def get_new_calls(file_paths, obj_list, obj_memb):
   calling_names = [*fun_list_names, *sub_list_names]
 
   # Search through all non-memer objects
-  for o in range(0,len( (obj_list) )):           # through objects
+  for o in range(len( (obj_list) )):               # through objects
     obj_list[o].call = []
     file_path = obj_list[o].path
-    for c in range(0,len(calling_names)):        # c - calling counter
+    for c in range(len(calling_names)):            # c - calling counter
       if calling_names[c] not in file_path:
         with open(file_path) as file:              # open each file
           for line in file:
@@ -625,10 +625,10 @@ def get_new_calls(file_paths, obj_list, obj_memb):
               obj_list[o].call.append(calling_names[c])
 
   # Search through all non-memer objects
-  for o in range(0,len( (obj_memb) )):           # through objects
+  for o in range(len( (obj_memb) )):             # through objects
     mod = obj_memb[o].in_module
     file_path = obj_memb[o].path
-    for c in range(0,len(calling_names)):        # c - calling counter
+    for c in range(len(calling_names)):          # c - calling counter
       with open(file_path) as file:              # open each file
         for line in file:
           line = line.split('!',          1)[0]  # remove comment
@@ -638,7 +638,7 @@ def get_new_calls(file_paths, obj_list, obj_memb):
             mod.call.append(calling_names[c])
 
   # Remove duplicate entries from the list
-  for o in range(0,len( (obj_list) )):
+  for o in range(len( (obj_list) )):
     obj_list[o].call = list(dict.fromkeys(obj_list[o].call))
 
   return obj_list

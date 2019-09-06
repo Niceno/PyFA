@@ -957,11 +957,10 @@ def save_logical_coordinates(obj_list,file_name):
   text_file.write("#  i,  j,  name\n")
   text_file.write("#")
 
-  for i in range(0,len(obj_list)):
-
-    text_file.write("\n {:>3},{:>3},  {}".format(obj_list[i].column,  \
-                                                 obj_list[i].row,     \
-                                                 obj_list[i].name))
+  for o in range(len(obj_list)):
+    text_file.write("\n {:>3},{:>3},  {}".format(obj_list[o].column,  \
+                                                 obj_list[o].row,     \
+                                                 obj_list[o].name))
   text_file.close()
   print("File", const.OBJ_FILE_NAME, \
         "with object coordinates has been created!")
@@ -1015,16 +1014,16 @@ def classify_objects(obj_list):
   obj_used = []
   obj_memb = []
 
-  for o in range(0,len(obj_list)):
+  for o in range(len(obj_list)):
     if "_Mod_" in obj_list[o].name:
       obj_memb.append(obj_list[o])
     else:
       obj_used.append(obj_list[o])
 
-  for om in range(0, len(obj_memb)):
+  for om in range(len(obj_memb)):
     i = obj_memb[om].name.find("_Mod_")
     mod_name = obj_memb[om].name[0:i+4]
-    for ou in range(0,len(obj_used)):
+    for ou in range(len(obj_used)):
       if obj_used[ou].name == mod_name:
         obj_memb[om].in_module = obj_used[ou]
 
@@ -1054,13 +1053,13 @@ def get_obj_lists(file_paths):
   obj_list, obj_memb  = classify_objects(obj_list)
 
   if object_representation == "Reduced":
-    for i in range(0,len(obj_list)):
-      obj_list[i].var = 0
+    for o in range(len(obj_list)):
+      obj_list[o].var = 0
 
   if object_representation == "Minimal":
-    for i in range(0,len(obj_list)):
-      obj_list[i].var  = 0
-      obj_list[i].meth = 0
+    for o in range(len(obj_list)):
+      obj_list[o].var  = 0
+      obj_list[o].meth = 0
 
   obj_list = update_dimensions(obj_list)
 

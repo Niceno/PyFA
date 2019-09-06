@@ -1268,16 +1268,16 @@ def plot_grid(xf, obj_list):
   # Plot grid
 
   # Plot vertical lines
-  for i in range(0,len(grid.x)):
+  for i in range(len(grid.x)):
     plot_line(xf, grid.x[i], min_h, grid.x[i], max_h)
 
   # Plot horizontal lines
-  for j in range(0,len(grid.y)):
+  for j in range(len(grid.y)):
     plot_line(xf, min_v, grid.y[j], max_v, grid.y[j])
 
   # Plot coordinates of each spot in grid
-  for i in range(0,len(grid.x)-1):
-    for j in range(0,len(grid.y)-1):
+  for i in range(len(grid.x)-1):
+    for j in range(len(grid.y)-1):
       plot_text_right(xf, grid.x[i+1]-0.5, grid.y[j]+0.5,  \
                       "({}, {})".format(i, j))
 
@@ -1401,7 +1401,7 @@ def plot_type_stat_text_left(file, x0, y0, object):
   y_pos          = 0.25 + (y0 + const.FONT_SIZE    \
                  + (const_UBH-const.FONT_SIZE)*0.5)
 
-  type_stat_num  = list(range(0,type_stat_len))
+  type_stat_num  = list(range(type_stat_len))
 
   if type_stat_len != 0:
     for i in range(type_stat_len):
@@ -1450,7 +1450,7 @@ def plot_use_text_left(file, x0, y0, \
                        use_list,     \
                        object):
 
-  use_list_num  = list(range(0,len(use_list)))
+  use_list_num  = list(range(len(use_list)))
   fun_type_len  = check_if_function(object)
   type_stat_len = check_if_type_stat(object)
   box_width     = find_width(object)
@@ -1482,7 +1482,7 @@ def plot_var_text_left(file, x0, y0, \
                        object):
 
   box_width     = find_width(object)
-  var_list_num  = list(range(0,len(var_list)))
+  var_list_num  = list(range(len(var_list)))
   fun_type_len  = check_if_function(object)
   type_stat_len = check_if_type_stat(object)
   y_pos         = fun_type_len + use_len(use_list) + type_stat_len    \
@@ -1519,7 +1519,7 @@ def plot_meth_text_left(x0, y0, xf, \
     var_list = []
 
   box_width     = find_width(object)
-  meth_list_num = list(range(0,len(meth_list)))
+  meth_list_num = list(range(len(meth_list)))
   fun_type_len  = check_if_function(object)
   type_stat_len = check_if_type_stat(object)
   y_pos         = fun_type_len + type_stat_len                         \

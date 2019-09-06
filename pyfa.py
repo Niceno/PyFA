@@ -179,7 +179,7 @@ else:
 
   file_paths = list(filter(None, file_paths))
 
-  for i in range(0,len(file_paths)):
+  for i in range(len(file_paths)):
     file_paths[i] = root + file_paths[i]
 
 #--------------------------------------------------------------------
