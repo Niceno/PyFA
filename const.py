@@ -4,8 +4,8 @@
 BOX_MARGINS             = 1.5                  # box margins in cm (presumably)
 UNIT_BOX_HEIGHT         = 0.75                 # unit box height
 THICKNESS               = 2                    # box line thickness
-FIG_FILE_NAME           = "pyfa.fig"           # xfig output file name
-OBJ_FILE_NAME           = "pyfa.ij"            # file with object coordinates
+FIG_FILE_NAME           = "diagram.fig"        # xfig output file name
+OBJ_FILE_NAME           = "diagram.ij"         # file with object coordinates
 FONT_SIZE               = UNIT_BOX_HEIGHT*0.5  # font size related to box height
 FONT_HEADER             = "Courier-Bold"       # font for headers
 FONT_NORMAL             = "Courier"            # font for everything else
