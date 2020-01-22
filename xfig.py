@@ -1012,9 +1012,11 @@ def plot_spline(file, obj_list, object1, object2, line_type, depth):
 
   # Last coordinate for continous lines (use statements)
   if line_type == "Continuous":
+    ind = object2.use.index("use " + object1.name)
     y6 = object2.y0 + const_UBH                    \
                     + check_if_type_stat(object2)  \
-                    + len(object2.use)*0.5
+                    + ind * const_UBH              \
+                    + 0.5 * const_UBH
 
   # Last coordinate for dashed lines (call statements)
   elif line_type == "Dashed":
