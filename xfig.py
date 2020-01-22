@@ -203,7 +203,7 @@ def find_width(filename):
 # Function to write xfig header
 #
 # Parameters:
-#   - file:  Xfig file's handle
+#   - file:  xfig file's handle
 # Returns:
 #   - nothing
 #-------------------------------------------------------------------------------
@@ -239,6 +239,9 @@ def plot_all(file, obj_list):
 
   # Plot grid
   plot_grid(file, obj_list)
+
+  # Plot legend
+  plot_legend(file, obj_list, 0, -8)
 
 #===============================================================================
 # Plot module, subroutine or function (choose which one to plot)
@@ -361,6 +364,9 @@ def plot_module(file, x0, y0,     \
                 use_list,         \
                 object):
 
+  file.write("# START COMPOUND\n")
+  file.write("# %12.5f %12.5f\n" % (x0, y0))
+
   # Plot a header text box
   plot_mod_name(file, x0, y0,     \
                 module_name,      \
@@ -394,6 +400,8 @@ def plot_module(file, x0, y0,     \
                    meth_list,       \
                    use_list,        \
                    object)
+
+  file.write("# END COMPOUND\n")
 
 #===============================================================================
 # Function to plot subroutine box
@@ -968,33 +976,36 @@ def plot_text_right(file, x0, y0, text):
 #-------------------------------------------------------------------------------
 def plot_spline(file, obj_list, object1, object2, line_type, depth):
 
-  offset = attribute.box_margins * 1.00
-
   # print("Connecting ", object1.name, "and", object2.name)
 
-  if object1.column == object2.column:
-    x1 = object1.x0   # start at the left hand side of the object1
-    x2 = x1 - offset  # continue to the left
-    x6 = object2.x0   # end on the left hand side of object1
-    x5 = x6 - offset  # come from left side
+  offset = attribute.box_margins * 1.00
 
-  elif object1.column < object2.column:
-    x1 = object1.x1   # start at the right hand side of the object1
-    x2 = x1 + offset  # continue to the right
-    x6 = object2.x0   # end on the left hand side of object1
-    x5 = x6 - offset  # come from left side
+  xc1 = object1.x0 + object1.w * 0.5
+  xc2 = object2.x0 + object2.w * 0.5
+
+  if abs(xc1 - xc2) <= offset:
+    x1 = object1.x0              # start at the lhs of object1
+    x2 = x1 - offset             # continue to the left
+    x6 = object2.x0              # end on the lhs of object1
+    x5 = x6 - offset             # come from left side
+
+  elif xc1 < xc2 - offset:
+    x1 = object1.x0 + object1.w  # start at the rhs of object1
+    x2 = x1 + offset             # continue to the right
+    x6 = object2.x0              # end on the lhs of object1
+    x5 = x6 - offset             # come from left side
 
   else:
-    x1 = object1.x0   # start at the left hand side of the object1
-    x2 = x1 - offset  # continue to the left
-    x6 = object2.x1   # end on the right hand side of object2
-    x5 = x6 + offset  # come from right side
+    x1 = object1.x0              # start at the lhs of the object1
+    x2 = x1 - offset             # continue to the left
+    x6 = object2.x0 + object2.w  # end on the rhs of object2
+    x5 = x6 + offset             # come from right side
 
   # First height depends on line_type
   if line_type == "Continuous":
-    y1 = (object1.y0 + object1.y1) * 0.5   # starts in the middle of object1
+    y1 = object1.y0 + object1.h * 0.5  # starts in the middle of object1
   elif line_type == "Dashed":
-    y1 = object1.y0 + const_UBH * 0.5      # starts from the middle of header
+    y1 = object1.y0 + const_UBH * 0.5  # starts from the middle of header
 
   # Second coordinate should be the same as first
   y2 = y1
@@ -1112,10 +1123,10 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
     eliminate_steps = []
     for o in range(len(obj_list)):
       for s in range(len(step_x)):
-        if step_x[s] >= (obj_list[o].x0 - stride * 0.5) and \
-           step_x[s] <= (obj_list[o].x1 + stride * 0.5) and \
-           step_y[s] >= (obj_list[o].y0 - stride * 0.5) and \
-           step_y[s] <= (obj_list[o].y1 + stride * 0.5):
+        if step_x[s] >= (obj_list[o].x0                 - stride * 0.5) and \
+           step_x[s] <= (obj_list[o].x0 + obj_list[o].w + stride * 0.5) and \
+           step_y[s] >= (obj_list[o].y0                 - stride * 0.5) and \
+           step_y[s] <= (obj_list[o].y0 + obj_list[o].h + stride * 0.5):
           eliminate_steps.append(s)
     eliminate_steps.sort(reverse = True)
     for e in range(len(eliminate_steps)):
@@ -1336,9 +1347,6 @@ def plot_grid(xf, obj_list):
     for j in range(len(grid.y)-1):
       plot_text_right(xf, grid.x[i+1]-0.5, grid.y[j]+0.5,  \
                       "({}, {})".format(i, j))
-
-  # Plot legend
-  plot_legend(xf, obj_list, 0, -8)
 
 #===============================================================================
 # Function to plot module name box (module header box)
@@ -1739,7 +1747,7 @@ def plot_legend(file, obj_list, x0, y0):
 
   object =  attribute.Program("Legend",                      \
                               "              Subroutine",    \
-                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
   plot_mod_name(file,  x0,  y0,               "Module",     object)
   plot_sub_name(file,  x0,  y0+const_UBH,     "Subroutine", object)
@@ -1796,8 +1804,8 @@ def find_coordinates(obj_list):
     col = obj_list[o].column
     xc = (grid.x[col] + grid.x[col+1]) * 0.5
     yc = (grid.y[row] + grid.y[row+1]) * 0.5
-    obj_list[o].x0 = xc - obj_list[o].width  * 0.5
-    obj_list[o].y0 = yc - obj_list[o].height * 0.5
-    obj_list[o].x1 = xc + obj_list[o].width  * 0.5
-    obj_list[o].y1 = yc + obj_list[o].height * 0.5
+    obj_list[o].x0 = xc - obj_list[o].w * 0.5
+    obj_list[o].y0 = yc - obj_list[o].h * 0.5
+    obj_list[o].x1 = xc + obj_list[o].w * 0.5
+    obj_list[o].y1 = yc + obj_list[o].h * 0.5
 

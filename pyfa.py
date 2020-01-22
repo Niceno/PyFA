@@ -34,8 +34,10 @@ def print_help_and_exit():
    'straight' for straight alignment")
   print("                                  \
    'diagonal' for diagonal alignment")
-  print("  -c, --coordinates [FILE]        \
-  Read object coordinates from the file")
+  print("  -ij, --ij_coordinates [FILE]    \
+  Read (i,j) object coordinates from the file")
+  print("  -xy, --xy_coordinates [FILE]    \
+  Read (x,y) object coordinates from the file")
   print("  -d, --detail_level [SWITCH]     \
   Plot by specified object detail: ")
   print("                                  \
@@ -77,9 +79,10 @@ attribute.object_hierarchy      = "Row-Based"
 attribute.object_representation = "Reduced"
 attribute.box_margins           = const.BOX_MARGINS
 
-src_file    = "None"
-s_specified = "None"
-c_specified = "None"
+src_file     = "None"
+s_specified  = "None"
+ij_specified = "None"
+xy_specified = "None"
 
 # If no command line arguments were specified, print help and exit
 if len(sys.argv) == 1:
@@ -154,12 +157,19 @@ for j in range(1,len(sys.argv),2):
       s_specified = sys.argv[j+1]
       print("List of files is specified in:", str(sys.argv[j+1]))
 
-    # Check if file with object coordinates was specified
-    elif str(sys.argv[j]) == "-c" or    \
-         str(sys.argv[j]) == "--coordinates":
+    # Check if file with object (i,j) coordinates was specified
+    elif str(sys.argv[j]) == "-ij" or    \
+         str(sys.argv[j]) == "--ij_coordinates":
 
-      c_specified = sys.argv[j+1]
-      print("Object coordinates are specified in:", str(sys.argv[j+1]))
+      ij_specified = sys.argv[j+1]
+      print("Object (i,j) coordinates are specified in:", str(sys.argv[j+1]))
+
+    # Check if file with object (x,y) coordinates was specified
+    elif str(sys.argv[j]) == "-xy" or    \
+         str(sys.argv[j]) == "--xy_coordinates":
+
+      xy_specified = sys.argv[j+1]
+      print("Object (x,y) coordinates are specified in:", str(sys.argv[j+1]))
 
     else:
       print("Unknow option:", sys.argv[j])
@@ -211,21 +221,15 @@ obj_list = finder.get_new_calls(file_paths, obj_list, obj_memb)
 # If logical coordinates specified, load them now
 # (These should over-write those specified above)
 #-------------------------------------------------
-if c_specified != "None":
-  obj_list = attribute.load_logical_coordinates(c_specified, obj_list)
+if ij_specified != "None":
+  obj_list = attribute.load_ij_coordinates(ij_specified, obj_list)
 
-if src_file == "None" and c_specified == "None":
+if src_file == "None" and ij_specified == "None":
   file_paths = browse.source_paths(root)
   if not file_paths:
     print("No Fortran sources found!")
     print("Exiting the program")
     sys.exit()
-
-#----------------------------------------------------------
-# If logical coordinates were not specified, save them now
-#----------------------------------------------------------
-if c_specified == "None":
-  attribute.save_logical_coordinates(obj_list, const.OBJ_FILE_NAME)
 
 #------------------------------------------
 #
@@ -233,17 +237,34 @@ if c_specified == "None":
 #
 #------------------------------------------
 
+#---------------------------------------
 # Find object coordinates in Xfig units
+#---------------------------------------
 xfig.find_coordinates(obj_list)
+if xy_specified != "None":
+  obj_list = attribute.load_xy_coordinates(xy_specified, obj_list)
 
+#----------------
 # Open Xfig file
+#----------------
 xf = open(const.FIG_FILE_NAME, "w")
 
+#------------------
 # Write header out
+#------------------
 xfig.write_header(xf)
 
+#-------------------------------------------
 # Plot all fortran files starting from root
+#-------------------------------------------
 xfig.plot_all(xf, obj_list)
+
+#-------------------------------------------------------------------------
+# If neither (i,j) or (x,y) coordinates were not specified, save them now
+#-------------------------------------------------------------------------
+if ij_specified == "None" and xy_specified == "None":
+  attribute.save_ij_coordinates(obj_list, const.IJ_FILE_NAME)
+  attribute.save_xy_coordinates(obj_list, const.XY_FILE_NAME)
 
 #End
 xf.close()
