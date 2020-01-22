@@ -159,10 +159,11 @@ def find_height(object):
 #-------------------------------------------------------------------------------
 def find_width(filename):
 
-  var_list     = filename.var
-  meth_list    = filename.meth
-  header_name  = filename.name
-  use_list     = filename.use
+  header_name = filename.name
+  var_list    = filename.var
+  meth_list   = filename.meth
+  use_list    = filename.use
+  type_list   = filename.type_stat
 
   if filename.type == "Function":
     fun_type = filename.fun_type
@@ -180,15 +181,18 @@ def find_width(filename):
     var_list = ["No variables"]
   if var_list == 0:
     var_list = ["No variables"]
+  if type_list == 0:
+    type_list = ["No new types"]
 
   var_length      = max(var_list,  key=len)
   meth_length     = max(meth_list, key=len)
   use_length      = max(use_list,  key=len)
   fun_type_length = max(fun_type,  key=len)
+  type_length     = max(type_list, key=len)
 
-  lengths = [len(var_length), len(meth_length), \
-             len(header_name),len(use_length),  \
-             len(fun_type_length)]
+  lengths = [len(var_length),      len(meth_length), \
+             len(header_name),     len(use_length),  \
+             len(fun_type_length), len(type_length)]
 
   box_width = max(lengths)
   box_width = box_width * const_UBH * 0.4  # gives the best ratio for width
@@ -271,14 +275,12 @@ def plot(file, object):
 
   # Type of object is function, assign function name
   elif object.type == "Function":
-
     fun_name  = object.name
     mod_name  = 0
     sub_name  = 0
     prog_name = 0
 
   elif object.type == "Program":
-
     prog_name = object.name
     fun_name  = 0
     mod_name  = 0
