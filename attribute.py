@@ -215,7 +215,7 @@ class Program(object):
 # Returns:
 #   - use_list:  if it exists return use list, return "None" if list is empty(0)
 # Used by:
-#   - Functions for importing attributes to objects
+#   - functions for importing attributes to objects
 #-------------------------------------------------------------------------------
 def check_use(list):
 
@@ -462,7 +462,7 @@ def print_info(obj_list):
 # Returns:
 #   - lvl:         max level of objects from list
 # Used by:
-#   - Functions for creating grid and updating coordinates of objects
+#   - functions for creating grid and updating coordinates of objects
 #-------------------------------------------------------------------------------
 def find_max_lvl(obj_list):
   lvls = []
@@ -804,7 +804,7 @@ def row_list(obj_list,row):
 # Returns:
 #   - max_width:   maximum width of all objets (boxes)
 # Used by:
-#   - Functions for creating and updating grid
+#   - functions for creating and updating grid
 #-------------------------------------------------------------------------------
 def max_width(obj_list):
   widths_list = []
@@ -823,7 +823,7 @@ def max_width(obj_list):
 # Returns:
 #   - max_height:   maximum height of all objets (boxes)
 # Used by:
-#   - Functions for creating and updating grid
+#   - functions for creating and updating grid
 #-------------------------------------------------------------------------------
 def max_height(obj_list):
   heights_list = []

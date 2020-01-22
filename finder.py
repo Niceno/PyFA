@@ -15,7 +15,7 @@ import sys
 # Returns:
 #   - module_name:             name of the module, return [] if none
 # Used by:
-#   - Functions for assigning attributes to objects ! Variables in Grid_Mod
+#   - functions for assigning attributes to objects ! Variables in Grid_Mod
 #-------------------------------------------------------------------------------
 def get_mod(file_name_with_path):
 
@@ -54,7 +54,7 @@ def get_mod(file_name_with_path):
 # Returns:
 #   - sub_name:             name of the subroutine, return 0 if none
 # Used by:
-#   - Functions for assigning attributes to objects
+#   - functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
 def get_sub(file_name_with_path):
 
@@ -119,7 +119,7 @@ def get_sub(file_name_with_path):
 # Returns:
 #   - fun_name:                name of the function, return 0 if none
 # Used by:
-#   - Functions for assigning attributes to objects
+#   - functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
 def get_fun(file_name_with_path):
 
@@ -186,7 +186,7 @@ def get_fun(file_name_with_path):
 # Returns:
 #   - prog_name:               name of the function, return 0 if none
 # Used by:
-#   - Functions for assigning attributes to objects
+#   - functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
 def get_prog(file_name_with_path):
 
@@ -224,7 +224,7 @@ def get_prog(file_name_with_path):
 # Returns:
 #   - fun_type:                type of the function, return 0 if none
 # Used by:
-#   - Functions for assigning attributes to objects
+#   - functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
 def get_fun_type(file_name_with_path):
 
@@ -264,7 +264,7 @@ def get_fun_type(file_name_with_path):
 # Returns:
 #   - call_list:               list of call statements, return 0 if none
 # Used by:
-#   - Functions for assigning attributes to objects
+#   - functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
 def get_call(file_name_with_path):
 
@@ -301,7 +301,7 @@ def get_call(file_name_with_path):
 # Returns:
 #   - type_list:             list of type statements, return 0 if none
 # Used by:
-#   - Functions for assigning attributes to objects
+#   - functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
 def get_type(file_name_with_path):
 
@@ -345,7 +345,7 @@ def get_type(file_name_with_path):
 # Returns:
 #   - use_list:               list of use statements, return 0 if none
 # Used by:
-#   - Functions for assigning attributes to objects
+#   - functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
 def get_use(file_name_with_path):
 
@@ -470,7 +470,7 @@ def get_all_var(file_name_with_path):
 # Returns:
 #   - sub_var_list:               list of global variables in subroutines
 # Used by:
-#   - Functions for assigning attributes to objects
+#   - functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
 def get_var(file_name_with_path):
 
@@ -506,7 +506,7 @@ def get_var(file_name_with_path):
 # Returns:
 #   - meth_list:               list of all methods(module functions)
 # Used by:
-#   - Functions for assigning attributes to objects
+#   - functions for assigning attributes to objects
 #-------------------------------------------------------------------------------
 def get_meth(file_name_with_path):
   module_name = get_mod(file_name_with_path)

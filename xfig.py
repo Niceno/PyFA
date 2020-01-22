@@ -21,7 +21,7 @@ from const import UNIT_BOX_HEIGHT     as const_UBH
 # Returns:
 #   - use_list_len:  number of use statements, zero if none
 # Used by:
-#   - Functions which plot frames, to determine box height
+#   - functions which plot frames, to determine box height
 #-------------------------------------------------------------------------------
 def use_len(list):
   if list != 0:
@@ -38,7 +38,7 @@ def use_len(list):
 # Returns:
 #   - fun_type_len:  1 if it is function, 0 if it is not function
 # Used by:
-#   - Functions which plot frames, to determine box height
+#   - functions which plot frames, to determine box height
 #-------------------------------------------------------------------------------
 def check_if_function(object):
   if object.type == "Function":
@@ -55,7 +55,7 @@ def check_if_function(object):
 # Returns:
 #   - fun_type_len:  1 if it is has type stat, 0 if not
 # Used by:
-#   - Functions which plot frames, to determine box height
+#   - functions which plot frames, to determine box height
 #-------------------------------------------------------------------------------
 def check_if_type_stat(object):
   if object.type_stat != 0:
@@ -72,7 +72,7 @@ def check_if_type_stat(object):
 # Returns:
 #   - number corresponding to font code, as defined in Xfig format
 # Used by:
-#   - Functions which plot text
+#   - functions which plot text
 #-------------------------------------------------------------------------------
 def xfig_font_code(name):
 
@@ -93,7 +93,7 @@ def xfig_font_code(name):
 # Returns:
 #   - number corresponding to color code, as defined in Xfig format
 # Used by:
-#   - Functions which plot frames
+#   - functions which plot frames
 #-------------------------------------------------------------------------------
 def xfig_box_color(name):
 
@@ -153,7 +153,7 @@ def find_height(object):
 # Returns:
 #   - var_width:  box width in Xfig drawing units
 # Used by:
-#   - Functions which plot boxes
+#   - functions which plot boxes
 # Warning:
 #   - Uses ghost parameter 0.4 to convert width from characters to Xfig units
 #-------------------------------------------------------------------------------
