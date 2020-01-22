@@ -12,6 +12,7 @@ from const import UNIT_BOX_HEIGHT     as const_UBH
 from const import STARTING_LAYER_USE  as const_SLU
 from const import STARTING_LAYER_CALL as const_SLC
 from const import UNIT_BOX_HEIGHT     as const_UBH
+from const import COMPOUND_MARGIN     as const_CMR
 
 #===============================================================================
 # Function to choose use statements list length
@@ -361,6 +362,11 @@ def plot_module(file, x0, y0,     \
                 use_list,         \
                 object):
 
+  # Start a compound around the module
+  plot_mod_start_compound(file, x0, y0,   \
+                          module_name,    \
+                          object)
+
   # Plot a header text box
   plot_mod_name(file, x0, y0,     \
                 module_name,      \
@@ -394,6 +400,11 @@ def plot_module(file, x0, y0,     \
                    meth_list,       \
                    use_list,        \
                    object)
+
+  # End the compound around the module
+  plot_mod_end_compound(file, x0, y0,   \
+                        module_name,    \
+                        object)
 
 #===============================================================================
 # Function to plot subroutine box
@@ -1800,4 +1811,45 @@ def find_coordinates(obj_list):
     obj_list[o].y0 = yc - obj_list[o].height * 0.5
     obj_list[o].x1 = xc + obj_list[o].width  * 0.5
     obj_list[o].y1 = yc + obj_list[o].height * 0.5
+
+#===============================================================================
+# Function to start definition of a compound in xfig
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - x0:           object position on x axis in centimeters
+#   - y0:           object position on y axis in centimeters
+#   - text:         module name)
+#   - object:       object to plot (module)
+# Returns:
+#   - nothing
+# Used by:
+#   - plot_module
+#-------------------------------------------------------------------------------
+def plot_mod_start_compound(file, x0, y0, text, object):
+  box_width  = find_width(object)
+  box_height = find_height(object)
+
+  file.write("6 %9d %9d %9d %9d\n" % (       \
+     x0            *const_XFS - const_CMR,   \
+     y0            *const_XFS - const_CMR,   \
+    (x0+box_width) *const_XFS + const_CMR,   \
+    (y0+box_height)*const_XFS + const_CMR))
+
+#===============================================================================
+# Function to end a compound in xfig
+#
+# Parameters:
+#   - file:         Xfig file's handle
+#   - x0:           object position on x axis in centimeters
+#   - y0:           object position on y axis in centimeters
+#   - text:         module name)
+#   - object:       object to plot (module)
+# Returns:
+#   - nothing
+# Used by:
+#   - plot_module
+#-------------------------------------------------------------------------------
+def plot_mod_end_compound(file, x0, y0, text, object):
+  file.write("-6\n")
 
