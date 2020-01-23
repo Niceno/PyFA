@@ -989,23 +989,24 @@ def plot_spline(file, obj_list, object1, object2, line_type, depth):
   xc1 = object1.x0 + object1.w * 0.5
   xc2 = object2.x0 + object2.w * 0.5
 
+  # 0.7 in lines below is to avoid coinciding lines
   if abs(xc1 - xc2) <= offset:
     x1 = object1.x0              # start at the lhs of object1
-    x2 = x1 - offset             # continue to the left
+    x2 = x1 - offset * 0.7       # continue to the left
     x6 = object2.x0              # end on the lhs of object1
-    x5 = x6 - offset             # come from left side
+    x5 = x6 - offset * 0.7       # come from left side
 
   elif xc1 < xc2 - offset:
     x1 = object1.x0 + object1.w  # start at the rhs of object1
-    x2 = x1 + offset             # continue to the right
+    x2 = x1 + offset * 0.7       # continue to the right
     x6 = object2.x0              # end on the lhs of object1
-    x5 = x6 - offset             # come from left side
+    x5 = x6 - offset * 0.7       # come from left side
 
   else:
     x1 = object1.x0              # start at the lhs of the object1
-    x2 = x1 - offset             # continue to the left
+    x2 = x1 - offset * 0.7       # continue to the left
     x6 = object2.x0 + object2.w  # end on the rhs of object2
-    x5 = x6 + offset             # come from right side
+    x5 = x6 + offset * 0.7       # come from right side
 
   # First height depends on line_type
   if line_type == "Continuous":
