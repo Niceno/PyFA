@@ -1086,6 +1086,7 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
   x    = []
   y    = []
   dist = []
+  keep = []
 
   x.append(x1)
   y.append(y1)
@@ -1107,7 +1108,7 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
     step_y    = []
     step_dist = []
 
-    stride = attribute.box_margins * 0.5
+    stride = attribute.box_margins * 0.45
 
     # Step 0                        # Step 1
     step_x.append(x[-1] + stride);  step_x.append(x[-1] + stride)
@@ -1168,6 +1169,7 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
     x.   append(step_x[min_dist])
     y.   append(step_y[min_dist])
     dist.append(min(step_dist))
+    keep.append(True)
 
     # Check if converged
     if dist[-1] < (attribute.box_margins * 0.5):
@@ -1183,13 +1185,45 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
           y = y[:-3]
           break
 
-  x.append(x5)
-  y.append(y5)
+  x.   append(x5)
+  y.   append(y5)
+  keep.append(True)
 
-  x.append(x6)
-  y.append(y6)
+  x.   append(x6)
+  y.   append(y6)
+  keep.append(True)
 
-  return x, y
+  #------------------------------------------------
+  #
+  # Eliminate the points in-between straight lines
+  #
+  #------------------------------------------------
+
+  # Mark points in between straight lines for deletion
+  for i in range(1, len(x)-1):
+    dx_p = x[i+1] - x[i]
+    dy_p = y[i+1] - y[i]
+    dx_m = x[i]   - x[i-1]
+    dy_m = y[i]   - y[i-1]
+    if abs(dx_p - dx_m) < 0.1 and abs(dy_p - dy_m) < 0.1:
+      keep[i] = False
+
+  # Yet, keep the points next to ones which are kept (to preserve curves)
+  keep_2 = keep[:]
+  for i in range(1, len(x)-1):
+    if not keep[i]:
+      if keep[i-1] or keep[i+1]:
+        keep_2[i] = True
+
+  # Make a compressed list of x and y coordinates
+  x_c = []
+  y_c = []
+  for i in range(0, len(x)):
+    if keep_2[i]:
+      x_c.append(x[i])
+      y_c.append(y[i])
+
+  return x_c, y_c
 
 #===============================================================================
 # Function to plot spline (with 2 coordinates)
@@ -1199,7 +1233,6 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
 #   - obj_list:
 #   - x0:         first coordinate on x axis
 #   - y0:         first coordinate on y axis
-
 # Returns:
 #   - nothing
 # Used by:
