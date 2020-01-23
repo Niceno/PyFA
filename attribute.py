@@ -19,8 +19,6 @@ import const
 #   - level:      level of module
 #   - x0:         first corner(upper left) position on x axis in centimeters
 #   - y0:         first corner(upper left) position on y axis in centimeters
-#   - x1:         second corner(upper right) position on x axis in centimeters
-#   - y1:         second corner(upper right) position on y axis in centimeters
 #   - width:      module box width
 #   - height:     module box height
 #   - call:       call statements of module
@@ -34,8 +32,8 @@ import const
 #   - Function for importing attributes(parameters) to module class(object)
 #-------------------------------------------------------------------------------
 class Module(object):
-  def __init__(module, type, name, use, var, meth,          \
-               level, x0, x1, y0, y1, width, height,        \
+  def __init__(module, type, name, use, var, meth,  \
+               level, x0, y0, width, height,        \
                call, type_stat, row, column, path):
 
     module.name      = name
@@ -45,12 +43,10 @@ class Module(object):
     module.call      = call
     module.level     = level
     module.x0        = x0
-    module.x1        = x1
     module.y0        = y0
-    module.y1        = y1
     module.type      = type
-    module.width     = width
-    module.height    = height
+    module.w         = width
+    module.h         = height
     module.type_stat = type_stat
     module.row       = row
     module.column    = column
@@ -69,8 +65,6 @@ class Module(object):
 #   - level:      level of subroutine
 #   - x0:         first corner(upper left) position on x axis in centimeters
 #   - y0:         first corner(upper left) position on y axis in centimeters
-#   - x1:         second corner(upper right) position on x axis in centimeters
-#   - y1:         second corner(upper right) position on y axis in centimeters
 #   - width:      subroutine box width
 #   - height:     subroutine box height
 #   - call:       call statements of subroutine
@@ -83,8 +77,8 @@ class Module(object):
 #   - Function for importing attributes(parameters) to subroutine class(object)
 #-------------------------------------------------------------------------------
 class Subroutine(object):
-  def __init__(subroutine, type, name, use, var, meth,       \
-               level, x0, x1, y0, y1, width, height,         \
+  def __init__(subroutine, type, name, use, var, meth,  \
+               level, x0, y0, width, height,            \
                call, type_stat, row, column, path):
 
     subroutine.name      = name
@@ -94,12 +88,10 @@ class Subroutine(object):
     subroutine.call      = call
     subroutine.level     = level
     subroutine.x0        = x0
-    subroutine.x1        = x1
     subroutine.y0        = y0
-    subroutine.y1        = y1
     subroutine.type      = type
-    subroutine.width     = width
-    subroutine.height    = height
+    subroutine.w         = width
+    subroutine.h         = height
     subroutine.type_stat = type_stat
     subroutine.row       = row
     subroutine.column    = column
@@ -119,8 +111,6 @@ class Subroutine(object):
 #   - level:      level of function
 #   - x0:         first corner(upper left) position on x axis in centimeters
 #   - y0:         first corner(upper left) position on y axis in centimeters
-#   - x1:         second corner(upper right) position on x axis in centimeters
-#   - y1:         second corner(upper right) position on y axis in centimeters
 #   - width:      function box width
 #   - height:     function box height
 #   - fun_type:   type of function
@@ -134,8 +124,8 @@ class Subroutine(object):
 #   - Function for importing attributes(parameters) to function class(object)
 #-------------------------------------------------------------------------------
 class Function(object):
-  def __init__(function, type, name, use, var, meth,     \
-               level, x0, x1, y0, y1, width, height,     \
+  def __init__(function, type, name, use, var, meth,  \
+               level, x0, y0, width, height,          \
                fun_type, call, type_stat, row, column, path):
 
     function.name      = name
@@ -145,12 +135,10 @@ class Function(object):
     function.call      = call
     function.level     = level
     function.x0        = x0
-    function.x1        = x1
     function.y0        = y0
-    function.y1        = y1
     function.type      = type
-    function.width     = width
-    function.height    = height
+    function.w         = width
+    function.h         = height
     function.fun_type  = fun_type
     function.type_stat = type_stat
     function.row       = row
@@ -171,8 +159,6 @@ class Function(object):
 #   - level:      level of program
 #   - x0:         first corner(upper left) position on x axis in centimeters
 #   - y0:         first corner(upper left) position on y axis in centimeters
-#   - x1:         second corner(upper right) position on x axis in centimeters
-#   - y1:         second corner(upper right) position on y axis in centimeters
 #   - width:      program box width
 #   - height:     program box height
 #   - call:       call statements of program
@@ -185,8 +171,8 @@ class Function(object):
 #   - program for importing attributes(parameters) to program class(object)
 #-------------------------------------------------------------------------------
 class Program(object):
-  def __init__(program, type, name, use, var, meth, level,     \
-               x0, x1, y0, y1, width, height, call,            \
+  def __init__(program, type, name, use, var, meth, level,  \
+               x0, y0, width, height, call,                 \
                type_stat, row, column, path):
 
     program.name      = name
@@ -196,12 +182,10 @@ class Program(object):
     program.call      = call
     program.level     = level
     program.x0        = x0
-    program.x1        = x1
     program.y0        = y0
-    program.y1        = y1
     program.type      = type
-    program.width     = width
-    program.height    = height
+    program.w         = width
+    program.h         = height
     program.type_stat = type_stat
     program.row       = row
     program.column    = column
@@ -246,9 +230,7 @@ def module_class(file_path):
   type_stat    = finder.get_type(file_path)
   level        = 0
   x0           = 0
-  x1           = 0
   y0           = 0
-  y1           = 0
   width        = 0
   height       = 0
   row          = 0
@@ -262,9 +244,7 @@ def module_class(file_path):
                   meth_list,    \
                   level,        \
                   x0,           \
-                  x1,           \
                   y0,           \
-                  y1,           \
                   width,        \
                   height,       \
                   call_list,    \
@@ -296,9 +276,7 @@ def subroutine_class(file_path):
   meth_list  = 0
   level      = 0
   x0         = 0
-  x1         = 0
   y0         = 0
-  y1         = 0
   width      = 0
   height     = 0
   row        = 0
@@ -312,9 +290,7 @@ def subroutine_class(file_path):
                           meth_list,  \
                           level,      \
                           x0,         \
-                          x1,         \
                           y0,         \
-                          y1,         \
                           width,      \
                           height,     \
                           call_list,  \
@@ -346,9 +322,7 @@ def function_class(file_path):
   meth_list  = 0
   level      = 0
   x0         = 0
-  x1         = 0
   y0         = 0
-  y1         = 0
   width      = 0
   height     = 0
   row        = 0
@@ -362,9 +336,7 @@ def function_class(file_path):
                       meth_list,  \
                       level,      \
                       x0,         \
-                      x1,         \
                       y0,         \
-                      y1,         \
                       width,      \
                       height,     \
                       fun_type,   \
@@ -397,9 +369,7 @@ def program_class(file_path):
   meth_list  = 0
   level      = 0
   x0         = 0
-  x1         = 0
   y0         = 0
-  y1         = 0
   width      = 0
   height     = 0
   row        = 0
@@ -413,9 +383,7 @@ def program_class(file_path):
                     meth_list,   \
                     level,       \
                     x0,          \
-                    x1,          \
                     y0,          \
-                    y1,          \
                     width,       \
                     height,      \
                     call_list,   \
@@ -433,7 +401,7 @@ def program_class(file_path):
 # Returns:
 #   - nothing
 # Used by:
-#   - Main program, only for printing information
+#   - main program, only for printing information
 #-------------------------------------------------------------------------------
 def print_info(obj_list):
 
@@ -446,12 +414,10 @@ def print_info(obj_list):
           "\nCalls: ",           obj_list[i].call,        \
           "\nType statements: ", obj_list[i].type_stat,   \
           "\nLevel: ",           obj_list[i].level,       \
-          "\nWidth: ",           obj_list[i].width,       \
-          "\nHeight: ",          obj_list[i].height,      \
+          "\nWidth: ",           obj_list[i].w,           \
+          "\nHeight: ",          obj_list[i].h,           \
           "\nX0:",               obj_list[i].x0,          \
           "Y0:",                 obj_list[i].y0,          \
-          "\nX1:",               obj_list[i].x1,          \
-          "Y1:",                 obj_list[i].y1,          \
           "\nFile path:",        obj_list[i].path)
 
 #===============================================================================
@@ -724,8 +690,8 @@ def prog_list_fun(file_paths):
 def update_dimensions(obj_list):
 
   for o in range(len(obj_list)):
-    obj_list[o].width  = xfig.find_width(obj_list[o])
-    obj_list[o].height = xfig.find_height(obj_list[o])
+    obj_list[o].w = xfig.find_width(obj_list[o])
+    obj_list[o].h = xfig.find_height(obj_list[o])
 
   return obj_list
 
@@ -809,7 +775,7 @@ def row_list(obj_list,row):
 def max_width(obj_list):
   widths_list = []
   for i in range(len(obj_list)):
-    widths = obj_list[i].width
+    widths = obj_list[i].w
     widths_list.append(widths)
 
   max_width = max(widths_list)
@@ -925,7 +891,7 @@ def place_objects_column(obj_list):
 # Used by:
 #   - finder.py - Function for searching coordinates in file and updating them
 #-------------------------------------------------------------------------------
-def update_box_pos(obj_list, name, row, column):
+def update_box_ij_pos(obj_list, name, row, column):
 
   # Assign new coordinates
   for i in range(len(obj_list)):
@@ -937,7 +903,28 @@ def update_box_pos(obj_list, name, row, column):
   return obj_list
 
 #===============================================================================
-# Function for saving names of all objects into .txt file
+# Function for updating only 1 box by row and column (change placement in grid)
+#
+# Parameters:
+#   - obj_list:     list of objects
+# Returns:
+#   - list of objects
+# Used by:
+#   - finder.py - Function for searching coordinates in file and updating them
+#-------------------------------------------------------------------------------
+def update_box_xy_pos(obj_list, name, x0, y0):
+
+  # Assign new coordinates
+  for i in range(len(obj_list)):
+    object_name = obj_list[i].name.replace(" ", "")
+    if name == object_name:
+      obj_list[i].x0 = x0
+      obj_list[i].y0 = y0
+
+  return obj_list
+
+#===============================================================================
+# Function for saving logical coordinates into .ij file
 #
 # Parameters:
 #   - obj_list:     list of objects
@@ -947,26 +934,26 @@ def update_box_pos(obj_list, name, row, column):
 # Note:
 #   - creates a .txt file in PyFA folder
 # Used by:
-#   - Main program (simple.py)
+#   - main program (simple.py)
 #-------------------------------------------------------------------------------
-def save_logical_coordinates(obj_list,file_name):
+def save_ij_coordinates(obj_list,file_name):
 
   # Write list of all names into a .txt file
   text_file = open(file_name,"w")
   text_file.write("#\n")
-  text_file.write("#  i,  j,  name\n")
-  text_file.write("#")
+  text_file.write("#  i   j   name\n")
+  text_file.write("#\n")
 
   for o in range(len(obj_list)):
-    text_file.write("\n {:>3},{:>3},  {}".format(obj_list[o].column,  \
-                                                 obj_list[o].row,     \
-                                                 obj_list[o].name))
+    text_file.write("%4d%4d   %s\n" % (obj_list[o].column,  \
+                                       obj_list[o].row,     \
+                                       obj_list[o].name))
   text_file.close()
-  print("File", const.OBJ_FILE_NAME, \
-        "with object coordinates has been created!")
+  print("File", file_name, \
+        "with (i,j) coordinates has been created!")
 
 #===============================================================================
-# Function for searching coordinates in file and update them
+# Function for searching coordinates in .ij file and update them
 #
 # Parameters:
 #   - file_with_names:  file with names and coordinates
@@ -974,9 +961,9 @@ def save_logical_coordinates(obj_list,file_name):
 # Returns:
 #   - obj_list:         list of objects with updated placements in grid
 # Used by:
-#   - Main program (function for changing object placement in grid)
+#   - main program (function for changing object placement in grid)
 #===============================================================================
-def load_logical_coordinates(file_with_names, obj_list):
+def load_ij_coordinates(file_with_names, obj_list):
 
   list = obj_list
   try: myfile = open(file_with_names, 'rt')
@@ -987,12 +974,71 @@ def load_logical_coordinates(file_with_names, obj_list):
   with myfile:
     for line in myfile:
       if not line.startswith("#"):
-        line = "".join(line.split())
-        data = line.split(",",2)
-        obj_list = update_box_pos(list,          \
-                                  data[2],       \
-                                  int(data[1]),  \
-                                  int(data[0]))
+        data = line.split()
+        obj_list = update_box_ij_pos(list,          \
+                                     data[2],       \
+                                     int(data[1]),  \
+                                     int(data[0]))
+  myfile.close()
+
+  return obj_list
+
+#===============================================================================
+# Function for saving real coordinates into .xy file
+#
+# Parameters:
+#   - obj_list:     list of objects
+#   - file_name:    name of saved .txt file
+# Returns:
+#   - nothing
+# Note:
+#   - creates a .txt file in PyFA folder
+# Used by:
+#   - main program (simple.py)
+#-------------------------------------------------------------------------------
+def save_xy_coordinates(obj_list,file_name):
+
+  # Write list of all names into a .txt file
+  text_file = open(file_name,"w")
+  text_file.write("#\n")
+  text_file.write("#  x       y      name\n")
+  text_file.write("#\n")
+
+  for o in range(len(obj_list)):
+    text_file.write(" %7.3f %7.3f  %s\n" % (obj_list[o].x0,      \
+                                            obj_list[o].y0,      \
+                                            obj_list[o].name))
+  text_file.close()
+  print("File", file_name, \
+        "with (x,y) coordinates has been created!")
+
+#===============================================================================
+# Function for searching coordinates in .ij file and update them
+#
+# Parameters:
+#   - file_with_names:  file with names and coordinates
+#   - obj_list:         list of objects
+# Returns:
+#   - obj_list:         list of objects with updated placements in grid
+# Used by:
+#   - main program (function for changing object placement in grid)
+#===============================================================================
+def load_xy_coordinates(file_with_names, obj_list):
+
+  list = obj_list
+  try: myfile = open(file_with_names, 'rt')
+  except:
+    print("File", file_with_names, "can't be found!  Exiting")
+    sys.exit()
+
+  with myfile:
+    for line in myfile:
+      if not line.startswith("#"):
+        data = line.split()
+        obj_list = update_box_xy_pos(list,            \
+                                     data[2],         \
+                                     float(data[0]),  \
+                                     float(data[1]))
   myfile.close()
 
   return obj_list
@@ -1037,7 +1083,7 @@ def classify_objects(obj_list):
 # Returns:
 #   - obj_list:     list with all created and updated objects
 # Used by:
-#   - Main program (simple.py)
+#   - main program (simple.py)
 #-------------------------------------------------------------------------------
 def get_obj_lists(file_paths):
 
