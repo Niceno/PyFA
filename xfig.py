@@ -1010,7 +1010,8 @@ def plot_spline(file, obj_list, object1, object2, line_type, depth):
 
   # First height depends on line_type
   if line_type == "Continuous":
-    y1 = object1.y0 + object1.h * 0.5  # starts in the middle of object1
+    # y1 = object1.y0 + object1.h * 0.5  # starts in the middle of object1
+    y1 = object1.y0 + const_UBH * 0.5  # starts from the middle of header
   elif line_type == "Dashed":
     y1 = object1.y0 + const_UBH * 0.5  # starts from the middle of header
 
