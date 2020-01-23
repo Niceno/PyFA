@@ -1100,7 +1100,7 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
   # Main loop
   #
   #-----------
-  for i in range(0, 128):
+  for i in range(0, 512):
 
     #--------------------------   3 2 1
     # Set eight possible direc    4 c 0
