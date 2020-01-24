@@ -1240,9 +1240,9 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
 # Used by:
 #   - function for plotting spline connections for legend
 #-------------------------------------------------------------------------------
-def plot_spline_legend(file, obj_list, x0, y0, line_type):
+def plot_spline_legend(file, obj_list, x0, y0, width, line_type):
 
-  x1 = x0 + 7   # ghost number
+  x1 = x0 + width
 
   if line_type == "Continuous":
     file.write("3 0 0 1 0 7 ")
@@ -1785,23 +1785,30 @@ def plot_meth_name(file, x0, y0,      \
 #-------------------------------------------------------------------------------
 def plot_legend(file, obj_list, x0, y0):
 
-  text_width   = 5  # ghost number
-  text_height  = 1  # ghost number
-
   object =  attribute.Program("Legend",                      \
                               "              Subroutine",    \
                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+  text_height = const_UBH
+  text_width  = find_width(object)
 
+  # Boxes
   plot_mod_name(file,  x0,  y0,               "Module",     object)
   plot_sub_name(file,  x0,  y0+const_UBH,     "Subroutine", object)
   plot_fun_name(file,  x0,  y0+(const_UBH)*2, "Function",   object)
   plot_prog_name(file, x0,  y0+(const_UBH)*3, "Program",    object)
-  plot_spline_legend(file, obj_list, x0, y0+4, "Continuous")
-  plot_spline_legend(file, obj_list, x0, y0+5, "Dashed")
-  plot_text_center(file, x0+1, y0+3.2, text_width, \
-                   text_height, "Use statements")
-  plot_text_center(file, x0+1, y0+4.2, text_width, \
-                   text_height, "Call statements")
+
+  # Splines
+  plot_spline_legend(file, obj_list, x0, y0+const_UBH*5.5, text_width,  \
+                     "Continuous")
+  plot_spline_legend(file, obj_list, x0, y0+const_UBH*7.0, text_width,  \
+                     "Dashed")
+  plot_text_center(file, x0+1, y0+4.5*const_UBH,  \
+                   text_width, text_height,       \
+                   "Use statements")
+  plot_text_center(file, x0+1, y0+6.0*const_UBH,  \
+                   text_width,                    \
+                   text_height,                   \
+                   "Call statements")
 
 #===============================================================================
 # Find grid and object coordinates
