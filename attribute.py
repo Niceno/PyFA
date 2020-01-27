@@ -893,10 +893,15 @@ def place_objects_column(obj_list):
 #-------------------------------------------------------------------------------
 def update_box_ij_pos(obj_list, name, row, column):
 
+  # Strip name of whitespaces and new lines
+  strip_name = name.replace(" ", "").replace("\n", "")
+
   # Assign new coordinates
   for i in range(len(obj_list)):
-    object_name = obj_list[i].name.replace(" ", "")
-    if name == object_name:
+    # Strip object name of whitespaces and new lines
+    strip_obj_name = obj_list[i].name.replace(" ", "").replace("\n", "")
+
+    if strip_obj_name == strip_name:
       obj_list[i].row    = row
       obj_list[i].column = column
 
@@ -941,13 +946,13 @@ def save_ij_coordinates(obj_list,file_name):
   # Write list of all names into a .txt file
   text_file = open(file_name,"w")
   text_file.write("#\n")
-  text_file.write("#  i   j   name\n")
+  text_file.write("#  i;   j;   name\n")
   text_file.write("#\n")
 
   for o in range(len(obj_list)):
-    text_file.write("%4d%4d   %s\n" % (obj_list[o].column,  \
-                                       obj_list[o].row,     \
-                                       obj_list[o].name))
+    text_file.write("%4d;%4d;   %s\n" % (obj_list[o].column,  \
+                                         obj_list[o].row,     \
+                                         obj_list[o].name))
   text_file.close()
   print("File", file_name, \
         "with (i,j) coordinates has been created!")
@@ -974,7 +979,7 @@ def load_ij_coordinates(file_with_names, obj_list):
   with myfile:
     for line in myfile:
       if not line.startswith("#"):
-        data = line.split()
+        data = line.split(";")
         obj_list = update_box_ij_pos(list,          \
                                      data[2],       \
                                      int(data[1]),  \
@@ -1001,13 +1006,13 @@ def save_xy_coordinates(obj_list,file_name):
   # Write list of all names into a .txt file
   text_file = open(file_name,"w")
   text_file.write("#\n")
-  text_file.write("#  x       y      name\n")
+  text_file.write("#       x;       y;  name\n")
   text_file.write("#\n")
 
   for o in range(len(obj_list)):
-    text_file.write(" %7.3f %7.3f  %s\n" % (obj_list[o].x0,      \
-                                            obj_list[o].y0,      \
-                                            obj_list[o].name))
+    text_file.write(" %8.3f;%8.3f;  %s\n" % (obj_list[o].x0,      \
+                                             obj_list[o].y0,      \
+                                             obj_list[o].name))
   text_file.close()
   print("File", file_name, \
         "with (x,y) coordinates has been created!")
@@ -1034,7 +1039,7 @@ def load_xy_coordinates(file_with_names, obj_list):
   with myfile:
     for line in myfile:
       if not line.startswith("#"):
-        data = line.split()
+        data = line.split(";")
         obj_list = update_box_xy_pos(list,            \
                                      data[2],         \
                                      float(data[0]),  \
