@@ -7,9 +7,9 @@ import time
 import const
 import os            # needed for getcwd
 import sys           # needed to get command line arguments
-import xfig
-import finder
-import browse
+import Xfig
+import Finder
+import Browse
 import attribute
 
 #===============================================================================
@@ -193,7 +193,7 @@ for j in range(1,len(sys.argv),2):
 if r_specified != "None":
 
   print("Analyzing Fortan sources in: " + r_specified)
-  file_paths = browse.source_paths(r_specified)
+  file_paths = Browse.source_paths(r_specified)
 
 #---------------------------------------------
 # List of sources was specified, read from it
@@ -220,7 +220,7 @@ else:
 # For all cases, take object list from file paths and work out calls
 #--------------------------------------------------------------------
 obj_list, obj_memb = attribute.get_obj_lists(file_paths)
-obj_list = finder.get_new_calls(file_paths, obj_list, obj_memb)
+obj_list = Finder.get_new_calls(file_paths, obj_list, obj_memb)
 
 #-------------------------------------------------
 # If logical coordinates specified, load them now
@@ -238,7 +238,7 @@ if ij_specified != "None":
 #---------------------------------------
 # Find object coordinates in Xfig units
 #---------------------------------------
-xfig.find_coordinates(obj_list)
+Xfig.find_coordinates(obj_list)
 if xy_specified != "None":
   obj_list = attribute.load_xy_coordinates(xy_specified, obj_list)
 
@@ -250,12 +250,12 @@ xf = open(const.FIG_FILE_NAME, "w")
 #------------------
 # Write header out
 #------------------
-xfig.write_header(xf)
+Xfig.write_header(xf)
 
 #-------------------------------------------
 # Plot all fortran files starting from root
 #-------------------------------------------
-xfig.plot_all(xf, obj_list)
+Xfig.plot_all(xf, obj_list)
 
 #-------------------------------------------------------------------------
 # If neither (i,j) or (x,y) coordinates were not specified, save them now

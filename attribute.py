@@ -1,9 +1,8 @@
 #===============================================================================
 # Import libraries
 #-------------------------------------------------------------------------------
-import xfig
-import finder
-import browse
+import Xfig
+import Finder
 import const
 
 #===============================================================================
@@ -222,12 +221,12 @@ def check_use(list):
 def module_class(file_path):
 
   type         = "Module"
-  module_name  = finder.get_mod(file_path)
-  use_list     = check_use(finder.get_use(file_path))
-  var_list     = finder.get_var(file_path)
-  meth_list    = finder.get_meth(file_path)
-  call_list    = finder.get_call(file_path)
-  type_stat    = finder.get_type(file_path)
+  module_name  = Finder.get_mod(file_path)
+  use_list     = check_use(Finder.get_use(file_path))
+  var_list     = Finder.get_var(file_path)
+  meth_list    = Finder.get_meth(file_path)
+  call_list    = Finder.get_call(file_path)
+  type_stat    = Finder.get_type(file_path)
   level        = 0
   x0           = 0
   y0           = 0
@@ -268,11 +267,11 @@ def module_class(file_path):
 def subroutine_class(file_path):
 
   type       = "Subroutine"
-  sub_name   = finder.get_sub(file_path)
-  use_list   = check_use(finder.get_use(file_path))
-  var_list   = finder.get_var(file_path)
-  call_list  = finder.get_call(file_path)
-  type_stat  = finder.get_type(file_path)
+  sub_name   = Finder.get_sub(file_path)
+  use_list   = check_use(Finder.get_use(file_path))
+  var_list   = Finder.get_var(file_path)
+  call_list  = Finder.get_call(file_path)
+  type_stat  = Finder.get_type(file_path)
   meth_list  = 0
   level      = 0
   x0         = 0
@@ -313,12 +312,12 @@ def subroutine_class(file_path):
 def function_class(file_path):
 
   type       = "Function"
-  fun_name   = finder.get_fun(file_path)
-  use_list   = check_use(finder.get_use(file_path))
-  var_list   = finder.get_var(file_path)
-  fun_type   = finder.get_fun_type(file_path)
-  call_list  = finder.get_call(file_path)
-  type_stat  = finder.get_type(file_path)
+  fun_name   = Finder.get_fun(file_path)
+  use_list   = check_use(Finder.get_use(file_path))
+  var_list   = Finder.get_var(file_path)
+  fun_type   = Finder.get_fun_type(file_path)
+  call_list  = Finder.get_call(file_path)
+  type_stat  = Finder.get_type(file_path)
   meth_list  = 0
   level      = 0
   x0         = 0
@@ -361,10 +360,10 @@ def function_class(file_path):
 def program_class(file_path):
 
   type       = "Program"
-  prog_name  = finder.get_prog(file_path)
-  use_list   = check_use(finder.get_use(file_path))
-  call_list  = finder.get_call(file_path)
-  type_stat  = finder.get_type(file_path)
+  prog_name  = Finder.get_prog(file_path)
+  use_list   = check_use(Finder.get_use(file_path))
+  call_list  = Finder.get_call(file_path)
+  type_stat  = Finder.get_type(file_path)
   var_list   = 0
   meth_list  = 0
   level      = 0
@@ -606,8 +605,8 @@ def mod_list_fun(file_paths):
   modules_list = []
 
   for i in range(len(file_paths)):
-    module_name = finder.get_mod(file_paths[i]) # find modules from file paths
-    sub_name = finder.get_sub(file_paths[i])    # find subs from file paths
+    module_name = Finder.get_mod(file_paths[i]) # find modules from file paths
+    sub_name = Finder.get_sub(file_paths[i])    # find subs from file paths
 
     if module_name != []:                       # if it is module append to list
       modules_list.append(module_class(file_paths[i]))
@@ -628,7 +627,7 @@ def sub_list_fun(file_paths):
   subroutines_list = []
 
   for i in range(len(file_paths)):
-    sub_name = finder.get_sub(file_paths[i])  # find subroutines from file paths
+    sub_name = Finder.get_sub(file_paths[i])  # find subroutines from file paths
     if sub_name != 0:                         # if it is sub then append to list
       subroutines_list.append(subroutine_class(file_paths[i]))
   sub_list = sub_lvl(subroutines_list,file_paths)
@@ -649,7 +648,7 @@ def fun_list_fun(file_paths):
   functions_list = []
 
   for i in range(len(file_paths)):
-    fun_name = finder.get_fun(file_paths[i])  # find functions from file paths
+    fun_name = Finder.get_fun(file_paths[i])  # find functions from file paths
     if fun_name != 0:                    # if it is function then append to list
       functions_list.append(function_class(file_paths[i]))
   fun_list = fun_lvl(functions_list,file_paths)
@@ -670,7 +669,7 @@ def prog_list_fun(file_paths):
   program_list = []
 
   for i in range(len(file_paths)):
-    program_name = finder.get_prog(file_paths[i]) # find program from file paths
+    program_name = Finder.get_prog(file_paths[i]) # find program from file paths
     if program_name != 0:                 # if it is program then append to list
       program_list.append(program_class(file_paths[i]))
 
@@ -690,8 +689,8 @@ def prog_list_fun(file_paths):
 def update_dimensions(obj_list):
 
   for o in range(len(obj_list)):
-    obj_list[o].w = xfig.find_width(obj_list[o])
-    obj_list[o].h = xfig.find_height(obj_list[o])
+    obj_list[o].w = Xfig.find_width(obj_list[o])
+    obj_list[o].h = Xfig.find_height(obj_list[o])
 
   return obj_list
 
@@ -710,7 +709,7 @@ def x_pos(obj_list):
   # Create list with all box widths
   box_widths = [0] + []                       # initialize box_widths list
   for i in range(len(obj_list)):
-    box = xfig.find_width(obj_list[i])
+    box = Xfig.find_width(obj_list[i])
     box_widths.append(box)                    # list of box widths of all boxes
 
   # Create new list for boxes to be parallel
@@ -889,7 +888,7 @@ def place_objects_column(obj_list):
 # Returns:
 #   - list of objects
 # Used by:
-#   - finder.py - Function for searching coordinates in file and updating them
+#   - Finder.py - Function for searching coordinates in file and updating them
 #-------------------------------------------------------------------------------
 def update_box_ij_pos(obj_list, name, row, column):
 
@@ -916,7 +915,7 @@ def update_box_ij_pos(obj_list, name, row, column):
 # Returns:
 #   - list of objects
 # Used by:
-#   - finder.py - Function for searching coordinates in file and updating them
+#   - Finder.py - Function for searching coordinates in file and updating them
 #-------------------------------------------------------------------------------
 def update_box_xy_pos(obj_list, name, x0, y0):
 
