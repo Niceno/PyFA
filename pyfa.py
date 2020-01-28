@@ -23,7 +23,6 @@ import attribute
 #   - main program
 #-------------------------------------------------------------------------------
 def print_help_and_exit():
-  print("len(sys.argv) = ", len(sys.argv))
   print("\nProgram for extracting UML diagrams for modern Fortran programs")
   print("\nAuthor: Ivan Simcic")
   print("\nUsage: pyfa.py [OPTIONS]")
@@ -34,10 +33,6 @@ def print_help_and_exit():
    'straight' for straight alignment")
   print("                                  \
    'diagonal' for diagonal alignment")
-  print("  -ij, --ij_coordinates [FILE]    \
-  Read (i,j) object coordinates from the file")
-  print("  -xy, --xy_coordinates [FILE]    \
-  Read (x,y) object coordinates from the file")
   print("  -d, --detail_level [SWITCH]     \
   Plot by specified object detail: ")
   print("                                  \
@@ -48,6 +43,8 @@ def print_help_and_exit():
    'minimal' for minimal representation")
   print("  -h, --help                      \
   Displays this help screen")
+  print("  -ij,--ij_coordinates [FILE]     \
+  Read (i,j) object coordinates from the file")
   print("  -m, --margins [MARGIN]          \
   Set margin in cm for individual boxes")
   print("  -o, --object_hierarchy [SWITCH] \
@@ -56,8 +53,12 @@ def print_help_and_exit():
    'row'    for row based hierarchy")
   print("                                  \
    'column' for column based hierarchy")
+  print("  -r, --root  [DIR]               \
+  Root directory for browsing sources")
   print("  -s, --sources [FILE]            \
   Choose source list with paths for plotting")
+  print("  -xy,--xy_coordinates [FILE]     \
+  Read (x,y) object coordinates from the file")
   print("\nExample1: pyfa.py -s source.list -a straight")
   print("Example2: pyfa.py -a straight\n")
 
@@ -65,10 +66,6 @@ def print_help_and_exit():
 
 # Start measuring time
 start = time.time()
-
-# Set the current directory as the root
-root = os.getcwd() + "/"
-print("Analyzing Fortan sources in: " + root)
 
 # Initialize
 file_paths = []
@@ -80,7 +77,8 @@ attribute.object_representation = "Reduced"
 attribute.box_margins           = const.BOX_MARGINS
 
 src_file     = "None"
-s_specified  = "None"
+r_specified  = "None"  # root directory
+s_specified  = "None"  # list of sources
 ij_specified = "None"
 xy_specified = "None"
 
@@ -150,6 +148,13 @@ for j in range(1,len(sys.argv),2):
       attribute.box_margins = float(sys.argv[j+1])
       print("Box margins are set to:", str(sys.argv[j+1]))
 
+    # Check if root for browsing was specified
+    elif str(sys.argv[j]) == "-r" or    \
+         str(sys.argv[j]) == "--root":
+
+      r_specified = sys.argv[j+1]
+      print("Root directory for sources is:", str(sys.argv[j+1]))
+
     # Check if list of sources were specified
     elif str(sys.argv[j]) == "-s" or    \
          str(sys.argv[j]) == "--sources":
@@ -185,10 +190,10 @@ for j in range(1,len(sys.argv),2):
 #---------------------------------------------------------------
 # List of sources was not specified, browse the whole directory
 #---------------------------------------------------------------
-if s_specified == "None":
+if r_specified != "None":
 
-  print("List of sources not specifed, browsing through all")
-  file_paths = browse.source_paths(root)
+  print("Analyzing Fortan sources in: " + r_specified)
+  file_paths = browse.source_paths(r_specified)
 
 #---------------------------------------------
 # List of sources was specified, read from it
@@ -196,7 +201,7 @@ if s_specified == "None":
 else:
 
   # Get list of objects from source.list
-  try: src_file = open (s_specified, 'rt')
+  try: src_file = open(s_specified, 'rt')
   except:
     print("File", s_specified, "can't be found!  Exiting")
     sys.exit()
@@ -209,7 +214,7 @@ else:
   file_paths = list(filter(None, file_paths))
 
   for i in range(len(file_paths)):
-    file_paths[i] = root + file_paths[i]
+    file_paths[i] = os.getcwd() + "/" + file_paths[i]
 
 #--------------------------------------------------------------------
 # For all cases, take object list from file paths and work out calls
@@ -223,13 +228,6 @@ obj_list = finder.get_new_calls(file_paths, obj_list, obj_memb)
 #-------------------------------------------------
 if ij_specified != "None":
   obj_list = attribute.load_ij_coordinates(ij_specified, obj_list)
-
-if src_file == "None" and ij_specified == "None":
-  file_paths = browse.source_paths(root)
-  if not file_paths:
-    print("No Fortran sources found!")
-    print("Exiting the program")
-    sys.exit()
 
 #------------------------------------------
 #
