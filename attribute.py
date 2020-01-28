@@ -898,6 +898,7 @@ def update_box_ij_pos(obj_list, name, row, column):
 
   # Assign new coordinates
   for i in range(len(obj_list)):
+
     # Strip object name of whitespaces and new lines
     strip_obj_name = obj_list[i].name.replace(" ", "").replace("\n", "")
 
@@ -919,10 +920,16 @@ def update_box_ij_pos(obj_list, name, row, column):
 #-------------------------------------------------------------------------------
 def update_box_xy_pos(obj_list, name, x0, y0):
 
+  # Strip name of whitespaces and new lines
+  strip_name = name.replace(" ", "").replace("\n", "")
+
   # Assign new coordinates
   for i in range(len(obj_list)):
-    object_name = obj_list[i].name.replace(" ", "")
-    if name == object_name:
+
+    # Strip object name of whitespaces and new lines
+    strip_obj_name = obj_list[i].name.replace(" ", "").replace("\n", "")
+
+    if strip_obj_name == strip_name:
       obj_list[i].x0 = x0
       obj_list[i].y0 = y0
 

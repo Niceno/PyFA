@@ -264,10 +264,16 @@ if ij_specified == "None" and xy_specified == "None":
   attribute.save_ij_coordinates(obj_list, const.IJ_FILE_NAME)
   attribute.save_xy_coordinates(obj_list, const.XY_FILE_NAME)
 
-#End
+#---------------------------------------------------------
+# If only (x,y) coordinates were not specified, save them
+#---------------------------------------------------------
+elif xy_specified == "None":
+  attribute.save_xy_coordinates(obj_list, const.XY_FILE_NAME)
+
+# End
 xf.close()
 
-#Print out execution time
+# Print out execution time
 end = time.time()
 print("File", const.FIG_FILE_NAME, "has been created!")
 print("Execution time:", end - start, "seconds")
