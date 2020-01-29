@@ -1,4 +1,5 @@
 # Class definitions
+from Objects.Object       import Object
 from Objects.Function     import Function
 from Objects.Module       import Module
 from Objects.Program      import Program
