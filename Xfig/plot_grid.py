@@ -25,11 +25,11 @@ def plot_grid(xf, obj_list):
 
   # Plot vertical lines
   for i in range(len(grid.x)):
-    plot_line(xf, grid.x[i], min_h, grid.x[i], max_h, 500)
+    plot_line(xf, grid.x[i], min_h, grid.x[i], max_h, Const.COLOR_GRID, 500)
 
   # Plot horizontal lines
   for j in range(len(grid.y)):
-    plot_line(xf, min_v, grid.y[j], max_v, grid.y[j], 500)
+    plot_line(xf, min_v, grid.y[j], max_v, grid.y[j], Const.COLOR_GRID, 500)
 
   # Plot coordinates of each spot in grid
   for i in range(len(grid.x)-1):
