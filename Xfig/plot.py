@@ -23,27 +23,27 @@ def plot(file, object):
   y0          = object.y0
 
   # Type of object is module, assign module name
-  if object.type == "Module":
+  if object.Type() == "Module":
     mod_name  = object.name
     sub_name  = 0
     fun_name  = 0
     prog_name = 0
 
   # Type of object is subroutine, assign subroutine name
-  elif object.type == "Subroutine":
+  elif object.Type() == "Subroutine":
     sub_name  = object.name
     mod_name  = 0
     fun_name  = 0
     prog_name = 0
 
   # Type of object is function, assign function name
-  elif object.type == "Function":
+  elif object.Type() == "Function":
     fun_name  = object.name
     mod_name  = 0
     sub_name  = 0
     prog_name = 0
 
-  elif object.type == "Program":
+  elif object.Type() == "Program":
     prog_name = object.name
     fun_name  = 0
     mod_name  = 0
