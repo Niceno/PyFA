@@ -9,9 +9,12 @@
 #   - functions which plot frames, to determine box height
 #-------------------------------------------------------------------------------
 def check_if_type_stat(object):
-  if object.type_stat != 0:
-    type_len = len(object.type_stat)
+
+  if object.types != 0:
+    type_len = len(object.types)
+
   else:
     type_len = 0
+
   return type_len
 
