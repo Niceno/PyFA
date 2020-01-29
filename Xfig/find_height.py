@@ -16,7 +16,7 @@ def find_height(object):
   var_list     = object.var
   meth_list    = object.meth
   call_list    = object.call
-  type_list    = object.type_stat
+  type_list    = object.types
   len_fun_type = 0
 
   if use_list == "None":
@@ -27,7 +27,7 @@ def find_height(object):
     meth_list = []
   if type_list == 0:
     type_list = []
-  if object.type == "Function":
+  if object.Type() == "Function":
     fun_type = object.fun_type
     if fun_type != 0:
       len_fun_type = 1
