@@ -16,7 +16,7 @@ def get_new_calls(file_paths, obj_list, obj_memb):
   # Get all functions names from obj_list into a list
   fun_list_names = []
   for o in range(len(obj_list)):
-    if obj_list[o].type == "Function":
+    if obj_list[o].Type() == "Function":
       name = obj_list[i].name
       if "(" in name:
         name = name.split("(")
@@ -27,7 +27,7 @@ def get_new_calls(file_paths, obj_list, obj_memb):
   # Get all subroutine names from obj_list into a list
   sub_list_names = []
   for o in range(len(obj_list)):
-    if obj_list[o].type == "Subroutine":
+    if obj_list[o].Type() == "Subroutine":
       name = obj_list[o].name
       if "(" in name:
         name = name.split("(")
