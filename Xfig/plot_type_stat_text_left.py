@@ -18,10 +18,10 @@ from Xfig.plot_text        import plot_text
 #-------------------------------------------------------------------------------
 def plot_type_stat_text_left(file, x0, y0, object):
 
-  type_stat      = object.type_stat
-  type_stat_len  = check_if_type_stat(object)
+  type_stat     = object.types
+  type_stat_len = check_if_type_stat(object)
 
-  type_stat_num  = list(range(type_stat_len))
+  type_stat_num = list(range(type_stat_len))
 
   if type_stat_len != 0:
     for i in range(type_stat_len):
