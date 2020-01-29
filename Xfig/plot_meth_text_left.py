@@ -3,7 +3,7 @@ from Xfig.check_if_function  import check_if_function
 from Xfig.check_if_type_stat import check_if_type_stat
 from Xfig.find_width         import find_width
 from Xfig.use_len            import use_len
-from Xfig.plot_text_left     import plot_text_left
+from Xfig.plot_text          import plot_text
 
 #===============================================================================
 # Function to plot methods (text)
@@ -34,12 +34,15 @@ def plot_meth_text_left(x0, y0, xf, \
   meth_list_num = list(range(len(meth_list)))
   fun_type_len  = check_if_function(object)
   type_stat_len = check_if_type_stat(object)
-  y_pos         = fun_type_len + type_stat_len                         \
-                + len(var_list) + use_len(use_list)                    \
-                + (0.25 + (y0 + const.FONT_SIZE                        \
-                + (UNIT_BOX_HEIGHT-const.FONT_SIZE)*0.5))
 
   for i in range(len(meth_list)):
-    plot_text_left(xf, x0, y_pos + meth_list_num[i],                   \
-                   box_width, UNIT_BOX_HEIGHT, meth_list[i], const.FONT_NORMAL)
+    plot_text(xf, "Left",                                      \
+              x0 + Const.UNIT_BOX_HEIGHT*0.333,                \
+              y0 + Const.UNIT_BOX_HEIGHT*type_stat_len         \
+                 + Const.UNIT_BOX_HEIGHT*fun_type_len          \
+                 + Const.UNIT_BOX_HEIGHT*len(var_list)         \
+                 + Const.UNIT_BOX_HEIGHT*use_len(use_list)     \
+                 + Const.UNIT_BOX_HEIGHT*(meth_list_num[i]+1)  \
+                 + Const.UNIT_BOX_HEIGHT*0.75,                 \
+                   meth_list[i], Const.FONT_NORMAL, "Black", 10)
 

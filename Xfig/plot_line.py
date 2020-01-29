@@ -14,9 +14,9 @@ import Const
 # Used by:
 #   - function for plotting grid
 #-------------------------------------------------------------------------------
-def plot_line(file, x0, y0, x1, y1):
+def plot_line(file, x0, y0, x1, y1, depth):
 
-  file.write("2 1 0 1 2 7 500 -1 -1 0.000 0 0 -1 0 0 2")
+  file.write("2 1 0 1 2 7 %3d -1 -1 0.000 0 0 -1 0 0 2" % depth)
 
   file.write("\n%9d %9d" % ( (x0) * Const.XFIG_SCALE,  \
                              (y0) * Const.XFIG_SCALE))

@@ -28,7 +28,7 @@ def plot_meth_name(file, x0, y0,      \
   box_width = find_width(object)
 
   # Plot methods framing box first
-  plot_meth_frame(file, x0, y0, box_width, UNIT_BOX_HEIGHT,           \
+  plot_meth_frame(file, x0, y0, box_width, Const.UNIT_BOX_HEIGHT,  \
                   var_list, meth_list, use_list, object)
 
   # Plot text

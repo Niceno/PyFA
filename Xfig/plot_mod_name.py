@@ -1,7 +1,7 @@
 import Const
 from Xfig.find_width       import find_width
 from Xfig.plot_mod_frame   import plot_mod_frame
-from Xfig.plot_text_center import plot_text_center
+from Xfig.plot_text        import plot_text
 
 #===============================================================================
 # Function to plot module name box (module header box)
@@ -25,5 +25,8 @@ def plot_mod_name(file, x0, y0, text, object):
   plot_mod_frame(file, x0, y0, box_width, Const.UNIT_BOX_HEIGHT)
 
   # Plot text
-  plot_text_center(file, x0, y0, box_width, Const.UNIT_BOX_HEIGHT, text)
+  plot_text(file, "Center",                   \
+            x0 + box_width*0.5,               \
+            y0 + Const.UNIT_BOX_HEIGHT*0.75,  \
+            text, Const.FONT_HEADER, "Black", 10)
 

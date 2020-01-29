@@ -31,9 +31,7 @@ from Xfig.plot_spline              import plot_spline
 from Xfig.plot_sub_frame           import plot_sub_frame
 from Xfig.plot_sub_name            import plot_sub_name
 from Xfig.plot_subroutine          import plot_subroutine
-from Xfig.plot_text_center         import plot_text_center
-from Xfig.plot_text_left           import plot_text_left
-from Xfig.plot_text_right          import plot_text_right
+from Xfig.plot_text                import plot_text
 from Xfig.plot_type_stat_frame     import plot_type_stat_frame
 from Xfig.plot_type_stat           import plot_type_stat
 from Xfig.plot_type_stat_text_left import plot_type_stat_text_left
