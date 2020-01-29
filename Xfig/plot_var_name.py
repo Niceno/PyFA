@@ -1,3 +1,8 @@
+import Const
+from Xfig.find_width         import find_width
+from Xfig.plot_var_frame     import plot_var_frame
+from Xfig.plot_var_text_left import plot_var_text_left
+
 #===============================================================================
 # Function to plot variable box with text
 #
@@ -21,7 +26,8 @@ def plot_var_name(file, x0, y0,       \
   box_width = find_width(object)
 
   # Plot variable framing box first
-  plot_var_frame(file, x0, y0, box_width, const_UBH, var_list, use_list, object)
+  plot_var_frame(file, x0, y0, box_width, Const.UNIT_BOX_HEIGHT,  \
+                 var_list, use_list, object)
 
   # Plot text
   plot_var_text_left(file, x0, y0, var_list, use_list, object)
