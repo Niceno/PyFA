@@ -20,7 +20,7 @@ def plot_all_spline(file, obj_list, box_margins):
 
   # Getting list with only modules
   for i in range(len(obj_list)):
-    if obj_list[i].type == "Module":
+    if obj_list[i].Type() == "Module":
       mod_objects.append(obj_list[i])
 
   # Getting list with objects that have use statements
