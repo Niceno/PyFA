@@ -22,13 +22,13 @@ def plot_type_stat_frame(file, x0, y0, box_width, box_height,  \
 
   type_stat_len = check_if_type_stat(object)
 
-  if object.type == "Module":
+  if object.Type() == "Module":
     color = Const.COLOR_HEADER_MODULE
-  if object.type == "Subroutine":
+  if object.Type() == "Subroutine":
     color = Const.COLOR_HEADER_SUBROUTINE
-  if object.type == "Function":
+  if object.Type() == "Function":
     color = Const.COLOR_HEADER_FUNCTION
-  if object.type == "Program":
+  if object.Type() == "Program":
     color = Const.COLOR_HEADER_PROGRAM
 
   file.write("2 2 0 ")
