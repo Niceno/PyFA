@@ -18,9 +18,9 @@ def find_width(filename):
   var_list    = filename.var
   meth_list   = filename.meth
   use_list    = filename.use
-  type_list   = filename.type_stat
+  type_list   = filename.types
 
-  if filename.type == "Function":
+  if filename.Type() == "Function":
     fun_type = filename.fun_type
   else:
     fun_type = ["0"]
