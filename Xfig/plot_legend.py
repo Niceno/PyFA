@@ -19,9 +19,8 @@ from Xfig.plot_prog_name     import plot_prog_name
 #-------------------------------------------------------------------------------
 def plot_legend(file, obj_list, x0, y0):
 
-  object =  Objects.Program("Legend",                      \
-                            "              Subroutine",    \
-                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+  object =  Objects.Program("              Subroutine",    \
+                            0,  0, 0, 0, 0, 0)
   text_height = Const.UNIT_BOX_HEIGHT
   text_width  = find_width(object)
 
