@@ -1,4 +1,4 @@
-from const import XFIG_SCALE as const_XFS
+import Const
 
 #===============================================================================
 # Function to plot spline (with 2 coordinates)
@@ -33,9 +33,9 @@ def plot_spline_legend(file, obj_list, x0, y0, width, line_type):
     file.write("\n 1 0 2.00 120.00 120.00")        # arrow settings
     file.write("\n 6 0 2.00 120.00 120.00")        # arrow settings
 
-  file.write("\n%9d %9d" % ( (x0) * const_XFS,  \
-                             (y0) * const_XFS))
-  file.write("%9d %9d" %   ( (x1) * const_XFS,  \
-                             (y0) * const_XFS))
+  file.write("\n%9d %9d" % ( (x0) * Const.XFIG_SCALE,  \
+                             (y0) * Const.XFIG_SCALE))
+  file.write("%9d %9d" %   ( (x1) * Const.XFIG_SCALE,  \
+                             (y0) * Const.XFIG_SCALE))
   file.write("\n 0.000 0.000\n")
 

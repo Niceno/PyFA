@@ -12,14 +12,14 @@ from Xfig.plot_legend     import plot_legend
 # Returns:
 #   - nothing
 #-------------------------------------------------------------------------------
-def plot_all(file, obj_list):
+def plot_all(file, obj_list, box_margins):
 
   # Plot boxes
   for i in range(len(obj_list)):
     plot(file, obj_list[i])
 
   # Plot splines
-  plot_all_spline(file, obj_list)
+  plot_all_spline(file, obj_list, box_margins)
 
   # Plot grid
   plot_grid(file, obj_list)

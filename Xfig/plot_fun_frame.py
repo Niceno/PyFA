@@ -1,5 +1,4 @@
-import const
-from const import XFIG_SCALE as const_XFS
+import Const
 from Xfig.box_color import box_color
 
 #===============================================================================
@@ -19,13 +18,18 @@ from Xfig.box_color import box_color
 def plot_fun_frame(file, x0, y0, box_width, box_height):
 
   file.write("2 2 0 ")
-  file.write("%3d "     % const.THICKNESS)
+  file.write("%3d "     % Const.THICKNESS)
   file.write("0")
-  file.write("%3d "     % box_color(const.COLOR_HEADER_FUNCTION))
+  file.write("%3d "     % box_color(Const.COLOR_HEADER_FUNCTION))
   file.write("15 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%9d %9d"  % ( x0           *const_XFS,  y0            *const_XFS))
-  file.write("%9d %9d"  % ((x0+box_width)*const_XFS,  y0            *const_XFS))
-  file.write("%9d %9d"  % ((x0+box_width)*const_XFS, (y0+box_height)*const_XFS))
-  file.write("%9d %9d"  % ( x0           *const_XFS, (y0+box_height)*const_XFS))
-  file.write("%9d %9d\n"% ( x0           *const_XFS,  y0            *const_XFS))
+  file.write("%9d %9d"  % ( x0            *Const.XFIG_SCALE,   \
+                            y0            *Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ((x0+box_width) *Const.XFIG_SCALE,   \
+                            y0            *Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ((x0+box_width) *Const.XFIG_SCALE,   \
+                           (y0+box_height)*Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ( x0            *Const.XFIG_SCALE,   \
+                           (y0+box_height)*Const.XFIG_SCALE))
+  file.write("%9d %9d\n"% ( x0            *Const.XFIG_SCALE,   \
+                            y0            *Const.XFIG_SCALE))
 

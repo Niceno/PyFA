@@ -1,6 +1,4 @@
-import attribute
-from const import UNIT_BOX_HEIGHT as const_UBH
-from const import XFIG_SCALE      as const_XFS
+import Const
 from Xfig.check_if_type_stat import check_if_type_stat
 from Xfig.walk               import walk
 
@@ -17,11 +15,12 @@ from Xfig.walk               import walk
 # Used by:
 #   - function for plotting spline connections
 #-------------------------------------------------------------------------------
-def plot_spline(file, obj_list, object1, object2, line_type, depth):
+def plot_spline(file, obj_list, object1, object2, line_type, depth,  \
+                box_margins):
 
   # print("Connecting ", object1.name, "and", object2.name)
 
-  offset = attribute.box_margins * 1.00
+  offset = box_margins * 1.00
 
   xc1 = object1.x0 + object1.w * 0.5
   xc2 = object2.x0 + object2.w * 0.5
@@ -48,9 +47,11 @@ def plot_spline(file, obj_list, object1, object2, line_type, depth):
   # First height depends on line_type
   if line_type == "Continuous":
     # y1 = object1.y0 + object1.h * 0.5  # starts in the middle of object1
-    y1 = object1.y0 + const_UBH * 0.5  # starts from the middle of header
+    y1 = object1.y0  \
+       + Const.UNIT_BOX_HEIGHT * 0.5  # starts from the middle of header
   elif line_type == "Dashed":
-    y1 = object1.y0 + const_UBH * 0.5  # starts from the middle of header
+    y1 = object1.y0  \
+       + Const.UNIT_BOX_HEIGHT * 0.5  # starts from the middle of header
 
   # Second coordinate should be the same as first
   y2 = y1
@@ -58,20 +59,21 @@ def plot_spline(file, obj_list, object1, object2, line_type, depth):
   # Last coordinate for continous lines (use statements)
   if line_type == "Continuous":
     ind = object2.use.index("use " + object1.name)
-    y6 = object2.y0 + const_UBH                    \
+    y6 = object2.y0 + Const.UNIT_BOX_HEIGHT        \
                     + check_if_type_stat(object2)  \
-                    + ind * const_UBH              \
-                    + 0.5 * const_UBH
+                    + ind * Const.UNIT_BOX_HEIGHT  \
+                    + 0.5 * Const.UNIT_BOX_HEIGHT
 
   # Last coordinate for dashed lines (call statements)
   elif line_type == "Dashed":
-    y6 = object2.y0 + const_UBH * 0.5  # hits in the middle of the header
+    y6 = object2.y0   \
+       + Const.UNIT_BOX_HEIGHT * 0.5  # hits in the middle of the header
 
   # Penultimate coordinate should be the same as last
   y5 = y6
 
   # Walk!
-  x, y = walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list)
+  x, y = walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list, box_margins)
 
   # Start writing a spline
   if line_type == "Continuous":
@@ -95,7 +97,8 @@ def plot_spline(file, obj_list, object1, object2, line_type, depth):
   for i in range(len(x)):
     if cnt % 4 == 0:
       file.write("\n       ")
-    file.write(" %9d %9d" % ( x[i] * const_XFS, y[i] * const_XFS))
+    file.write(" %9d %9d" % ( x[i] * Const.XFIG_SCALE,  \
+                              y[i] * Const.XFIG_SCALE))
     cnt = cnt + 1
 
   cnt = 0

@@ -1,4 +1,4 @@
-from const import UNIT_BOX_HEIGHT as const_UBH
+import Const
 
 #===============================================================================
 # Function for calculating height of a box
@@ -32,8 +32,12 @@ def find_height(object):
     if fun_type != 0:
       len_fun_type = 1
 
-  height = const_UBH + len(var_list) + len(meth_list) + len(use_list)    \
-         + len(type_list) + len_fun_type
+  height = Const.UNIT_BOX_HEIGHT  \
+         + len(var_list)          \
+         + len(meth_list)         \
+         + len(use_list)          \
+         + len(type_list)         \
+         + len_fun_type
 
   return height
 

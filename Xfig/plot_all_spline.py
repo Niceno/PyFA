@@ -1,5 +1,4 @@
-from const import STARTING_LAYER_USE  as const_SLU
-from const import STARTING_LAYER_CALL as const_SLC
+import Const
 from Xfig.plot_spline import plot_spline
 
 #===============================================================================
@@ -13,7 +12,7 @@ from Xfig.plot_spline import plot_spline
 # Used by:
 #   - function for plotting everything (the entire graph) from object list
 #-------------------------------------------------------------------------------
-def plot_all_spline(file, obj_list):
+def plot_all_spline(file, obj_list, box_margins):
 
   use_objects  = []
   mod_objects  = []
@@ -35,10 +34,10 @@ def plot_all_spline(file, obj_list):
       call_objects.append(obj_list[i])
 
 
-  depth_list_use  = list(range(const_SLU,    \
-                               const_SLU + len(mod_objects)))
-  depth_list_call = list(range(const_SLC,    \
-                               const_SLC + len(call_objects)))
+  depth_list_use  = list(range(Const.STARTING_LAYER_USE,    \
+                               Const.STARTING_LAYER_USE + len(mod_objects)))
+  depth_list_call = list(range(Const.STARTING_LAYER_CALL,    \
+                               Const.STARTING_LAYER_CALL + len(call_objects)))
 
   # Plotting connections for use statements
   for i in range(len(use_objects)):
@@ -53,7 +52,8 @@ def plot_all_spline(file, obj_list):
                       mod_objects[m],     \
                       use_objects[i],     \
                       "Continuous",       \
-                      depth_list_use[m])
+                      depth_list_use[m],  \
+                      box_margins)
 
   # Plotting connections for call statements
   for i in range(len(call_objects)):
@@ -62,10 +62,11 @@ def plot_all_spline(file, obj_list):
       called = call[k]
       for m in range(len(obj_list)):
         if called in obj_list[m].name:
-          plot_spline(file,             \
-                      obj_list,         \
-                      call_objects[i],  \
-                      obj_list[m],      \
-                      "Dashed",         \
-                      depth_list_call[i])
+          plot_spline(file,                \
+                      obj_list,            \
+                      call_objects[i],     \
+                      obj_list[m],         \
+                      "Dashed",            \
+                      depth_list_call[i],  \
+                      box_margins)
 

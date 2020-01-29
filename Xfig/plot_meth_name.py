@@ -1,4 +1,4 @@
-from const import UNIT_BOX_HEIGHT as const_UBH
+import Const
 from Xfig.find_width          import find_width
 from Xfig.plot_meth_frame     import plot_meth_frame
 from Xfig.plot_meth_text_left import plot_meth_text_left
@@ -28,7 +28,7 @@ def plot_meth_name(file, x0, y0,      \
   box_width = find_width(object)
 
   # Plot methods framing box first
-  plot_meth_frame(file, x0, y0, box_width, const_UBH,           \
+  plot_meth_frame(file, x0, y0, box_width, UNIT_BOX_HEIGHT,           \
                   var_list, meth_list, use_list, object)
 
   # Plot text

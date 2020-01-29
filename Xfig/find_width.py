@@ -1,4 +1,4 @@
-from const import UNIT_BOX_HEIGHT as const_UBH
+import Const
 
 #===============================================================================
 # Choose box width depending on longest string
@@ -50,7 +50,8 @@ def find_width(filename):
              len(fun_type_length), len(type_length)]
 
   box_width = max(lengths)
-  box_width = box_width * const_UBH * 0.4  # gives the best ratio for width
+  box_width = box_width  \
+            * Const.UNIT_BOX_HEIGHT * 0.4  # gives the best ratio for width
 
   return box_width
 

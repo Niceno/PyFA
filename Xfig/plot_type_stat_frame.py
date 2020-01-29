@@ -1,5 +1,4 @@
-import const
-from const import XFIG_SCALE as const_XFS
+import Const
 from Xfig.check_if_type_stat import check_if_type_stat
 from Xfig.box_color     import box_color
 
@@ -24,24 +23,29 @@ def plot_type_stat_frame(file, x0, y0, box_width, box_height,  \
   type_stat_len = check_if_type_stat(object)
 
   if object.type == "Module":
-    color = const.COLOR_HEADER_MODULE
+    color = Const.COLOR_HEADER_MODULE
   if object.type == "Subroutine":
-    color = const.COLOR_HEADER_SUBROUTINE
+    color = Const.COLOR_HEADER_SUBROUTINE
   if object.type == "Function":
-    color = const.COLOR_HEADER_FUNCTION
+    color = Const.COLOR_HEADER_FUNCTION
   if object.type == "Program":
-    color = const.COLOR_HEADER_PROGRAM
+    color = Const.COLOR_HEADER_PROGRAM
 
   file.write("2 2 0 ")
-  file.write("%3d "     % const.THICKNESS)
+  file.write("%3d "     % Const.THICKNESS)
   file.write("0")
   file.write("%3d "     % box_color(color))
   file.write("11 -1 30 0.000 0 0 -1 0 0 5\n")         # 30*5 = 150% intensity
-  file.write("%9d %9d"  % ( x0           *const_XFS, (y0+box_height)*const_XFS))
-  file.write("%9d %9d"  % ((x0+box_width)*const_XFS, (y0+box_height)*const_XFS))
-  file.write("%9d %9d"  % ((x0+box_width)*const_XFS, (y0+box_height           \
-                          +type_stat_len)*const_XFS))
-  file.write("%9d %9d"  % ( x0           *const_XFS, (y0+box_height           \
-                          +type_stat_len)*const_XFS))
-  file.write("%9d %9d\n"% ( x0           *const_XFS, (y0+box_height)*const_XFS))
+  file.write("%9d %9d"  % ( x0            *Const.XFIG_SCALE,  \
+                           (y0+box_height)*Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ((x0+box_width) *Const.XFIG_SCALE,  \
+                           (y0+box_height)*Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ((x0+box_width) *Const.XFIG_SCALE,  \
+                           (y0+box_height               \
+                           +type_stat_len)*Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ( x0            *Const.XFIG_SCALE,  \
+                           (y0+box_height               \
+                           +type_stat_len)*Const.XFIG_SCALE))
+  file.write("%9d %9d\n"% ( x0            *Const.XFIG_SCALE,  \
+                           (y0+box_height)*Const.XFIG_SCALE))
 

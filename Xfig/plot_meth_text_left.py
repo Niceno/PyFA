@@ -1,5 +1,4 @@
-import const
-from const import UNIT_BOX_HEIGHT as const_UBH
+import Const
 from Xfig.check_if_function  import check_if_function
 from Xfig.check_if_type_stat import check_if_type_stat
 from Xfig.find_width         import find_width
@@ -38,9 +37,9 @@ def plot_meth_text_left(x0, y0, xf, \
   y_pos         = fun_type_len + type_stat_len                         \
                 + len(var_list) + use_len(use_list)                    \
                 + (0.25 + (y0 + const.FONT_SIZE                        \
-                + (const_UBH-const.FONT_SIZE)*0.5))
+                + (UNIT_BOX_HEIGHT-const.FONT_SIZE)*0.5))
 
   for i in range(len(meth_list)):
     plot_text_left(xf, x0, y_pos + meth_list_num[i],                   \
-                   box_width, const_UBH, meth_list[i], const.FONT_NORMAL)
+                   box_width, UNIT_BOX_HEIGHT, meth_list[i], const.FONT_NORMAL)
 

@@ -1,8 +1,7 @@
-import const
-from const import XFIG_SCALE as const_XFS
+import Const
 from Xfig.check_if_function  import check_if_function
 from Xfig.check_if_type_stat import check_if_type_stat
-from Xfig.box_color     import box_color
+from Xfig.box_color          import box_color
 from Xfig.use_len            import use_len
 
 #===============================================================================
@@ -29,19 +28,24 @@ def plot_use_frame(file, x0, y0, box_width, box_height, \
   type_stat_len = check_if_type_stat(object)
 
   file.write("2 2 0 ")
-  file.write("%3d "     % const.THICKNESS)
+  file.write("%3d "     % Const.THICKNESS)
   file.write("0")
-  file.write("%3d "     % box_color(const.COLOR_BOX))
+  file.write("%3d "     % box_color(Const.COLOR_BOX))
   file.write("12 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%9d %9d"  % ( x0           *const_XFS, (y0+box_height)*const_XFS))
-  file.write("%9d %9d"  % ((x0+box_width)*const_XFS, (y0+box_height)*const_XFS))
-  file.write("%9d %9d"  % ((x0+box_width)*const_XFS, (y0+box_height            \
-                          +use_len(use_list)           \
-                          +fun_type_len                \
-                          +type_stat_len)*const_XFS))
-  file.write("%9d %9d"  % ( x0           *const_XFS, (y0+box_height            \
-                          +use_len(use_list)           \
-                          +fun_type_len                \
-                          +type_stat_len)*const_XFS))
-  file.write("%9d %9d\n"% ( x0           *const_XFS, (y0+box_height)*const_XFS))
+  file.write("%9d %9d"  % ( x0            *Const.XFIG_SCALE,   \
+                           (y0+box_height)*Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ((x0+box_width) *Const.XFIG_SCALE,   \
+                           (y0+box_height)*Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ((x0+box_width) *Const.XFIG_SCALE,   \
+                           (y0+box_height                      \
+                           +use_len(use_list)                  \
+                           +fun_type_len                       \
+                           +type_stat_len)*Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ( x0            *Const.XFIG_SCALE,   \
+                           (y0+box_height                      \
+                           +use_len(use_list)                  \
+                           +fun_type_len                       \
+                           +type_stat_len)*Const.XFIG_SCALE))
+  file.write("%9d %9d\n"% ( x0            *Const.XFIG_SCALE,   \
+                           (y0+box_height)*Const.XFIG_SCALE))
 

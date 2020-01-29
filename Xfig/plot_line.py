@@ -1,4 +1,4 @@
-from const import XFIG_SCALE as const_XFS
+import Const
 
 #===============================================================================
 # Function to plot line
@@ -18,9 +18,9 @@ def plot_line(file, x0, y0, x1, y1):
 
   file.write("2 1 0 1 2 7 500 -1 -1 0.000 0 0 -1 0 0 2")
 
-  file.write("\n%9d %9d" % ( (x0) * const_XFS,  \
-                             (y0) * const_XFS))
-  file.write("%9d %9d" %   ( (x1) * const_XFS,  \
-                             (y1) * const_XFS))
+  file.write("\n%9d %9d" % ( (x0) * Const.XFIG_SCALE,  \
+                             (y0) * Const.XFIG_SCALE))
+  file.write("%9d %9d" %   ( (x1) * Const.XFIG_SCALE,  \
+                             (y1) * Const.XFIG_SCALE))
   file.write("\n")
 

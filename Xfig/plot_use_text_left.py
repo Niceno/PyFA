@@ -1,5 +1,4 @@
-import const
-from const import UNIT_BOX_HEIGHT as const_UBH
+import Const
 from Xfig.check_if_function  import check_if_function
 from Xfig.check_if_type_stat import check_if_type_stat
 from Xfig.find_width         import find_width
@@ -27,10 +26,13 @@ def plot_use_text_left(file, x0, y0, \
   fun_type_len  = check_if_function(object)
   type_stat_len = check_if_type_stat(object)
   box_width     = find_width(object)
-  y_pos         = fun_type_len + type_stat_len + 0.25       \
-                + (y0 + const.FONT_SIZE + (const_UBH-const.FONT_SIZE)*0.5)
+  y_pos         = fun_type_len + type_stat_len + 0.25 \
+                + (   y0               \
+                   +  Const.FONT_SIZE  \
+                   + (Const.UNIT_BOX_HEIGHT-Const.FONT_SIZE)*0.5)
 
   for i in range(len(use_list)):
     plot_text_left(file, x0, y_pos + use_list_num[i],       \
-                   box_width, const_UBH, use_list[i], const.FONT_NORMAL)
+                   box_width, Const.UNIT_BOX_HEIGHT,        \
+                   use_list[i], Const.FONT_NORMAL)
 

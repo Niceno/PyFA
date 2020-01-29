@@ -1,5 +1,4 @@
-import math
-import attribute
+import math  # needed for sqrt
 
 #===============================================================================
 # Walk from one object to another, avoiding all objects in the graph
@@ -10,7 +9,7 @@ import attribute
 # Returns:
 #   - x, y:                coordinates with all steps from one object to another
 #-------------------------------------------------------------------------------
-def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
+def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list, box_margins):
 
   # Walk
   x    = []
@@ -38,7 +37,7 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
     step_y    = []
     step_dist = []
 
-    stride = attribute.box_margins * 0.45
+    stride = box_margins * 0.45
 
     # Step 0                        # Step 1
     step_x.append(x[-1] + stride);  step_x.append(x[-1] + stride)
@@ -102,14 +101,14 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list):
     keep.append(True)
 
     # Check if converged
-    if dist[-1] < (attribute.box_margins * 0.5):
+    if dist[-1] < (box_margins * 0.5):
       x = x[:-2]
       y = y[:-2]
       break
 
     # Check if it wobbles (only if you are close)
     if len(dist) > 2:
-      if dist[-1] < (attribute.box_margins):
+      if dist[-1] < (box_margins):
         if dist[-1] > dist[-2]:
           x = x[:-3]
           y = y[:-3]

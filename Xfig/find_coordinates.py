@@ -1,5 +1,4 @@
 import grid
-import attribute
 from Xfig.find_width  import find_width
 from Xfig.find_height import find_height
 
@@ -11,7 +10,7 @@ from Xfig.find_height import find_height
 # Returns:
 #   - nothing
 #-------------------------------------------------------------------------------
-def find_coordinates(obj_list):
+def find_coordinates(obj_list, box_margins):
 
   # Grid coordinates
   n_row = 0
@@ -29,9 +28,9 @@ def find_coordinates(obj_list):
     row = obj_list[o].row
     col = obj_list[o].column
     widths[col]  = max(widths [col], find_width (obj_list[o])  \
-                 + attribute.box_margins * 2.0)
+                 + box_margins * 2.0)
     heights[row] = max(heights[row], find_height(obj_list[o])  \
-                 + attribute.box_margins * 2.0)
+                 + box_margins * 2.0)
 
   for o in range(len(obj_list)):
     row = obj_list[o].row
