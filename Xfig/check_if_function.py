@@ -9,9 +9,12 @@
 #   - functions which plot frames, to determine box height
 #-------------------------------------------------------------------------------
 def check_if_function(object):
-  if object.type == "Function":
+
+  if object.Type() == "Function":
     fun_type_len = 1
+
   else:
     fun_type_len = 0
+
   return fun_type_len
 
