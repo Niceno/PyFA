@@ -1,10 +1,10 @@
 from Xfig.plot_object_end_compound   import plot_object_end_compound
 from Xfig.plot_object_start_compound import plot_object_start_compound
 from Xfig.plot_object_name           import plot_object_name
-from Xfig.plot_type_stat             import plot_type_stat
-from Xfig.plot_use_name              import plot_use_name
-from Xfig.plot_meth_name             import plot_meth_name
-from Xfig.plot_var_name              import plot_var_name
+from Xfig.plot_type_list             import plot_type_list
+from Xfig.plot_use_list              import plot_use_list
+from Xfig.plot_meth_list             import plot_meth_list
+from Xfig.plot_var_list              import plot_var_list
 
 #===============================================================================
 # Function to plot module box
@@ -29,21 +29,19 @@ def plot_module(file, object):
 
   # Plot a type statements box
   if object.N_Types() > 0:
-    plot_type_stat(file, object)
+    plot_type_list(file, object)
 
   # If use statements have been found, plot use text box
   if object.N_Uses() > 0:
-    plot_use_name(file, object)
+    plot_use_list(file, object)
 
   # If variables have been found, plot variables text box
   if object.N_Vars() > 0:
-    plot_var_name(file, object)
+    plot_var_list(file, object)
 
   # If methods have been found, plot methods text box
   if object.N_Methods() > 0:
-    plot_meth_name(file,            \
-                   object.methods,  \
-                   object)
+    plot_meth_list(file, object)
 
   # End the compound around the module
   plot_object_end_compound(file, object)

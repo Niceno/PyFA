@@ -1,10 +1,10 @@
 import Const
-from Xfig.find_width         import find_width
-from Xfig.plot_var_frame     import plot_var_frame
-from Xfig.plot_var_text_left import plot_var_text_left
+from Xfig.find_width               import find_width
+from Xfig.plot_type_frame     import plot_type_frame
+from Xfig.plot_type_text_list import plot_type_text_list
 
 #===============================================================================
-# Function to plot variable box with text
+# Function to plot type statements box with text
 #
 # Parameters:
 #   - file:         Xfig file's handle
@@ -14,13 +14,13 @@ from Xfig.plot_var_text_left import plot_var_text_left
 # Used by:
 #   - functions for plotting modules, subroutines and functions
 #-------------------------------------------------------------------------------
-def plot_var_name(file, object):
+def plot_type_list(file, object):
 
   box_width = find_width(object)
 
-  # Plot variable framing box first
-  plot_var_frame(file, box_width, Const.UNIT_BOX_HEIGHT, object)
+  # Plot type statement framing box first
+  plot_type_frame(file, box_width, Const.UNIT_BOX_HEIGHT, object)
 
   # Plot text
-  plot_var_text_left(file, object.x0, object.y0, object)
+  plot_type_text_list(file, object)
 

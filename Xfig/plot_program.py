@@ -1,6 +1,6 @@
 from Xfig.plot_object_name import plot_object_name
-from Xfig.plot_use_name    import plot_use_name
-from Xfig.plot_type_stat   import plot_type_stat
+from Xfig.plot_use_list    import plot_use_list
+from Xfig.plot_type_list   import plot_type_list
 
 #===============================================================================
 # Function to plot program box
@@ -20,9 +20,9 @@ def plot_program(file, object):
 
   # Plot a type statements box
   if object.N_Types() > 0:
-    plot_type_stat(file, object)
+    plot_type_list(file, object)
 
   # If use statements have been found, plot use text box
   if object.N_Uses() > 0:
-    plot_use_name(file, object)
+    plot_use_list(file, object)
 

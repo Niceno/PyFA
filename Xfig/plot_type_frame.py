@@ -6,8 +6,8 @@ from Xfig.box_color import box_color
 #
 # Parameters:
 #   - file:            Xfig file's handle
-#   - x0:              object position on x axis in centimeters
-#   - y0:              object position on y axis in centimeters
+#   - object.x0:              object position on x axis in centimeters
+#   - object.y0:              object position on y axis in centimeters
 #   - box_width:       box width in centimeters
 #   - box_height:      box height in centimeters
 #   - object:          object to plot
@@ -16,8 +16,7 @@ from Xfig.box_color import box_color
 # Used by:
 #   - function for plotting type statement box
 #-------------------------------------------------------------------------------
-def plot_type_stat_frame(file, x0, y0, box_width, box_height,  \
-                        object):
+def plot_type_frame(file, box_width, box_height, object):
 
   type_stat_len = object.N_Types()
 
@@ -35,16 +34,16 @@ def plot_type_stat_frame(file, x0, y0, box_width, box_height,  \
   file.write("0")
   file.write("%3d "     % box_color(color))
   file.write("11 -1 30 0.000 0 0 -1 0 0 5\n")         # 30*5 = 150% intensity
-  file.write("%9d %9d"  % ( x0            *Const.XFIG_SCALE,  \
-                           (y0+box_height)*Const.XFIG_SCALE))
-  file.write("%9d %9d"  % ((x0+box_width) *Const.XFIG_SCALE,  \
-                           (y0+box_height)*Const.XFIG_SCALE))
-  file.write("%9d %9d"  % ((x0+box_width) *Const.XFIG_SCALE,  \
-                           (y0+box_height               \
+  file.write("%9d %9d"  % ( object.x0            *Const.XFIG_SCALE,  \
+                           (object.y0+box_height)*Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ((object.x0+box_width) *Const.XFIG_SCALE,  \
+                           (object.y0+box_height)*Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ((object.x0+box_width) *Const.XFIG_SCALE,  \
+                           (object.y0+box_height               \
                            +type_stat_len)*Const.XFIG_SCALE))
-  file.write("%9d %9d"  % ( x0            *Const.XFIG_SCALE,  \
-                           (y0+box_height               \
+  file.write("%9d %9d"  % ( object.x0            *Const.XFIG_SCALE,  \
+                           (object.y0+box_height               \
                            +type_stat_len)*Const.XFIG_SCALE))
-  file.write("%9d %9d\n"% ( x0            *Const.XFIG_SCALE,  \
-                           (y0+box_height)*Const.XFIG_SCALE))
+  file.write("%9d %9d\n"% ( object.x0            *Const.XFIG_SCALE,  \
+                           (object.y0+box_height)*Const.XFIG_SCALE))
 
