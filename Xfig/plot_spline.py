@@ -1,6 +1,5 @@
 import Const
-from Xfig.check_if_type_stat import check_if_type_stat
-from Xfig.walk               import walk
+from Xfig.walk import walk
 
 #===============================================================================
 # Function to plot spline (with 6 coordinates)
@@ -60,7 +59,7 @@ def plot_spline(file, obj_list, object1, object2, line_type, depth,  \
   if line_type == "Continuous":
     ind = object2.use.index("use " + object1.name)
     y6 = object2.y0 + Const.UNIT_BOX_HEIGHT        \
-                    + check_if_type_stat(object2)  \
+                    + object2.N_Types()            \
                     + ind * Const.UNIT_BOX_HEIGHT  \
                     + 0.5 * Const.UNIT_BOX_HEIGHT
 

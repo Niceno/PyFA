@@ -5,7 +5,6 @@ from Xfig.plot_type_stat          import plot_type_stat
 from Xfig.plot_use_name           import plot_use_name
 from Xfig.plot_meth_name          import plot_meth_name
 from Xfig.plot_var_name           import plot_var_name
-from Xfig.check_if_type_stat      import check_if_type_stat
 
 #===============================================================================
 # Function to plot module box
@@ -42,8 +41,7 @@ def plot_module(file, x0, y0,     \
                 object)
 
   # Plot a type statements box
-  type_stat_len  = check_if_type_stat(object)
-  if type_stat_len != 0:
+  if object.N_Types() != 0:
     plot_type_stat(file, x0, y0, object)
 
   if use_list != "None":

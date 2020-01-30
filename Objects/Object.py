@@ -42,5 +42,22 @@ class Object():
     self.w         = 0.0
     self.h         = 0.0
 
+#===============================================================================
+# Returns type of the object
+#-------------------------------------------------------------------------------
   def Type(self):
     return self.__class__.__name__
+
+#===============================================================================
+# Returns number of type statements (new types)
+#
+# (It would be more elegant if empty list was still a list, like this: [])
+#-------------------------------------------------------------------------------
+  def N_Types(self):
+
+    if self.types != 0:
+      return len(self.types)
+
+    else:
+      return 0
+

@@ -1,7 +1,6 @@
 import Const
-from Xfig.check_if_type_stat import check_if_type_stat
-from Xfig.find_width         import find_width
-from Xfig.plot_text        import plot_text
+from Xfig.find_width import find_width
+from Xfig.plot_text  import plot_text
 
 #===============================================================================
 # Function to plot type statements (text)
@@ -19,12 +18,10 @@ from Xfig.plot_text        import plot_text
 def plot_type_stat_text_left(file, x0, y0, object):
 
   type_stat     = object.types
-  type_stat_len = check_if_type_stat(object)
+  type_stat_num = list(range(object.N_Types()))
 
-  type_stat_num = list(range(type_stat_len))
-
-  if type_stat_len != 0:
-    for i in range(type_stat_len):
+  if object.N_Types() != 0:
+    for i in range(object.N_Types()):
       plot_text(file, "Left",                                    \
                 x0 + Const.UNIT_BOX_HEIGHT*0.333,                \
                 y0 + Const.UNIT_BOX_HEIGHT*(type_stat_num[i]+1)  \

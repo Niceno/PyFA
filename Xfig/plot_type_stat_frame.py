@@ -1,6 +1,5 @@
 import Const
-from Xfig.check_if_type_stat import check_if_type_stat
-from Xfig.box_color     import box_color
+from Xfig.box_color import box_color
 
 #===============================================================================
 # Function to plot an empty type statement box (frame without text)
@@ -20,7 +19,7 @@ from Xfig.box_color     import box_color
 def plot_type_stat_frame(file, x0, y0, box_width, box_height,  \
                         object):
 
-  type_stat_len = check_if_type_stat(object)
+  type_stat_len = object.N_Types()
 
   if object.Type() == "Module":
     color = Const.COLOR_HEADER_MODULE

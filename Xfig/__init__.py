@@ -1,5 +1,4 @@
 from Xfig.check_if_function        import check_if_function
-from Xfig.check_if_type_stat       import check_if_type_stat
 from Xfig.find_coordinates         import find_coordinates
 from Xfig.find_height              import find_height
 from Xfig.find_width               import find_width

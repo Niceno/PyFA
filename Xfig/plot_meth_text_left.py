@@ -1,9 +1,8 @@
 import Const
-from Xfig.check_if_function  import check_if_function
-from Xfig.check_if_type_stat import check_if_type_stat
-from Xfig.find_width         import find_width
-from Xfig.use_len            import use_len
-from Xfig.plot_text          import plot_text
+from Xfig.check_if_function import check_if_function
+from Xfig.find_width        import find_width
+from Xfig.use_len           import use_len
+from Xfig.plot_text         import plot_text
 
 #===============================================================================
 # Function to plot methods (text)
@@ -33,12 +32,11 @@ def plot_meth_text_left(x0, y0, xf, \
   box_width     = find_width(object)
   meth_list_num = list(range(len(meth_list)))
   fun_type_len  = check_if_function(object)
-  type_stat_len = check_if_type_stat(object)
 
   for i in range(len(meth_list)):
     plot_text(xf, "Left",                                      \
               x0 + Const.UNIT_BOX_HEIGHT*0.333,                \
-              y0 + Const.UNIT_BOX_HEIGHT*type_stat_len         \
+              y0 + Const.UNIT_BOX_HEIGHT*object.N_Types()      \
                  + Const.UNIT_BOX_HEIGHT*fun_type_len          \
                  + Const.UNIT_BOX_HEIGHT*len(var_list)         \
                  + Const.UNIT_BOX_HEIGHT*use_len(use_list)     \

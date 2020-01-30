@@ -1,8 +1,7 @@
 import Const
-from Xfig.check_if_function  import check_if_function
-from Xfig.check_if_type_stat import check_if_type_stat
-from Xfig.box_color          import box_color
-from Xfig.use_len            import use_len
+from Xfig.check_if_function import check_if_function
+from Xfig.box_color         import box_color
+from Xfig.use_len           import use_len
 
 #===============================================================================
 # Function to plot an empty use statements box (frame without text)
@@ -25,7 +24,7 @@ def plot_use_frame(file, x0, y0, box_width, box_height, \
                    object):
 
   fun_type_len  = check_if_function(object)
-  type_stat_len = check_if_type_stat(object)
+  type_stat_len = object.N_Types()
 
   file.write("2 2 0 ")
   file.write("%3d "     % Const.THICKNESS)
