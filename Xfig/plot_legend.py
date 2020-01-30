@@ -24,10 +24,10 @@ def plot_legend(file, obj_list, x0, y0):
   text_width  = find_width(sobject)
 
   # Boxes
-  plot_object_name(file, x0, y0,                           "Module",     mobject)
-  plot_object_name(file, x0, y0+Const.UNIT_BOX_HEIGHT,     "Subroutine", sobject)
-  plot_object_name(file, x0, y0+(Const.UNIT_BOX_HEIGHT)*2, "Function",   fobject)
-  plot_object_name(file, x0, y0+(Const.UNIT_BOX_HEIGHT)*3, "Program",    pobject)
+  plot_object_name(file, x0, y0,                           mobject)
+  plot_object_name(file, x0, y0+Const.UNIT_BOX_HEIGHT,     sobject)
+  plot_object_name(file, x0, y0+(Const.UNIT_BOX_HEIGHT)*2, fobject)
+  plot_object_name(file, x0, y0+(Const.UNIT_BOX_HEIGHT)*3, pobject)
 
   # Splines
   plot_spline_legend(file, obj_list,                           \

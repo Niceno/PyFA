@@ -36,9 +36,7 @@ def plot_module(file, x0, y0,     \
                           object)
 
   # Plot a header text box
-  plot_object_name(file, x0, y0,     \
-                   module_name,      \
-                   object)
+  plot_object_name(file, x0, y0, object)
 
   # Plot a type statements box
   if object.N_Types() != 0:

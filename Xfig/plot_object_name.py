@@ -17,7 +17,7 @@ from Xfig.plot_text        import plot_text
 # Used by:
 #   - function for plotting function box
 #-------------------------------------------------------------------------------
-def plot_object_name(file, x0, y0, text, object):
+def plot_object_name(file, x0, y0, object):
 
   box_width = find_width(object)
 
@@ -28,5 +28,5 @@ def plot_object_name(file, x0, y0, text, object):
   plot_text(file, "Center",                   \
             x0 + box_width*0.5,               \
             y0 + Const.UNIT_BOX_HEIGHT*0.75,  \
-            text, Const.FONT_HEADER, "Black", 10)
+            object.name, Const.FONT_HEADER, "Black", 10)
 
