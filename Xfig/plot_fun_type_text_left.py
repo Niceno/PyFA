@@ -1,3 +1,8 @@
+import Const
+from Xfig.find_width         import find_width
+from Xfig.check_if_type_stat import check_if_type_stat
+from Xfig.plot_text          import plot_text
+
 #===============================================================================
 # Function to plot function type (text)
 #
@@ -17,8 +22,13 @@ def plot_fun_type_text_left(file, x0, y0, object):
   box_width     = find_width(object)
   type_stat_len = check_if_type_stat(object)
   y_pos         = type_stat_len + 0.25                                    \
-                + (y0 + const.FONT_SIZE + (const_UBH-const.FONT_SIZE)*0.5)
+                + (y0 + Const.FONT_SIZE  \
+                + (Const.UNIT_BOX_HEIGHT-Const.FONT_SIZE)*0.5)
 
-  plot_text_left(file, x0, y_pos, box_width,            \
-                 const_UBH, fun_type, const.FONT_NORMAL)
+  plot_text(file, "Left",                                    \
+            x0 + Const.UNIT_BOX_HEIGHT*0.333,                \
+            y0 + Const.UNIT_BOX_HEIGHT                       \
+               + Const.UNIT_BOX_HEIGHT* type_stat_len        \
+               + Const.UNIT_BOX_HEIGHT*0.75,                 \
+            fun_type, Const.FONT_HEADER, "Black", 10)
 

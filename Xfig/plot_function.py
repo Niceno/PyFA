@@ -1,3 +1,8 @@
+from Xfig.plot_fun_name      import plot_fun_name
+from Xfig.check_if_type_stat import check_if_type_stat
+from Xfig.plot_fun_type_name import plot_fun_type_name
+from Xfig.plot_var_name      import plot_var_name
+
 #===============================================================================
 # Function to plot function box
 #

@@ -1,4 +1,7 @@
-from Xfig.find_width       import find_width
+import Const
+from Xfig.find_width              import find_width
+from Xfig.plot_fun_type_frame     import plot_fun_type_frame
+from Xfig.plot_fun_type_text_left import plot_fun_type_text_left
 
 #===============================================================================
 # Function to plot function type box with text
@@ -20,7 +23,7 @@ def plot_fun_type_name(file, x0, y0,   \
   box_width = find_width(object)
 
   # Plot function type framing box first
-  plot_fun_type_frame(file, x0, y0, box_width, const_UBH, object)
+  plot_fun_type_frame(file, x0, y0, box_width, Const.UNIT_BOX_HEIGHT, object)
 
   # Plot text
   plot_fun_type_text_left(file, x0, y0, object)
