@@ -42,12 +42,20 @@ def find_width(filename):
   var_length      = max(var_list,  key=len)
   meth_length     = max(meth_list, key=len)
   use_length      = max(use_list,  key=len)
-  fun_type_length = max(fun_type,  key=len)
+  if fun_type != 0:
+    fun_type_length = max(fun_type,  key=len)
+  else:
+    fun_type_length = 0
   type_length     = max(type_list, key=len)
 
-  lengths = [len(var_length),      len(meth_length), \
-             len(header_name),     len(use_length),  \
-             len(fun_type_length), len(type_length)]
+  if fun_type != 0:
+    lengths = [len(var_length),      len(meth_length), \
+               len(header_name),     len(use_length),  \
+               len(fun_type_length), len(type_length)]
+  else:
+    lengths = [len(var_length),      len(meth_length), \
+               len(header_name),     len(use_length),  \
+               len(type_length)]
 
   box_width = max(lengths)
   box_width = box_width  \

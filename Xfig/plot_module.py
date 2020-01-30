@@ -1,6 +1,6 @@
 from Xfig.plot_mod_end_compound   import plot_mod_end_compound
 from Xfig.plot_mod_start_compound import plot_mod_start_compound
-from Xfig.plot_mod_name           import plot_mod_name
+from Xfig.plot_object_name        import plot_object_name
 from Xfig.plot_type_stat          import plot_type_stat
 from Xfig.plot_use_name           import plot_use_name
 from Xfig.plot_meth_name          import plot_meth_name
@@ -36,9 +36,9 @@ def plot_module(file, x0, y0,     \
                           object)
 
   # Plot a header text box
-  plot_mod_name(file, x0, y0,     \
-                module_name,      \
-                object)
+  plot_object_name(file, x0, y0,     \
+                   module_name,      \
+                   object)
 
   # Plot a type statements box
   if object.N_Types() != 0:

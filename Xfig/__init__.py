@@ -5,8 +5,6 @@ from Xfig.find_width               import find_width
 from Xfig.plot_all                 import plot_all
 from Xfig.plot_all_spline          import plot_all_spline
 from Xfig.plot_function            import plot_function
-from Xfig.plot_fun_frame           import plot_fun_frame
-from Xfig.plot_fun_name            import plot_fun_name
 from Xfig.plot_fun_type_frame      import plot_fun_type_frame
 from Xfig.plot_fun_type_name       import plot_fun_type_name
 from Xfig.plot_fun_type_text_left  import plot_fun_type_text_left
@@ -17,18 +15,12 @@ from Xfig.plot_meth_frame          import plot_meth_frame
 from Xfig.plot_meth_name           import plot_meth_name
 from Xfig.plot_meth_text_left      import plot_meth_text_left
 from Xfig.plot_mod_end_compound    import plot_mod_end_compound
-from Xfig.plot_mod_frame           import plot_mod_frame
-from Xfig.plot_mod_name            import plot_mod_name
 from Xfig.plot_mod_start_compound  import plot_mod_start_compound
 from Xfig.plot_module              import plot_module
-from Xfig.plot_prog_frame          import plot_prog_frame
-from Xfig.plot_prog_name           import plot_prog_name
 from Xfig.plot_program             import plot_program
 from Xfig.plot                     import plot
 from Xfig.plot_spline_legend       import plot_spline_legend
 from Xfig.plot_spline              import plot_spline
-from Xfig.plot_sub_frame           import plot_sub_frame
-from Xfig.plot_sub_name            import plot_sub_name
 from Xfig.plot_subroutine          import plot_subroutine
 from Xfig.plot_text                import plot_text
 from Xfig.plot_type_stat_frame     import plot_type_stat_frame
@@ -40,6 +32,8 @@ from Xfig.plot_use_text_left       import plot_use_text_left
 from Xfig.plot_var_frame           import plot_var_frame
 from Xfig.plot_var_name            import plot_var_name
 from Xfig.plot_var_text_left       import plot_var_text_left
+from Xfig.plot_object_name         import plot_object_name
+from Xfig.plot_title_frame         import plot_title_frame
 from Xfig.use_len                  import use_len
 from Xfig.walk                     import walk
 from Xfig.write_header             import write_header

@@ -1,6 +1,6 @@
-from Xfig.plot_prog_name import plot_prog_name
-from Xfig.plot_use_name  import plot_use_name
-from Xfig.plot_type_stat import plot_type_stat
+from Xfig.plot_object_name import plot_object_name
+from Xfig.plot_use_name    import plot_use_name
+from Xfig.plot_type_stat   import plot_type_stat
 
 #===============================================================================
 # Function to plot program box
@@ -23,9 +23,9 @@ def plot_program(file, x0, y0,         \
                  object):
 
   # Plot a header text box
-  plot_prog_name(file, x0, y0,         \
-                program_name,          \
-                object)
+  plot_object_name(file, x0, y0,         \
+                   program_name,          \
+                   object)
 
   # Plot a type statements box
   if object.N_Types() != 0:

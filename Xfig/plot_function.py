@@ -1,4 +1,4 @@
-from Xfig.plot_fun_name      import plot_fun_name
+from Xfig.plot_object_name   import plot_object_name
 from Xfig.plot_fun_type_name import plot_fun_type_name
 from Xfig.plot_var_name      import plot_var_name
 
@@ -25,9 +25,9 @@ def plot_function(file, x0, y0,       \
                   object):
 
   # Plot a header text box
-  plot_fun_name(file, x0, y0,         \
-                function_name,        \
-                object)
+  plot_object_name(file, x0, y0,         \
+                   function_name,        \
+                   object)
 
   # Plot a type statements box
   if object.N_Types() != 0:

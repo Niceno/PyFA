@@ -1,7 +1,7 @@
-from Xfig.plot_sub_name  import plot_sub_name
-from Xfig.plot_type_stat import plot_type_stat
-from Xfig.plot_use_name  import plot_use_name
-from Xfig.plot_var_name  import plot_var_name
+from Xfig.plot_object_name import plot_object_name
+from Xfig.plot_type_stat   import plot_type_stat
+from Xfig.plot_use_name    import plot_use_name
+from Xfig.plot_var_name    import plot_var_name
 
 #===============================================================================
 # Function to plot subroutine box
@@ -26,9 +26,9 @@ def plot_subroutine(file, x0, y0,      \
                     object):
 
   # Plot a header text box
-  plot_sub_name(file, x0, y0,          \
-                subroutine_name,       \
-                object)
+  plot_object_name(file, x0, y0,          \
+                   subroutine_name,       \
+                   object)
 
   # Plot a type statements box
   if object.N_Types() != 0:
