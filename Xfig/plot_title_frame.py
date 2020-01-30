@@ -2,7 +2,7 @@ import Const
 from Xfig.box_color import box_color
 
 #===============================================================================
-# Function to plot an empty function frame
+# Function to plot an empty module frame
 #
 # Parameters:
 #   - file:            Xfig file's handle
@@ -13,14 +13,21 @@ from Xfig.box_color import box_color
 # Returns:
 #   - nothing
 # Used by:
-#   - function for plotting function name box (header box)
+#   - function for plotting module name box (header box)
 #-------------------------------------------------------------------------------
-def plot_fun_frame(file, x0, y0, box_width, box_height):
+def plot_title_frame(file, object, x0, y0, box_width, box_height):
 
   file.write("2 2 0 ")
   file.write("%3d "     % Const.THICKNESS)
   file.write("0")
-  file.write("%3d "     % box_color(Const.COLOR_HEADER_FUNCTION))
+  if object.Type()   == "Subroutine":
+    file.write("%3d " % box_color(Const.COLOR_HEADER_SUBROUTINE))
+  elif object.Type() == "Program":
+    file.write("%3d " % box_color(Const.COLOR_HEADER_PROGRAM))
+  elif object.Type() == "Module":
+    file.write("%3d " % box_color(Const.COLOR_HEADER_MODULE))
+  elif object.Type() == "Function":
+    file.write("%3d " % box_color(Const.COLOR_HEADER_FUNCTION))
   file.write("15 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"  % ( x0            *Const.XFIG_SCALE,   \
                             y0            *Const.XFIG_SCALE))
