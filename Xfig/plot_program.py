@@ -9,7 +9,6 @@ from Xfig.plot_type_stat   import plot_type_stat
 #   - file:               Xfig file's handle
 #   - x0:                 object position on x axis in centimeters
 #   - y0:                 object position on y axis in centimeters
-#   - programe_name:      name of the program
 #   - use_list:           list of subroutine use statements
 #   - object:             object to plot (subroutine)
 # Returns:
@@ -18,7 +17,6 @@ from Xfig.plot_type_stat   import plot_type_stat
 #   - function for plotting module/subroutine/function/program
 #-------------------------------------------------------------------------------
 def plot_program(file, x0, y0,         \
-                 program_name,         \
                  use_list,             \
                  object):
 

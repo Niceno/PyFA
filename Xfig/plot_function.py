@@ -11,7 +11,6 @@ from Xfig.plot_object_start_compound import plot_object_start_compound
 #   - file:               Xfig file's handle
 #   - x0:                 object position on x axis in centimeters
 #   - y0:                 object position on y axis in centimeters
-#   - function_name:      name of the function
 #   - var_list:           list of function variables
 #   - use_list:           list of function use statements
 #   - object:             object to plot (function)
@@ -21,7 +20,6 @@ from Xfig.plot_object_start_compound import plot_object_start_compound
 #   - function for plotting module/subroutine/function (choosing what to plot)
 #-------------------------------------------------------------------------------
 def plot_function(file, x0, y0,       \
-                  function_name,      \
                   var_list,           \
                   use_list,           \
                   object):

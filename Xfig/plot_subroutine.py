@@ -10,7 +10,6 @@ from Xfig.plot_var_name    import plot_var_name
 #   - file:               Xfig file's handle
 #   - x0:                 object position on x axis in centimeters
 #   - y0:                 object position on y axis in centimeters
-#   - subroutine_name:    name of the subroutine
 #   - var_list:           list of subroutine variables
 #   - use_list:           list of subroutine use statements
 #   - object:             object to plot (subroutine)
@@ -20,7 +19,6 @@ from Xfig.plot_var_name    import plot_var_name
 #   - function for plotting module/subroutine/function (choosing what to plot)
 #-------------------------------------------------------------------------------
 def plot_subroutine(file, x0, y0,      \
-                    subroutine_name,   \
                     var_list,          \
                     use_list,          \
                     object):

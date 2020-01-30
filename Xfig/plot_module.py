@@ -13,7 +13,6 @@ from Xfig.plot_var_name              import plot_var_name
 #   - file:            Xfig file's handle
 #   - x0:              object position on x axis in centimeters
 #   - y0:              object position on y axis in centimeters
-#   - module_name:     name of the module
 #   - var_list:        list of module variables
 #   - meth_list:       list of module methods
 #   - use_list:        list of module use statements
@@ -24,7 +23,6 @@ from Xfig.plot_var_name              import plot_var_name
 #   - function for plotting module/subroutine/function (choosing what to plot)
 #-------------------------------------------------------------------------------
 def plot_module(file, x0, y0,     \
-                module_name,      \
                 var_list,         \
                 meth_list,        \
                 use_list,         \

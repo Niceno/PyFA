@@ -56,12 +56,9 @@ def plot(file, object):
     if var_list == []:
       var_list = ["No variables"]
 
-    module_name = mod_name
-
     if (mod_name != []):
 
       plot_module(file, x0, y0,        \
-                  module_name,         \
                   var_list,            \
                   meth_list,           \
                   use_list,            \
@@ -69,34 +66,28 @@ def plot(file, object):
 
   # Subroutine definition has been found
   elif sub_name != 0:
-    subroutine_name = sub_name
 
-  # If variables has not been found, do not plot subroutine
+    # If variables has not been found, do not plot subroutine
     if var_list != []:
       plot_subroutine(file, x0, y0,    \
-                    subroutine_name,   \
                     var_list,          \
                     use_list,          \
                     object)
 
   # Function definition has been found
   elif fun_name != 0:
-    function_name = fun_name
 
-  # If variables has not been found, do not plot function
+    # If variables has not been found, do not plot function
     if var_list != []:
       plot_function(file, x0, y0,      \
-                    function_name,     \
                     var_list,          \
                     use_list,          \
                     object)
 
   # Program definition has been found
   elif prog_name != 0:
-    program_name = prog_name
 
     plot_program(file, x0, y0,         \
-                 program_name,         \
                  use_list,             \
                  object)
 
