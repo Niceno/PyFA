@@ -1,6 +1,5 @@
 import Finder
-from Objects.check_use import check_use
-from Objects.Function  import Function
+from Objects.Function import Function
 
 #===============================================================================
 # Import attributes from fortran files to function object
@@ -15,12 +14,12 @@ from Objects.Function  import Function
 def function_class(file_path):
 
   fun_name   = Finder.get_fun(file_path)
-  use_list   = check_use(Finder.get_use(file_path))
+  use_list   = Finder.get_use(file_path)
   var_list   = Finder.get_var(file_path)
-  fun_type   = Finder.get_fun_type(file_path)
+  meth_list  = []
   call_list  = Finder.get_call(file_path)
   type_stat  = Finder.get_type(file_path)
-  meth_list  = 0
+  fun_type   = Finder.get_fun_type(file_path)
   path       = file_path
 
   function = Function(fun_name,   \
@@ -29,8 +28,8 @@ def function_class(file_path):
                       var_list,   \
                       meth_list,  \
                       call_list,  \
-                      fun_type,   \
-                      type_stat)
+                      type_stat,  \
+                      fun_type)
 
   return function
 

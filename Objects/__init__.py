@@ -23,7 +23,6 @@ from Objects.sub_lvl  import sub_lvl
 
 # Other general functions
 from Objects.classify_objects     import classify_objects
-from Objects.check_use            import check_use
 from Objects.find_max_lvl         import find_max_lvl
 from Objects.get_obj_lists        import get_obj_lists
 from Objects.lvl_list             import lvl_list

@@ -14,11 +14,12 @@ from Finder.get_sub           import get_sub
 #-------------------------------------------------------------------------------
 def get_var(file_name_with_path):
 
-  var_list    = get_all_var(file_name_with_path)
-  sub_name    = get_sub(file_name_with_path)
+  var_list = get_all_var(file_name_with_path)
+  sub_name = get_sub(file_name_with_path)
+  sub_var_list = []
+
   if sub_name != 0:                                # if it is subroutine
 
-    sub_var_list = []
     result = re.search("\((.*)\)", sub_name)
 
     if result:
@@ -32,9 +33,6 @@ def get_var(file_name_with_path):
 
   else:                                            # if it is not subroutine
     sub_var_list = var_list                        # return all variables
-
-  if sub_var_list == []:
-    sub_var_list = ["No variables defined"]
 
   return sub_var_list
 

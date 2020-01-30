@@ -25,7 +25,7 @@ def plot_all_spline(file, obj_list, box_margins):
 
   # Getting list with objects that have use statements
   for i in range(len(obj_list)):
-    if obj_list[i].use != "None":
+    if obj_list[i].uses != []:
       use_objects.append(obj_list[i])
 
   # Getting list with objects that have call statements
@@ -41,7 +41,7 @@ def plot_all_spline(file, obj_list, box_margins):
 
   # Plotting connections for use statements
   for i in range(len(use_objects)):
-    use = use_objects[i].use
+    use = use_objects[i].uses
     for k in range(len(use)):
       used = use[k]
       used = used.strip("use ")

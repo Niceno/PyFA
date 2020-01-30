@@ -16,8 +16,8 @@ def mod_lvl(modules_list):
     n += 1
     for i in range(len(modules_list)):
 
-      if modules_list[i].use != "None":         # if there are use statements
-        mod_use_list = modules_list[i].use      # get use list of modules
+      if modules_list[i].N_Uses() > 0:         # if there are use statements
+        mod_use_list = modules_list[i].uses     # get use list of modules
         mod_use_list = [i.split()[1] for i in mod_use_list]   # only take name
         mod_use_list = ([s.strip(",") for s in mod_use_list]) # modules without
                                                               # other info

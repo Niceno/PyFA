@@ -41,8 +41,6 @@ def get_use(file_name_with_path):
 
   if use_list != []:
     use_list = use_list
-  else:
-    use_list = 0
 
   return use_list
 

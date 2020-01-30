@@ -20,8 +20,8 @@ def sub_lvl(subroutines_list,file_paths):
     n += 1
     for i in range(len(subroutines_list)):
 
-      if subroutines_list[i].use != "None":       # if there are use statements
-        sub_use_list = subroutines_list[i].use    # get use list of subroutines
+      if subroutines_list[i].N_Uses() > 0:        # if there are use statements
+        sub_use_list = subroutines_list[i].uses   # get use list of subroutines
         sub_use_list = [i.split()[1] for i in sub_use_list]    # only take name
         sub_use_list = ([s.strip(",") for s in sub_use_list])  # modules without
                                                                # other info

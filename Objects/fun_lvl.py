@@ -21,8 +21,8 @@ def fun_lvl(functions_list,file_paths):
 
     for i in range(len(functions_list)):
 
-      if functions_list[i].use != "None":       # if there are use statements
-        fun_use_list = functions_list[i].use    # get use list of functions
+      if functions_list[i].N_Uses() > 0:        # if there are use statements
+        fun_use_list = functions_list[i].uses   # get use list of functions
         fun_use_list = [i.split()[1] for i in fun_use_list]    # only take name
         fun_use_list = ([s.strip(",") for s in fun_use_list])  # modules without
                                                                # other info

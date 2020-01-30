@@ -19,8 +19,8 @@ def prog_lvl(program_list, file_paths):
 
     for i in range(len(program_list)):
 
-      if program_list[i].use != "None":       # if there are use statements
-        prog_use_list = program_list[i].use    # get use list of program
+      if program_list[i].N_Uses() > 0:          # if there are use statements
+        prog_use_list = program_list[i].uses    # get use list of program
         prog_use_list = [i.split()[1] for i in prog_use_list]  # only take name
         prog_use_list = ([s.strip(",") for s in prog_use_list])# modules without
                                                                # other info

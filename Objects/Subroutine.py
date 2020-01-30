@@ -18,7 +18,7 @@ class Subroutine(Object):
 
     # Call mother's init
     Object.__init__(self, name, path,      \
-                    use, var, meth, call, types)
+                    use, var, meth, call, types, "")  # last is function type
 
     self.in_module = []
 

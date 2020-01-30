@@ -16,12 +16,11 @@ from Objects.Object import Object  # mother
 class Function(Object):
   def __init__(self, name, path,      \
                use, var, meth, call,  \
-               fun_type, types):
+               types, fun_type):
 
     # Call mother's init
     Object.__init__(self, name, path,      \
-                    use, var, meth, call, types)
+                    use, var, meth, call, types, fun_type)
 
-    self.fun_type  = fun_type
     self.in_module = []
 

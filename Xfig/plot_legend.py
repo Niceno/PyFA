@@ -1,5 +1,5 @@
 import Const
-import Objects
+from Objects import Function, Module, Program, Subroutine
 from Xfig.plot_spline_legend import plot_spline_legend
 from Xfig.plot_text          import plot_text
 from Xfig.find_width         import find_width
@@ -16,18 +16,31 @@ from Xfig.plot_object_name   import plot_object_name
 #-------------------------------------------------------------------------------
 def plot_legend(file, obj_list, x0, y0):
 
-  sobject = Objects.Subroutine("     Subroutine     ", 0, 0, 0, 0, 0, 0)
-  fobject = Objects.Function  ("      Function      ", 0, 0, 0, 0, 0, 0, 0)
-  mobject = Objects.Module    ("       Module       ", 0, 0, 0, 0, 0, 0)
-  pobject = Objects.Program   ("      Program       ", 0, 0, 0, 0, 0, 0)
+  p = ""  # path
+  u = []  # use
+  v = []  # var
+  m = []  # methods
+  c = []  # calls
+  mobject = Module    ("       Module       ", p, u, v, m, c, [])
+  mobject.x0 = x0
+  mobject.y0 = y0
+  sobject = Subroutine("     Subroutine     ", p, u, v, m, c, [])
+  sobject.x0 = x0
+  sobject.y0 = y0 + Const.UNIT_BOX_HEIGHT
+  fobject = Function  ("      Function      ", p, u, v, m, c, [], "")
+  fobject.x0 = x0
+  fobject.y0 = y0 + Const.UNIT_BOX_HEIGHT * 2
+  pobject = Program   ("      Program       ", p, u, v, m, c, [])
+  pobject.x0 = x0
+  pobject.y0 = y0 + Const.UNIT_BOX_HEIGHT * 3
   text_height = Const.UNIT_BOX_HEIGHT
   text_width  = find_width(sobject)
 
   # Boxes
-  plot_object_name(file, x0, y0,                           mobject)
-  plot_object_name(file, x0, y0+Const.UNIT_BOX_HEIGHT,     sobject)
-  plot_object_name(file, x0, y0+(Const.UNIT_BOX_HEIGHT)*2, fobject)
-  plot_object_name(file, x0, y0+(Const.UNIT_BOX_HEIGHT)*3, pobject)
+  plot_object_name(file, mobject)
+  plot_object_name(file, sobject)
+  plot_object_name(file, fobject)
+  plot_object_name(file, pobject)
 
   # Splines
   plot_spline_legend(file, obj_list,                           \

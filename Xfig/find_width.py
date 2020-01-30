@@ -4,7 +4,7 @@ import Const
 # Choose box width depending on longest string
 #
 # Parameters:
-#   - filename:   name of the Fortran file being read (.f90)
+#   - object:   name of the Fortran file being read (.f90)
 # Returns:
 #   - var_width:  box width in Xfig drawing units
 # Used by:
@@ -12,50 +12,30 @@ import Const
 # Warning:
 #   - Uses ghost parameter 0.4 to convert width from characters to Xfig units
 #-------------------------------------------------------------------------------
-def find_width(filename):
+def find_width(object):
 
-  header_name = filename.name
-  var_list    = filename.var
-  meth_list   = filename.meth
-  use_list    = filename.use
-  type_list   = filename.types
+  # Find variable with maximum length
+  longest_variable_name = ""
+  if object.N_Vars() > 0: longest_variable_name = max(object.vars, key=len)
 
-  if filename.Type() == "Function":
-    fun_type = filename.fun_type
-  else:
-    fun_type = ["0"]
-  if use_list == 0:
-    use_list = ["0"]
-  else:
-    use_list = use_list
-  if meth_list == 0:
-    meth_list = ["0"]
-  else:
-    meth_list = meth_list
-  if var_list == []:
-    var_list = ["No variables"]
-  if var_list == 0:
-    var_list = ["No variables"]
-  if type_list == 0:
-    type_list = ["No new types"]
+  # Find max length of methods
+  longest_method_name = ""
+  if object.N_Methods() > 0: longest_method_name = max(object.methods, key=len)
 
-  var_length      = max(var_list,  key=len)
-  meth_length     = max(meth_list, key=len)
-  use_length      = max(use_list,  key=len)
-  if fun_type != 0:
-    fun_type_length = max(fun_type,  key=len)
-  else:
-    fun_type_length = 0
-  type_length     = max(type_list, key=len)
+  # Find longest type name
+  longest_type_name = ""
+  if object.N_Types() > 0: longest_type_name = max(object.types, key=len)
 
-  if fun_type != 0:
-    lengths = [len(var_length),      len(meth_length), \
-               len(header_name),     len(use_length),  \
-               len(fun_type_length), len(type_length)]
-  else:
-    lengths = [len(var_length),      len(meth_length), \
-               len(header_name),     len(use_length),  \
-               len(type_length)]
+  # Find longest use statement
+  longest_use_name = ""
+  if object.N_Uses() > 0: longest_use_name = max(object.uses,  key=len)
+
+  lengths = [len(object.name),             \
+             len(object.fun_type),         \
+             len(longest_variable_name),   \
+             len(longest_method_name),     \
+             len(longest_use_name),        \
+             len(longest_type_name)]
 
   box_width = max(lengths)
   box_width = box_width  \

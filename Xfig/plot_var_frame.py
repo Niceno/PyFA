@@ -13,17 +13,13 @@ from Xfig.use_len           import use_len
 #   - box_width:       box width in centimeters
 #   - box_height:      box height in centimeters
 #   - var_list:        list of variables
-#   - use_list:        list of use statements
 #   - object:          object to plot
 # Returns:
 #   - nothing
 # Used by:
 #   - function for plotting variables box
 #-------------------------------------------------------------------------------
-def plot_var_frame(file, x0, y0, box_width, box_height, \
-                   var_list,                            \
-                   use_list,                            \
-                   object):
+def plot_var_frame(file, box_width, box_height, object):
 
   fun_type_len  = check_if_function(object)
 
@@ -32,22 +28,22 @@ def plot_var_frame(file, x0, y0, box_width, box_height, \
   file.write("0")
   file.write("%3d "     % box_color(Const.COLOR_BOX))
   file.write("14 -1 20 0.000 0 0 -1 0 0 5\n")
-  file.write("%9d %9d"  % ( x0              *Const.XFIG_SCALE,   \
-                           (y0+box_height)  *Const.XFIG_SCALE))
-  file.write("%9d %9d"  % ((x0+box_width)   *Const.XFIG_SCALE,   \
-                           (y0+box_height)  *Const.XFIG_SCALE))
-  file.write("%9d %9d"  % ((x0+box_width)   *Const.XFIG_SCALE,   \
-                           (y0+box_height                        \
-                          +len(var_list)                         \
-                          +use_len(use_list)                     \
-                          +fun_type_len                          \
-                          +object.N_Types())*Const.XFIG_SCALE))
-  file.write("%9d %9d"  % ( x0              *Const.XFIG_SCALE,   \
-                           (y0+box_height                        \
-                          +len(var_list)                         \
-                          +use_len(use_list)                     \
-                          +fun_type_len                          \
-                          +object.N_Types())*Const.XFIG_SCALE))
-  file.write("%9d %9d\n"% ( x0              *Const.XFIG_SCALE,   \
-                           (y0+box_height)  *Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ( object.x0              *Const.XFIG_SCALE,   \
+                           (object.y0+box_height)  *Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ((object.x0+box_width)   *Const.XFIG_SCALE,   \
+                           (object.y0+box_height)  *Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ((object.x0+box_width)   *Const.XFIG_SCALE,   \
+                           (object.y0+box_height                        \
+                           +object.N_Vars()                             \
+                           +object.N_Uses()                             \
+                           +fun_type_len                                \
+                           +object.N_Types())*Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ( object.x0              *Const.XFIG_SCALE,   \
+                           (object.y0+box_height                        \
+                           +object.N_Vars()                             \
+                           +object.N_Uses()                             \
+                           +fun_type_len                                \
+                           +object.N_Types())*Const.XFIG_SCALE))
+  file.write("%9d %9d\n"% ( object.x0              *Const.XFIG_SCALE,   \
+                           (object.y0+box_height)  *Const.XFIG_SCALE))
 

@@ -27,12 +27,9 @@ def get_meth(file_name_with_path):
     for item in sublist:
       flat_meth_list.append(item)
 
-  # Check if any method is found
-  if len(module_name) == 0:
-    meth_list = [""]
-  elif flat_meth_list == []:
-    meth_list = ["No methods defined"]
-  elif flat_meth_list != []:
+  meth_list = []
+
+  if flat_meth_list != []:
     meth_list = [i.split()[0] for i in flat_meth_list]
     mod = get_mod(file_name_with_path)                     # get module name
     meth_list = [mod + "_" + x for x in meth_list]         # add module name

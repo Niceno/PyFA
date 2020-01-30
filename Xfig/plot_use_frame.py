@@ -19,9 +19,7 @@ from Xfig.use_len           import use_len
 # Used by:
 #   - function for plotting use statements box
 #-------------------------------------------------------------------------------
-def plot_use_frame(file, x0, y0, box_width, box_height, \
-                   use_list,                            \
-                   object):
+def plot_use_frame(file, x0, y0, box_width, box_height, object):
 
   fun_type_len  = check_if_function(object)
   type_stat_len = object.N_Types()
@@ -37,12 +35,12 @@ def plot_use_frame(file, x0, y0, box_width, box_height, \
                            (y0+box_height)*Const.XFIG_SCALE))
   file.write("%9d %9d"  % ((x0+box_width) *Const.XFIG_SCALE,   \
                            (y0+box_height                      \
-                           +use_len(use_list)                  \
+                           +object.N_Uses()                    \
                            +fun_type_len                       \
                            +type_stat_len)*Const.XFIG_SCALE))
   file.write("%9d %9d"  % ( x0            *Const.XFIG_SCALE,   \
                            (y0+box_height                      \
-                           +use_len(use_list)                  \
+                           +object.N_Uses()                    \
                            +fun_type_len                       \
                            +type_stat_len)*Const.XFIG_SCALE))
   file.write("%9d %9d\n"% ( x0            *Const.XFIG_SCALE,   \

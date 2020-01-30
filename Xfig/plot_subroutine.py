@@ -8,41 +8,27 @@ from Xfig.plot_var_name    import plot_var_name
 #
 # Parameters:
 #   - file:               Xfig file's handle
-#   - x0:                 object position on x axis in centimeters
-#   - y0:                 object position on y axis in centimeters
-#   - var_list:           list of subroutine variables
-#   - use_list:           list of subroutine use statements
 #   - object:             object to plot (subroutine)
 # Returns:
 #   - nothing
 # Used by:
 #   - function for plotting module/subroutine/function (choosing what to plot)
 #-------------------------------------------------------------------------------
-def plot_subroutine(file, x0, y0,      \
-                    var_list,          \
-                    use_list,          \
-                    object):
+def plot_subroutine(file, object):
 
   # Plot a header text box
-  plot_object_name(file, x0, y0, object)
+  plot_object_name(file, object)
 
   # Plot a type statements box
-  if object.N_Types() != 0:
-    plot_type_stat(file, x0, y0, object)
+  if object.N_Types() > 0:
+    plot_type_stat(file, object)
 
-  # Check if use box exist
-  if use_list != "None":
-    # Plot a use text box
-    plot_use_name(file, x0, y0,        \
-                  use_list,            \
-                  object)
-  else:
-    use_list = 0
+  # If use statements have been found, plot use text box
+  if object.N_Uses() > 0:
+    plot_use_name(file, object)
 
-  if object.var != 0:
+  # If variables have been found, plot variables text box
+  if object.N_Vars() > 0:
     # Plot a variable text box
-    plot_var_name(file, x0, y0,         \
-                  var_list,             \
-                  use_list,             \
-                  object)
+    plot_var_name(file, object)
 

@@ -17,7 +17,7 @@ from Xfig.plot_text  import plot_text
 #-------------------------------------------------------------------------------
 def plot_fun_type_text_left(file, x0, y0, object):
 
-  fun_type  = object.fun_type
+  fun_type = object.fun_type
 
   plot_text(file, "Left",                                    \
             x0 + Const.UNIT_BOX_HEIGHT*0.333,                \

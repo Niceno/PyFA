@@ -39,8 +39,5 @@ def get_type(file_name_with_path):
     type_list = type_list
     type_list = list(set(type_list))
 
-  else:
-    type_list = 0
-
   return type_list
 

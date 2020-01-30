@@ -16,49 +16,27 @@ from Xfig.plot_program    import plot_program
 #-------------------------------------------------------------------------------
 def plot(file, object):
 
-  var_list    = object.var
-  meth_list   = object.meth
-  use_list    = object.use
-  x0          = object.x0
-  y0          = object.y0
-
   # Module definition has been found
   if object.Type() == "Module":
 
-    # If variables has not been found, assign "No variables" and plot module
-    if var_list == []:
-      var_list = ["No variables"]
-
-    plot_module(file, x0, y0,        \
-                var_list,            \
-                meth_list,           \
-                use_list,            \
-                object)
+    plot_module(file, object)
 
   # Subroutine definition has been found
   elif object.Type() == "Subroutine":
 
     # If variables has not been found, do not plot subroutine
-    if var_list != []:
-      plot_subroutine(file, x0, y0,    \
-                    var_list,          \
-                    use_list,          \
-                    object)
+    if object.N_Vars() > 0:          # WHY THIS???
+      plot_subroutine(file, object)
 
   # Function definition has been found
   elif object.Type() == "Function":
 
     # If variables has not been found, do not plot function
-    if var_list != []:
-      plot_function(file, x0, y0,      \
-                    var_list,          \
-                    use_list,          \
-                    object)
+    if object.N_Vars() > 0:          # WHY THIS???
+      plot_function(file, object)
 
   # Program definition has been found
   elif object.Type() == "Program":
 
-    plot_program(file, x0, y0,         \
-                 use_list,             \
-                 object)
+    plot_program(file, object)
 

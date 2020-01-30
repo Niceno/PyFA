@@ -13,7 +13,7 @@ import re
 def get_all_var(file_name_with_path):
 
   # Find all var names
-  var_name_list   = []
+  var_name_list  = []
   pattern        = re.compile("::(.*)", re.IGNORECASE)
   pattern2       = re.compile("(.*)[&]\s*$", re.IGNORECASE)
 

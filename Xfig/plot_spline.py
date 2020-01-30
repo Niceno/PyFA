@@ -57,7 +57,7 @@ def plot_spline(file, obj_list, object1, object2, line_type, depth,  \
 
   # Last coordinate for continous lines (use statements)
   if line_type == "Continuous":
-    ind = object2.use.index("use " + object1.name)
+    ind = object2.uses.index("use " + object1.name)
     y6 = object2.y0 + Const.UNIT_BOX_HEIGHT        \
                     + object2.N_Types()            \
                     + ind * Const.UNIT_BOX_HEIGHT  \

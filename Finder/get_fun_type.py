@@ -13,7 +13,7 @@ import re
 def get_fun_type(file_name_with_path):
 
   function = []                                 # initialize
-  pattern    = re.compile(".+?(?=function)", re.IGNORECASE)
+  pattern  = re.compile(".+?(?=function)", re.IGNORECASE)
 
   with open (file_name_with_path, 'rt') as myfile: # open file
     for line in myfile:                            # read line by line
@@ -36,7 +36,7 @@ def get_fun_type(file_name_with_path):
       fun_type = 0
 
   elif len(function) == 0:
-    fun_type = 0
+    fun_type = ""
 
   return fun_type
 

@@ -1,5 +1,4 @@
 import Finder
-from Objects.check_use import check_use
 from Objects.Program   import Program
 
 #===============================================================================
@@ -15,11 +14,12 @@ from Objects.Program   import Program
 def program_class(file_path):
 
   prog_name  = Finder.get_prog(file_path)
-  use_list   = check_use(Finder.get_use(file_path))
+  use_list   = Finder.get_use(file_path)
+  var_list   = Finder.get_var(file_path)
+  meth_list  = []
   call_list  = Finder.get_call(file_path)
   type_stat  = Finder.get_type(file_path)
-  var_list   = 0
-  meth_list  = 0
+  # Function type could come here, but it is set to "" in mother
   path       = file_path
 
   program = Program(prog_name,   \

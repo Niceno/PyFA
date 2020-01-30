@@ -20,17 +20,18 @@
 class Object():
 
   def __init__(self, name, path,      \
-               use, var, meth, call, types):
+               l_uses, l_vars, l_meth, call, types, f_type):
 
     self.name      = name
     self.path      = path
 
     # Logical properties
-    self.use   = use    # list of use statements
-    self.var   = var    # list of local variables
-    self.meth  = meth   # list of member functions
-    self.call  = call   # list of calls
-    self.types = types  # list of defined types
+    self.uses     = l_uses  # list of use statements
+    self.vars     = l_vars  # list of local variables
+    self.methods  = l_meth  # list of member functions
+    self.call     = call    # list of calls
+    self.types    = types   # list of defined types
+    self.fun_type = f_type  # function type (makes sense for Function only)
 
     self.level     = 0
 
@@ -54,10 +55,15 @@ class Object():
 # (It would be more elegant if empty list was still a list, like this: [])
 #-------------------------------------------------------------------------------
   def N_Types(self):
+    return len(self.types)
 
-    if self.types != 0:
-      return len(self.types)
+  def N_Uses(self):
+    return len(self.uses)
 
-    else:
-      return 0
+  def N_Vars(self):
+    return len(self.vars)
+
+  def N_Methods(self):
+    return len(self.methods)
+
 
