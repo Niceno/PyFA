@@ -1,6 +1,8 @@
-from Xfig.plot_object_name   import plot_object_name
-from Xfig.plot_fun_type_name import plot_fun_type_name
-from Xfig.plot_var_name      import plot_var_name
+from Xfig.plot_object_name           import plot_object_name
+from Xfig.plot_fun_type_name         import plot_fun_type_name
+from Xfig.plot_var_name              import plot_var_name
+from Xfig.plot_object_end_compound   import plot_object_end_compound
+from Xfig.plot_object_start_compound import plot_object_start_compound
 
 #===============================================================================
 # Function to plot function box
@@ -23,6 +25,9 @@ def plot_function(file, x0, y0,       \
                   var_list,           \
                   use_list,           \
                   object):
+
+  # Start a compound around the module
+  plot_object_start_compound(file, object)
 
   # Plot a header text box
   plot_object_name(file, x0, y0, object)
@@ -50,3 +55,5 @@ def plot_function(file, x0, y0,       \
                   use_list,             \
                   object)
 
+  # End the compound around the module
+  plot_object_end_compound(file, object)

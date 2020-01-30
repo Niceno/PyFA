@@ -12,6 +12,6 @@
 # Used by:
 #   - plot_module
 #-------------------------------------------------------------------------------
-def plot_mod_end_compound(file, x0, y0, text, object):
+def plot_object_end_compound(file, object):
   file.write("-6\n")
 

@@ -16,14 +16,14 @@ from Xfig.find_width  import find_width
 # Used by:
 #   - plot_module
 #-------------------------------------------------------------------------------
-def plot_mod_start_compound(file, x0, y0, text, object):
+def plot_object_start_compound(file, object):
 
   box_width  = find_width(object)
   box_height = find_height(object)
 
-  file.write("6 %9d %9d %9d %9d\n" % (                            \
-     x0             * Const.XFIG_SCALE - Const.COMPOUND_MARGIN,   \
-     y0             * Const.XFIG_SCALE - Const.COMPOUND_MARGIN,   \
-    (x0+box_width)  * Const.XFIG_SCALE + Const.COMPOUND_MARGIN,   \
-    (y0+box_height) * Const.XFIG_SCALE + Const.COMPOUND_MARGIN))
+  file.write("6 %9d %9d %9d %9d\n" % (                                   \
+     object.x0             * Const.XFIG_SCALE - Const.COMPOUND_MARGIN,   \
+     object.y0             * Const.XFIG_SCALE - Const.COMPOUND_MARGIN,   \
+    (object.x0+box_width)  * Const.XFIG_SCALE + Const.COMPOUND_MARGIN,   \
+    (object.y0+box_height) * Const.XFIG_SCALE + Const.COMPOUND_MARGIN))
 
