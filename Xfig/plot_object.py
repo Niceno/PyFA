@@ -1,26 +1,23 @@
 from Xfig.plot_object_name           import plot_object_name
-from Xfig.plot_fun_type_name         import plot_fun_type_name
-from Xfig.plot_var_list              import plot_var_list
 from Xfig.plot_use_list              import plot_use_list
+from Xfig.plot_meth_list             import plot_meth_list
+from Xfig.plot_var_list              import plot_var_list
+from Xfig.plot_type_list             import plot_type_list
 from Xfig.plot_object_end_compound   import plot_object_end_compound
 from Xfig.plot_object_start_compound import plot_object_start_compound
 
-def difference (list1, list2):
-  list_dif = [i for i in list1 + list2 if i not in list1 or i not in list2]
-  return list_dif
-
 #===============================================================================
-# Function to plot function box
+# Function to plot object box
 #
 # Parameters:
-#   - file:               Xfig file's handle
-#   - object:             object to plot (function)
+#   - file:            Xfig file's handle
+#   - object:          object to plot
 # Returns:
 #   - nothing
 # Used by:
-#   - function for plotting module/subroutine/function (choosing what to plot)
+#   - function for plotting module/subroutine/function/program
 #-------------------------------------------------------------------------------
-def plot_function(file, object):
+def plot_object(file, object):
 
   # Start a compound around the module
   plot_object_start_compound(file, object)
@@ -29,10 +26,8 @@ def plot_function(file, object):
   plot_object_name(file, object)
 
   # Plot a type statements box
-  if object.N_Types() != 0:
+  if object.N_Types() > 0:
     plot_type_list(file, object)
-
-  plot_fun_type_name(file, object.x0, object.y0, object)
 
   # If use statements have been found, plot use text box
   if object.N_Uses() > 0:
@@ -42,5 +37,10 @@ def plot_function(file, object):
   if object.N_Vars() > 0:
     plot_var_list(file, object)
 
+  # If methods have been found, plot methods text box
+  if object.N_Methods() > 0:
+    plot_meth_list(file, object)
+
   # End the compound around the module
   plot_object_end_compound(file, object)
+
