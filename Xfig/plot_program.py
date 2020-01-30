@@ -1,6 +1,7 @@
 from Xfig.plot_object_name import plot_object_name
 from Xfig.plot_use_list    import plot_use_list
 from Xfig.plot_type_list   import plot_type_list
+from Xfig.plot_var_list    import plot_var_list
 
 #===============================================================================
 # Function to plot program box
@@ -25,4 +26,8 @@ def plot_program(file, object):
   # If use statements have been found, plot use text box
   if object.N_Uses() > 0:
     plot_use_list(file, object)
+
+  # If variables have been found, plot variables text box
+  if object.N_Vars() > 0:
+    plot_var_list(file, object)
 
