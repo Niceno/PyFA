@@ -6,8 +6,7 @@ from Xfig.box_color import box_color
 #
 # Parameters:
 #   - file:            Xfig file's handle
-#   - x0:              object position on x axis in centimeters
-#   - y0:              object position on y axis in centimeters
+#   - object:          object to plot title
 #   - box_width:       box width in centimeters
 #   - box_height:      box height in centimeters
 # Returns:

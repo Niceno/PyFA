@@ -22,5 +22,5 @@ def plot_use_list(file, object):
   plot_use_frame(file, box_width, Const.UNIT_BOX_HEIGHT, object)
 
   # Plot text
-  plot_use_text_list(file, object.uses, object)
+  plot_use_text_list(file, object)
 

@@ -35,12 +35,12 @@ def get_obj_lists(file_paths,             \
 
   if object_representation == "Reduced":
     for o in range(len(obj_list)):
-      obj_list[o].var = []
+      obj_list[o].vars = []
 
   if object_representation == "Minimal":
     for o in range(len(obj_list)):
-      obj_list[o].var  = []
-      obj_list[o].meth = []
+      obj_list[o].vars    = []
+      obj_list[o].methods = []
 
   obj_list = update_dimensions(obj_list)
 

@@ -27,13 +27,11 @@ def get_fun_type(file_name_with_path):
 
     fun_type = fun_string.split(" function")[0] # split by "function" and
                                                 # take only part before phrase
-    fun_type = "type " + fun_type
-
     if fun_type.endswith("&"):
       fun_type = fun_type + ")"
 
     if fun_type.startswith("!"):
-      fun_type = 0
+      fun_type = ""
 
   elif len(function) == 0:
     fun_type = ""

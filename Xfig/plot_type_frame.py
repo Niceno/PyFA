@@ -6,8 +6,6 @@ from Xfig.box_color import box_color
 #
 # Parameters:
 #   - file:            Xfig file's handle
-#   - object.x0:              object position on x axis in centimeters
-#   - object.y0:              object position on y axis in centimeters
 #   - box_width:       box width in centimeters
 #   - box_height:      box height in centimeters
 #   - object:          object to plot
@@ -17,8 +15,6 @@ from Xfig.box_color import box_color
 #   - function for plotting type statement box
 #-------------------------------------------------------------------------------
 def plot_type_frame(file, box_width, box_height, object):
-
-  type_stat_len = object.N_Types()
 
   if object.Type() == "Module":
     color = Const.COLOR_HEADER_MODULE
@@ -40,10 +36,10 @@ def plot_type_frame(file, box_width, box_height, object):
                            (object.y0+box_height)*Const.XFIG_SCALE))
   file.write("%9d %9d"  % ((object.x0+box_width) *Const.XFIG_SCALE,  \
                            (object.y0+box_height               \
-                           +type_stat_len)*Const.XFIG_SCALE))
+                           +object.N_Types())    *Const.XFIG_SCALE))
   file.write("%9d %9d"  % ( object.x0            *Const.XFIG_SCALE,  \
                            (object.y0+box_height               \
-                           +type_stat_len)*Const.XFIG_SCALE))
+                           +object.N_Types())    *Const.XFIG_SCALE))
   file.write("%9d %9d\n"% ( object.x0            *Const.XFIG_SCALE,  \
                            (object.y0+box_height)*Const.XFIG_SCALE))
 

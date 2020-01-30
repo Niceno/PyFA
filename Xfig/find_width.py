@@ -30,11 +30,10 @@ def find_width(object):
   longest_use_name = ""
   if object.N_Uses() > 0: longest_use_name = max(object.uses,  key=len)
 
-  lengths = [len(object.name),             \
-             len(object.fun_type),         \
-             len(longest_variable_name),   \
-             len(longest_method_name),     \
-             len(longest_use_name),        \
+  lengths = [len(object.name) + len(object.fun_type),  \
+             len(longest_variable_name),               \
+             len(longest_method_name),                 \
+             len(longest_use_name),                    \
              len(longest_type_name)]
 
   box_width = max(lengths)

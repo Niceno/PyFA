@@ -1,5 +1,5 @@
 import Const
-from Xfig.find_width               import find_width
+from Xfig.find_width          import find_width
 from Xfig.plot_type_frame     import plot_type_frame
 from Xfig.plot_type_text_list import plot_type_text_list
 

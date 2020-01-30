@@ -8,9 +8,6 @@ from Xfig.plot_text        import plot_text
 #
 # Parameters:
 #   - file:         Xfig file's handle
-#   - x0:           object position on x axis in centimeters
-#   - y0:           object position on y axis in centimeters
-#   - text:         text to plot (function name)
 #   - object:       object to plot (function)
 # Returns:
 #   - nothing
@@ -24,9 +21,10 @@ def plot_object_name(file, object):
   # Plot module framing box first
   plot_title_frame(file, object, box_width, Const.UNIT_BOX_HEIGHT)
 
-  # Plot text
+  # Plot name
+  full_name = object.fun_type + " " + object.name
   plot_text(file, "Center",                          \
             object.x0 + box_width*0.5,               \
             object.y0 + Const.UNIT_BOX_HEIGHT*0.75,  \
-            object.name, Const.FONT_HEADER, "Black", 10)
+            full_name, Const.FONT_HEADER, "Black", 10)
 

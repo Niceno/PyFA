@@ -7,8 +7,6 @@ from Xfig.plot_text  import plot_text
 #
 # Parameters:
 #   - file:         Xfig file's handle
-#   - x0:           object position on x axis in centimeters
-#   - y0:           object position on y axis in centimeters
 #   - object:       object to plot
 # Returns:
 #   - nothing

@@ -7,9 +7,6 @@ from Xfig.find_width  import find_width
 #
 # Parameters:
 #   - file:         Xfig file's handle
-#   - x0:           object position on x axis in centimeters
-#   - y0:           object position on y axis in centimeters
-#   - text:         module name)
 #   - object:       object to plot (module)
 # Returns:
 #   - nothing
