@@ -22,50 +22,21 @@ def plot(file, object):
   x0          = object.x0
   y0          = object.y0
 
-  # Type of object is module, assign module name
-  if object.Type() == "Module":
-    mod_name  = object.name
-    sub_name  = 0
-    fun_name  = 0
-    prog_name = 0
-
-  # Type of object is subroutine, assign subroutine name
-  elif object.Type() == "Subroutine":
-    sub_name  = object.name
-    mod_name  = 0
-    fun_name  = 0
-    prog_name = 0
-
-  # Type of object is function, assign function name
-  elif object.Type() == "Function":
-    fun_name  = object.name
-    mod_name  = 0
-    sub_name  = 0
-    prog_name = 0
-
-  elif object.Type() == "Program":
-    prog_name = object.name
-    fun_name  = 0
-    mod_name  = 0
-    sub_name  = 0
-
   # Module definition has been found
-  if mod_name !=0 :
+  if object.Type() == "Module":
 
-  # If variables has not been found, assign "No variables" and plot module
+    # If variables has not been found, assign "No variables" and plot module
     if var_list == []:
       var_list = ["No variables"]
 
-    if (mod_name != []):
-
-      plot_module(file, x0, y0,        \
-                  var_list,            \
-                  meth_list,           \
-                  use_list,            \
-                  object)
+    plot_module(file, x0, y0,        \
+                var_list,            \
+                meth_list,           \
+                use_list,            \
+                object)
 
   # Subroutine definition has been found
-  elif sub_name != 0:
+  elif object.Type() == "Subroutine":
 
     # If variables has not been found, do not plot subroutine
     if var_list != []:
@@ -75,7 +46,7 @@ def plot(file, object):
                     object)
 
   # Function definition has been found
-  elif fun_name != 0:
+  elif object.Type() == "Function":
 
     # If variables has not been found, do not plot function
     if var_list != []:
@@ -85,7 +56,7 @@ def plot(file, object):
                     object)
 
   # Program definition has been found
-  elif prog_name != 0:
+  elif object.Type() == "Program":
 
     plot_program(file, x0, y0,         \
                  use_list,             \
