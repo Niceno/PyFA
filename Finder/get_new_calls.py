@@ -17,7 +17,7 @@ def get_new_calls(file_paths, obj_list, obj_memb):
   fun_list_names = []
   for o in range(len(obj_list)):
     if obj_list[o].Type() == "Function":
-      name = obj_list[i].name
+      name = obj_list[o].name
       if "(" in name:
         name = name.split("(")
         fun_list_names.append(name[0])
