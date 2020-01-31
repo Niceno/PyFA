@@ -14,6 +14,7 @@ from Xfig.plot_object_start_compound import plot_object_start_compound
 from Xfig.plot_object                import plot_object
 from Xfig.plot_spline_legend         import plot_spline_legend
 from Xfig.plot_spline                import plot_spline
+from Xfig.create_spline                import create_spline
 from Xfig.plot_text                  import plot_text
 from Xfig.plot_type_frame            import plot_type_frame
 from Xfig.plot_type_list             import plot_type_list

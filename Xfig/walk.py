@@ -107,7 +107,7 @@ def walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list, box_margins):
       break
 
     # Check if it wobbles (only if you are close)
-    if len(dist) > 2:
+    if len(dist) > 2:   # WARNING: GHOST NUMBER
       if dist[-1] < (box_margins):
         if dist[-1] > dist[-2]:
           x = x[:-3]
