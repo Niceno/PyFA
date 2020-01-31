@@ -8,7 +8,7 @@
 # Used by:
 #   - functions which plot frames
 #-------------------------------------------------------------------------------
-def box_color(name):
+def code_color(name):
 
   if name   == "Black":
     return  0

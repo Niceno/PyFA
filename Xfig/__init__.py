@@ -28,5 +28,5 @@ from Xfig.plot_object_name           import plot_object_name
 from Xfig.plot_title_frame           import plot_title_frame
 from Xfig.walk                       import walk
 from Xfig.write_header               import write_header
-from Xfig.box_color                  import box_color
-from Xfig.font_code                  import font_code
+from Xfig.code_color                 import code_color
+from Xfig.code_font                  import code_font

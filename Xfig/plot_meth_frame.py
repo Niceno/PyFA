@@ -1,5 +1,5 @@
 import Const
-from Xfig.box_color import box_color
+from Xfig.code_color import code_color
 
 #===============================================================================
 # Function to plot an empty method box (frame without text)
@@ -26,7 +26,7 @@ def plot_meth_frame(file, box_width, object):
   file.write("2 2 0 ")
   file.write("%3d "       % Const.THICKNESS)
   file.write("0")
-  file.write("%3d "       % box_color(Const.COLOR_BOX))
+  file.write("%3d "       % code_color(Const.COLOR_BOX))
   file.write("13 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"  % ( x0, y0) )
   file.write("%9d %9d"  % ( x1, y0) )

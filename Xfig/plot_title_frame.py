@@ -1,5 +1,5 @@
 import Const
-from Xfig.box_color import box_color
+from Xfig.code_color import code_color
 
 #===============================================================================
 # Function to plot an empty module frame
@@ -20,13 +20,13 @@ def plot_title_frame(file, object, box_width, box_height):
   file.write("%3d "     % Const.THICKNESS)
   file.write("0")
   if object.Type()   == "Subroutine":
-    file.write("%3d " % box_color(Const.COLOR_HEADER_SUBROUTINE))
+    file.write("%3d " % code_color(Const.COLOR_HEADER_SUBROUTINE))
   elif object.Type() == "Program":
-    file.write("%3d " % box_color(Const.COLOR_HEADER_PROGRAM))
+    file.write("%3d " % code_color(Const.COLOR_HEADER_PROGRAM))
   elif object.Type() == "Module":
-    file.write("%3d " % box_color(Const.COLOR_HEADER_MODULE))
+    file.write("%3d " % code_color(Const.COLOR_HEADER_MODULE))
   elif object.Type() == "Function":
-    file.write("%3d " % box_color(Const.COLOR_HEADER_FUNCTION))
+    file.write("%3d " % code_color(Const.COLOR_HEADER_FUNCTION))
   file.write("15 -1 20 0.000 0 0 -1 0 0 5\n")
   file.write("%9d %9d"  % ( object.x0            *Const.XFIG_SCALE,   \
                             object.y0            *Const.XFIG_SCALE))

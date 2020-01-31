@@ -8,7 +8,7 @@
 # Used by:
 #   - functions which plot text
 #-------------------------------------------------------------------------------
-def font_code(name):
+def code_font(name):
 
   if name   == "Courier":
     return 12

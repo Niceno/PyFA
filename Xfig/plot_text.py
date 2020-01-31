@@ -1,6 +1,6 @@
 import Const
-from Xfig.font_code import font_code
-from Xfig.box_color import box_color
+from Xfig.code_font  import code_font
+from Xfig.code_color import code_color
 
 #===============================================================================
 # Function to print centered frameless text
@@ -22,13 +22,13 @@ def plot_text(file, alignment, x0, y0, text, font, color, depth):
 
   # Alignments can be different
   if   alignment == "Left":
-    file.write("4 0 %3d %3d -1 " % (box_color(color), depth))
+    file.write("4 0 %3d %3d -1 " % (code_color(color), depth))
   elif alignment == "Center":
-    file.write("4 1 %3d %3d -1 " % (box_color(color), depth))
+    file.write("4 1 %3d %3d -1 " % (code_color(color), depth))
   elif alignment == "Right":
-    file.write("4 2 %3d %3d -1 " % (box_color(color), depth))
+    file.write("4 2 %3d %3d -1 " % (code_color(color), depth))
 
-  file.write("%5d" % font_code(font))             # font code
+  file.write("%5d" % code_font(font))             # font code
   file.write("%3d" % (Const.FONT_SIZE * 36))      # font size
   file.write(" 0.0000 4 ")
   text_width  = 3                                 # could be any value
