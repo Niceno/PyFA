@@ -1,6 +1,6 @@
 import Finder
 from Objects.program_class import program_class
-from Objects.prog_lvl      import prog_lvl
+from Objects.object_level  import object_level
 
 #===============================================================================
 # Function for creating programs and appending into list
@@ -12,7 +12,7 @@ from Objects.prog_lvl      import prog_lvl
 # Used by:
 #   - Function for creating complete and updated object list
 #-------------------------------------------------------------------------------
-def prog_list_fun(file_paths):
+def prog_list_fun(file_paths, mod_list):
 
   program_list = []
 
@@ -21,7 +21,7 @@ def prog_list_fun(file_paths):
     if program_name != 0:                 # if it is program then append to list
       program_list.append(program_class(file_paths[i]))
 
-  program_list = prog_lvl(program_list,file_paths)
+  program_list = object_level(program_list, mod_list)
 
   return program_list
 

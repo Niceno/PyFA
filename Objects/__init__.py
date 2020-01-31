@@ -16,10 +16,7 @@ from Objects.mod_list_fun  import mod_list_fun
 from Objects.prog_list_fun import prog_list_fun
 from Objects.sub_list_fun  import sub_list_fun
 
-from Objects.fun_lvl  import fun_lvl
-from Objects.mod_lvl  import mod_lvl
-from Objects.prog_lvl import prog_lvl
-from Objects.sub_lvl  import sub_lvl
+from Objects.object_level import object_level
 
 # Other general functions
 from Objects.classify_objects     import classify_objects

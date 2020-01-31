@@ -22,10 +22,11 @@ def get_obj_lists(file_paths,             \
                   object_hierarchy,       \
                   align_boxes):
 
-  mod_list  = mod_list_fun(file_paths)   # list of all mod classes
-  sub_list  = sub_list_fun(file_paths)   # list of all sub classes
-  fun_list  = fun_list_fun(file_paths)   # list of all fun classes
-  prog_list = prog_list_fun(file_paths)  # list of all prog classes
+  mod_list  = mod_list_fun (file_paths, [])         # list of all mod classes
+  sub_list  = sub_list_fun (file_paths, mod_list)   # list of all sub classes
+  fun_list  = fun_list_fun (file_paths, mod_list)   # list of all fun classes
+  prog_list = prog_list_fun(file_paths, mod_list)   # list of all prog classes
+
   obj_list  = [*mod_list,   \
                *sub_list,   \
                *fun_list,   \

@@ -1,6 +1,6 @@
 import Finder
 from Objects.subroutine_class import subroutine_class
-from Objects.sub_lvl          import sub_lvl
+from Objects.object_level     import object_level
 
 #===============================================================================
 # Function for creating subroutines and appending into list
@@ -12,7 +12,7 @@ from Objects.sub_lvl          import sub_lvl
 # Used by:
 #   - Function for creating complete and updated object list
 #-------------------------------------------------------------------------------
-def sub_list_fun(file_paths):
+def sub_list_fun(file_paths, mod_list):
 
   subroutines_list = []
 
@@ -21,7 +21,7 @@ def sub_list_fun(file_paths):
     if sub_name != 0:                         # if it is sub then append to list
       subroutines_list.append(subroutine_class(file_paths[i]))
 
-  sub_list = sub_lvl(subroutines_list,file_paths)
+  sub_list = object_level(subroutines_list, mod_list)
 
   return sub_list
 
