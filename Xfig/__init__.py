@@ -14,7 +14,6 @@ from Xfig.plot_object_start_compound import plot_object_start_compound
 from Xfig.plot_object                import plot_object
 from Xfig.plot_spline_legend         import plot_spline_legend
 from Xfig.plot_spline                import plot_spline
-from Xfig.create_spline                import create_spline
 from Xfig.plot_text                  import plot_text
 from Xfig.plot_type_frame            import plot_type_frame
 from Xfig.plot_type_list             import plot_type_list
@@ -27,7 +26,6 @@ from Xfig.plot_var_list              import plot_var_list
 from Xfig.plot_var_text_list         import plot_var_text_list
 from Xfig.plot_object_name           import plot_object_name
 from Xfig.plot_title_frame           import plot_title_frame
-from Xfig.walk                       import walk
 from Xfig.write_header               import write_header
 from Xfig.code_color                 import code_color
 from Xfig.code_font                  import code_font

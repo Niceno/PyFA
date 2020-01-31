@@ -1,6 +1,5 @@
 import Const
 from Spline.Spline import Spline
-from Xfig.walk import walk
 
 #===============================================================================
 # Function to plot spline (with 6 coordinates)

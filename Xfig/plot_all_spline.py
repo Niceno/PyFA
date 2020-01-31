@@ -1,6 +1,6 @@
 import Const
-from Xfig.plot_spline   import plot_spline
-from Xfig.create_spline import create_spline
+from Xfig.plot_spline import plot_spline
+from Spline.Spline    import Connect
 
 #===============================================================================
 # Function for plotting all spline connections
@@ -46,14 +46,13 @@ def plot_all_spline(file, obj_list, box_margins):
       used = used.strip("use ")
       for m in range(len(mod_objects)):
         if used == mod_objects[m].name:
-          print("counter = ", counter)
-          splines.append(create_spline(obj_list,           \
-                                       mod_objects[m],     \
-                                       use_objects[i],     \
-                                       "Continuous",       \
-                                       101+len(splines),   \
-                                       box_margins         \
-                                     * (1.0 + counter / max_cnt)))
+          splines.append(Connect(obj_list,           \
+                         mod_objects[m],     \
+                         use_objects[i],     \
+                         "Continuous",       \
+                         101+len(splines),   \
+                         box_margins         \
+                       * (1.0 + counter / max_cnt)))
           counter += 1.0
           if counter > max_cnt: counter = 0.0
 
@@ -64,14 +63,13 @@ def plot_all_spline(file, obj_list, box_margins):
       called = call[k]
       for m in range(len(obj_list)):
         if called in obj_list[m].name:
-          print("counter = ", counter)
-          splines.append(create_spline(obj_list,            \
-                                       call_objects[i],     \
-                                       obj_list[m],         \
-                                       "Dashed",            \
-                                       201+len(splines),    \
-                                       box_margins         \
-                                     * (1.0 + counter / max_cnt)))
+          splines.append(Connect(obj_list,            \
+                         call_objects[i],     \
+                         obj_list[m],         \
+                         "Dashed",            \
+                         201+len(splines),    \
+                         box_margins         \
+                       * (1.0 + counter / max_cnt)))
           counter += 1.0
           if counter > max_cnt: counter = 0.0
 
