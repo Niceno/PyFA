@@ -7,14 +7,13 @@ from Xfig.box_color import box_color
 # Parameters:
 #   - file:            Xfig file's handle
 #   - box_width:       box width in centimeters
-#   - box_height:      box height in centimeters
 #   - object:          object to plot
 # Returns:
 #   - nothing
 # Used by:
 #   - function for plotting type statement box
 #-------------------------------------------------------------------------------
-def plot_type_frame(file, box_width, box_height, object):
+def plot_type_frame(file, box_width, object):
 
   if object.Type() == "Module":
     color = Const.COLOR_HEADER_MODULE
@@ -25,21 +24,19 @@ def plot_type_frame(file, box_width, box_height, object):
   if object.Type() == "Program":
     color = Const.COLOR_HEADER_PROGRAM
 
+  x0 =  object.x0              * Const.XFIG_SCALE
+  x1 = (object.x0 + box_width) * Const.XFIG_SCALE
+  y0 = (object.y0 + ( 1 )      * Const.UNIT_BOX_HEIGHT ) * Const.XFIG_SCALE
+  y1 = y0 + object.N_Types()   * Const.UNIT_BOX_HEIGHT * Const.XFIG_SCALE
+
   file.write("2 2 0 ")
   file.write("%3d "     % Const.THICKNESS)
   file.write("0")
   file.write("%3d "     % box_color(color))
   file.write("11 -1 30 0.000 0 0 -1 0 0 5\n")         # 30*5 = 150% intensity
-  file.write("%9d %9d"  % ( object.x0            *Const.XFIG_SCALE,  \
-                           (object.y0+box_height)*Const.XFIG_SCALE))
-  file.write("%9d %9d"  % ((object.x0+box_width) *Const.XFIG_SCALE,  \
-                           (object.y0+box_height)*Const.XFIG_SCALE))
-  file.write("%9d %9d"  % ((object.x0+box_width) *Const.XFIG_SCALE,  \
-                           (object.y0+box_height               \
-                           +object.N_Types())    *Const.XFIG_SCALE))
-  file.write("%9d %9d"  % ( object.x0            *Const.XFIG_SCALE,  \
-                           (object.y0+box_height               \
-                           +object.N_Types())    *Const.XFIG_SCALE))
-  file.write("%9d %9d\n"% ( object.x0            *Const.XFIG_SCALE,  \
-                           (object.y0+box_height)*Const.XFIG_SCALE))
+  file.write("%9d %9d"  % ( x0, y0) )
+  file.write("%9d %9d"  % ( x1, y0) )
+  file.write("%9d %9d"  % ( x1, y1) )
+  file.write("%9d %9d"  % ( x0, y1) )
+  file.write("%9d %9d\n"% ( x0, y0) )
 

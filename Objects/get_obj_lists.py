@@ -43,6 +43,7 @@ def get_obj_lists(file_paths,             \
       obj_list[o].vars    = []
       obj_list[o].methods = []
 
+  # The following line updates object.h and object.w
   obj_list = update_dimensions(obj_list)
 
   if object_hierarchy == "Column-Based":

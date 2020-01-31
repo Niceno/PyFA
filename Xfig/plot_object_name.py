@@ -22,7 +22,10 @@ def plot_object_name(file, object):
   plot_title_frame(file, object, box_width, Const.UNIT_BOX_HEIGHT)
 
   # Plot name
-  full_name = object.fun_type + " " + object.name
+  full_name = " " + object.name
+  if object.Type() == "Function":
+    full_name = " " + object.fun_type + " " + object.name
+
   plot_text(file, "Center",                          \
             object.x0 + box_width*0.5,               \
             object.y0 + Const.UNIT_BOX_HEIGHT*0.75,  \

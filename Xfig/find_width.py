@@ -38,7 +38,7 @@ def find_width(object):
 
   box_width = max(lengths)
   box_width = box_width  \
-            * Const.UNIT_BOX_HEIGHT * 0.4  # gives the best ratio for width
+            * Const.UNIT_BOX_HEIGHT * 0.5  # gives the best ratio for width
 
   return box_width
 

@@ -1,3 +1,4 @@
+import Const
 from Xfig.plot_object     import plot_object
 from Xfig.plot_all_spline import plot_all_spline
 from Xfig.plot_grid       import plot_grid
@@ -25,5 +26,5 @@ def plot_all(file, obj_list, box_margins):
   plot_grid(file, obj_list)
 
   # Plot legend
-  plot_legend(file, obj_list, 0, -8)
+  plot_legend(file, obj_list, 0, -8 * Const.UNIT_BOX_HEIGHT)
 

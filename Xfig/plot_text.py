@@ -36,5 +36,9 @@ def plot_text(file, alignment, x0, y0, text, font, color, depth):
   file.write("%9d" % (text_height * Const.XFIG_SCALE))  # text height xfig units
   file.write("%9d" % (text_width  * Const.XFIG_SCALE))  # text width xfig units
   file.write("%9d %9d" % ((x0)*Const.XFIG_SCALE, (y0)*Const.XFIG_SCALE))
-  file.write("%s%s\\001\n" % (" ", text))
+
+  if alignment == "Center":
+    file.write("%s\\001\n" % text)
+  else:
+    file.write("%s%s\\001\n" % (" ", text))
 

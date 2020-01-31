@@ -12,15 +12,11 @@ import Const
 #-------------------------------------------------------------------------------
 def find_height(object):
 
-  len_fun_type = 0
-  if object.Type() == "Function": len_fun_type = 1
-
-  height = Const.UNIT_BOX_HEIGHT  \
-         + object.N_Vars()        \
-         + object.N_Methods()     \
-         + object.N_Uses()        \
-         + object.N_Types()       \
-         + len_fun_type
+  height = (  1                      \
+            + object.N_Vars()        \
+            + object.N_Methods()     \
+            + object.N_Uses()        \
+            + object.N_Types() ) * Const.UNIT_BOX_HEIGHT
 
   return height
 
