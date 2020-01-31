@@ -8,9 +8,6 @@ from Xfig.plot_meth_text_list import plot_meth_text_list
 #
 # Parameters:
 #   - file:         Xfig file's handle
-#   - x0:           object position on x axis in centimeters
-#   - y0:           object position on y axis in centimeters
-#   - meth_list:    list of methods
 #   - object:       object to plot
 # Returns:
 #   - nothing

@@ -15,14 +15,11 @@ from Xfig.plot_text  import plot_text
 #-------------------------------------------------------------------------------
 def plot_type_text_list(file, object):
 
-  type_stat     = object.types
-  type_stat_num = list(range(object.N_Types()))
-
   if object.N_Types() != 0:
     for i in range(object.N_Types()):
       plot_text(file, "Left",                                    \
-                object.x0 + Const.UNIT_BOX_HEIGHT*0.333,                \
-                object.y0 + Const.UNIT_BOX_HEIGHT*(type_stat_num[i]+1)  \
-                          + Const.UNIT_BOX_HEIGHT*0.75,                 \
-                type_stat[i], Const.FONT_HEADER, "Black", 10)
+                object.x0 + Const.UNIT_BOX_HEIGHT*0.333,         \
+                object.y0 + Const.UNIT_BOX_HEIGHT*(i+1)          \
+                          + Const.UNIT_BOX_HEIGHT*0.75,          \
+                object.types[i], Const.FONT_HEADER, "Black", 10)
 
