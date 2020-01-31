@@ -12,7 +12,7 @@ from Objects.object_level   import object_level
 # Used by:
 #   - Function for creating complete and updated object list
 #-------------------------------------------------------------------------------
-def fun_list_fun(file_paths, mod_list):
+def function_objects(file_paths, mod_list):
 
   functions_list = []
 

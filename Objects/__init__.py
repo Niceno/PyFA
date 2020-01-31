@@ -11,10 +11,10 @@ from Objects.module_class     import module_class
 from Objects.program_class    import program_class
 from Objects.subroutine_class import subroutine_class
 
-from Objects.fun_list_fun  import fun_list_fun
-from Objects.mod_list_fun  import mod_list_fun
-from Objects.prog_list_fun import prog_list_fun
-from Objects.sub_list_fun  import sub_list_fun
+from Objects.function_objects   import function_objects
+from Objects.module_objects     import module_objects
+from Objects.program_objects    import program_objects
+from Objects.subroutine_objects import subroutine_objects
 
 from Objects.object_level import object_level
 

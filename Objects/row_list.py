@@ -1,4 +1,3 @@
-
 #===============================================================================
 # Function for creating lists of objects at specific row
 #  and updating x coordinates

@@ -1,5 +1,5 @@
 import Finder
-from Objects.Program   import Program
+from Objects.Program import Program
 
 #===============================================================================
 # Import attributes from fortran files to program object

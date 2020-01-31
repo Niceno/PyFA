@@ -1,4 +1,3 @@
-
 #===============================================================================
 # Function to find maximum level of objects from list
 #

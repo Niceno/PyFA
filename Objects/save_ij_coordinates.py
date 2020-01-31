@@ -1,4 +1,3 @@
-
 #===============================================================================
 # Function for saving logical coordinates into .ij file
 #

@@ -1,4 +1,3 @@
-
 #===============================================================================
 # Function for removing subroutine objects that are already printed
 #  in module methods (functions)

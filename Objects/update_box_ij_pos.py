@@ -1,4 +1,3 @@
-
 #===============================================================================
 # Function for updating only 1 box by row and column (change placement in grid)
 #

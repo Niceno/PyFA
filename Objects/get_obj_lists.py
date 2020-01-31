@@ -1,8 +1,8 @@
-from Objects.classify_objects  import classify_objects
-from Objects.mod_list_fun      import mod_list_fun
-from Objects.prog_list_fun     import prog_list_fun
-from Objects.sub_list_fun         import sub_list_fun
-from Objects.fun_list_fun         import fun_list_fun
+from Objects.classify_objects     import classify_objects
+from Objects.module_objects       import module_objects
+from Objects.program_objects      import program_objects
+from Objects.subroutine_objects   import subroutine_objects
+from Objects.function_objects     import function_objects
 from Objects.place_objects_column import place_objects_column
 from Objects.place_objects_row    import place_objects_row
 from Objects.update_dimensions    import update_dimensions
@@ -22,10 +22,10 @@ def get_obj_lists(file_paths,             \
                   object_hierarchy,       \
                   align_boxes):
 
-  mod_list  = mod_list_fun (file_paths, [])         # list of all mod classes
-  sub_list  = sub_list_fun (file_paths, mod_list)   # list of all sub classes
-  fun_list  = fun_list_fun (file_paths, mod_list)   # list of all fun classes
-  prog_list = prog_list_fun(file_paths, mod_list)   # list of all prog classes
+  mod_list  = module_objects (file_paths, [])         # list of all mod classes
+  sub_list  = subroutine_objects (file_paths, mod_list)   # list of all sub classes
+  fun_list  = function_objects (file_paths, mod_list)   # list of all fun classes
+  prog_list = program_objects(file_paths, mod_list)   # list of all prog classes
 
   obj_list  = [*mod_list,   \
                *sub_list,   \
