@@ -64,4 +64,8 @@ def code_color(name):
     return 28
   elif name == "Pink2":
     return 29
+  elif name == "Pink":
+    return 30
+  elif name == "Gold":
+    return 31
 
