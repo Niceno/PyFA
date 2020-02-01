@@ -6,14 +6,13 @@ from Spline.Create    import Create
 # Function for plotting all spline connections
 #
 # Parameters:
-#   - file:      Xfig file's handle
 #   - obj_list:  list of all objects representing modules or subroutines
 # Returns:
 #   - nothing
 # Used by:
 #   - function for plotting everything (the entire graph) from object list
 #-------------------------------------------------------------------------------
-def create_splines(file, obj_list, offset, stride):
+def create_splines(obj_list, offset, stride):
 
   use_objects  = []
   mod_objects  = []

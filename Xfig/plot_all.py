@@ -1,6 +1,5 @@
 import Const
 from Xfig.plot_object     import plot_object
-from Xfig.create_splines  import create_splines
 from Xfig.plot_grid       import plot_grid
 from Xfig.plot_legend     import plot_legend
 from Xfig.plot_spline     import plot_spline
@@ -15,18 +14,15 @@ from Xfig.plot_spline     import plot_spline
 # Returns:
 #   - nothing
 #-------------------------------------------------------------------------------
-def plot_all(file, obj_list, box_margins):
+def plot_all(file, obj_list, spl_list, box_margins):
 
   # Plot boxes
   for i in range(len(obj_list)):
     plot_object(file, obj_list[i])
 
-  # Create splines                            offset          stride
-  splines = create_splines(file, obj_list, box_margins, box_margins * 0.5)
-
-  # Plot them all
-  for s in range(len(splines)):
-    plot_spline(file, splines[s])
+  # Plot all connections
+  for s in range(len(spl_list)):
+    plot_spline(file, spl_list[s])
 
   # Plot grid
   plot_grid(file, obj_list)

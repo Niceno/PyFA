@@ -2,7 +2,6 @@ from Xfig.find_coordinates           import find_coordinates
 from Xfig.find_height                import find_height
 from Xfig.find_width                 import find_width
 from Xfig.plot_all                   import plot_all
-from Xfig.create_splines             import create_splines
 from Xfig.plot_grid                  import plot_grid
 from Xfig.plot_legend                import plot_legend
 from Xfig.plot_line                  import plot_line

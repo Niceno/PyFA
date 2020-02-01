@@ -245,20 +245,25 @@ Xfig.find_coordinates(obj_list, box_margins)
 if xy_specified != "None":
   obj_list = Objects.load_xy_coordinates(xy_specified, obj_list)
 
+#------------------------------------
+# Create connections between objects
+#------------------------------------          offset          stride
+spl_list = Objects.create_splines(obj_list, box_margins, box_margins * 0.5)
+
 #----------------
 # Open Xfig file
 #----------------
-xf = open(Const.FIG_FILE_NAME, "w")
+file = open(Const.FIG_FILE_NAME, "w")
 
 #------------------
 # Write header out
 #------------------
-Xfig.write_header(xf)
+Xfig.write_header(file)
 
 #-------------------------------------------
 # Plot all fortran files starting from root
 #-------------------------------------------
-Xfig.plot_all(xf, obj_list, box_margins)
+Xfig.plot_all(file, obj_list, spl_list, box_margins)
 
 #-------------------------------------------------------------------------
 # If neither (i,j) or (x,y) coordinates were not specified, save them now
@@ -274,7 +279,7 @@ elif xy_specified == "None":
   Objects.save_xy_coordinates(obj_list, Const.XY_FILE_NAME)
 
 # End
-xf.close()
+file.close()
 
 # Print out execution time
 end = time.time()

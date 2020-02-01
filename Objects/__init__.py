@@ -33,6 +33,7 @@ from Objects.load_xy_coordinates  import load_xy_coordinates
 from Objects.save_xy_coordinates  import save_xy_coordinates
 from Objects.update_box_ij_pos    import update_box_ij_pos
 from Objects.update_box_xy_pos    import update_box_xy_pos
+from Objects.create_splines       import create_splines
 
 # Unused:
 # from Objects.print_info           import print_info
