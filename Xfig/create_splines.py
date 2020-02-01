@@ -13,7 +13,7 @@ from Spline.Create    import Create
 # Used by:
 #   - function for plotting everything (the entire graph) from object list
 #-------------------------------------------------------------------------------
-def plot_all_spline(file, obj_list, offset, stride):
+def create_splines(file, obj_list, offset, stride):
 
   use_objects  = []
   mod_objects  = []
@@ -70,7 +70,4 @@ def plot_all_spline(file, obj_list, offset, stride):
           counter += inc_cnt
           if counter > max_cnt+0.5: counter -= (max_cnt)
 
-  # Plot them all
-  for s in range(len(splines)):
-    plot_spline(file, splines[s])
-
+  return splines

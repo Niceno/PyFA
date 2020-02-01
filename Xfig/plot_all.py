@@ -1,8 +1,9 @@
 import Const
 from Xfig.plot_object     import plot_object
-from Xfig.plot_all_spline import plot_all_spline
+from Xfig.create_splines  import create_splines
 from Xfig.plot_grid       import plot_grid
 from Xfig.plot_legend     import plot_legend
+from Xfig.plot_spline     import plot_spline
 
 #===============================================================================
 # Plot everything (the entire graph) from object list
@@ -20,8 +21,12 @@ def plot_all(file, obj_list, box_margins):
   for i in range(len(obj_list)):
     plot_object(file, obj_list[i])
 
-  # Plot splines                     offset          stride
-  plot_all_spline(file, obj_list, box_margins, box_margins * 0.5)
+  # Create splines                            offset          stride
+  splines = create_splines(file, obj_list, box_margins, box_margins * 0.5)
+
+  # Plot them all
+  for s in range(len(splines)):
+    plot_spline(file, splines[s])
 
   # Plot grid
   plot_grid(file, obj_list)

@@ -50,11 +50,30 @@ def Walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list, spl_list, stride):
       step_x.append(x[-1] + dx)
       step_y.append(y[-1] + dy)
 
+    tol = Const.UNIT_BOX_HEIGHT / 2.0
+
+    #-----------------------------------------------
+    # Eliminate steps too close to existing splines
+    #-----------------------------------------------
+    eliminate_steps = []
+    for s in range(len(step_x)):
+      for o in range(len(spl_list)):
+        for n in range(2, spl_list[o].N_Points() - 2):
+          if step_x[s] >= (spl_list[o].x[n] - tol * 0.5) and \
+             step_x[s] <= (spl_list[o].x[n] + tol * 0.5) and \
+             step_y[s] >= (spl_list[o].y[n] - tol * 0.5) and \
+             step_y[s] <= (spl_list[o].y[n] + tol * 0.5):
+            eliminate_steps.append(s)
+    eliminate_steps = list(set(eliminate_steps))
+    eliminate_steps.sort(reverse = True)
+    for e in range(len(eliminate_steps)):
+      step_x.pop(eliminate_steps[e])
+      step_y.pop(eliminate_steps[e])
+
     #---------------------------------------------------
     # Eliminate steps which would fall in other objects
     #---------------------------------------------------
     eliminate_steps = []
-    tol = Const.UNIT_BOX_HEIGHT / 2.0
     for o in range(len(obj_list)):
       for s in range(len(step_x)):
         if step_x[s] >= (obj_list[o].x0                 - tol) and \
@@ -62,34 +81,11 @@ def Walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list, spl_list, stride):
            step_y[s] >= (obj_list[o].y0                 - tol) and \
            step_y[s] <= (obj_list[o].y0 + obj_list[o].h + tol):
           eliminate_steps.append(s)
+    eliminate_steps = list(set(eliminate_steps))
     eliminate_steps.sort(reverse = True)
     for e in range(len(eliminate_steps)):
       step_x.pop(eliminate_steps[e])
       step_y.pop(eliminate_steps[e])
-
-#   #-----------------------------------------------
-#   # Eliminate steps too close to existing splines
-#   #-----------------------------------------------
-#   eliminate_steps = []
-#   for s in range(len(step_x)):
-#     for o in range(len(spl_list)):
-#       for n in range(2, spl_list[o].N_Points() - 2):
-#         if step_x[s] >= (spl_list[o].x[n] - tol) and \
-#            step_x[s] <= (spl_list[o].x[n] + tol) and \
-#            step_y[s] >= (spl_list[o].y[n] - tol) and \
-#            step_y[s] <= (spl_list[o].y[n] + tol):
-#           eliminate_steps.append(s)
-#   eliminate_steps.sort(reverse = True)
-#   es = list(set(eliminate_steps))
-#   es.sort(reverse = True)
-#   print(eliminate_steps)
-#   print(es)
-#   print("len(elimin) = ", len(eliminate_steps))
-#   print("len(step_x) = ", len(step_x))
-#   for e in range(len(es)):
-#     print(e, es[e])
-#     step_x.pop(es[e])
-#     step_y.pop(es[e])
 
     #-------------------------------------
     # Eliminate steps which would go back
@@ -98,6 +94,7 @@ def Walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list, spl_list, stride):
     for s in range(len(step_x)):
       if step_x[s] == x[-2] and step_y[s] == y[-2]:
         eliminate_steps.append(s)
+    eliminate_steps = list(set(eliminate_steps))
     eliminate_steps.sort(reverse = True)
     for e in range(len(eliminate_steps)):
       step_x.pop(eliminate_steps[e])
@@ -142,35 +139,5 @@ def Walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list, spl_list, stride):
   y.   append(y6)
   keep.append(True)
 
-  #------------------------------------------------
-  #
-  # Eliminate the points in-between straight lines
-  #
-  #------------------------------------------------
-
-  # Mark points in between straight lines for deletion
-  for i in range(1, len(x)-1):
-    dx_p = x[i+1] - x[i]
-    dy_p = y[i+1] - y[i]
-    dx_m = x[i]   - x[i-1]
-    dy_m = y[i]   - y[i-1]
-    if abs(dx_p - dx_m) < 0.4 and abs(dy_p - dy_m) < 0.4:  # GHOST NUMBERS
-      keep[i] = False
-
-  # Yet, keep the points next to ones which are kept (to preserve curves)
-  keep_2 = keep[:]
-  for i in range(1, len(x)-1):
-    if not keep[i]:
-      if keep[i-1] or keep[i+1]:
-        keep_2[i] = True
-
-  # Make a compressed list of x and y coordinates
-  x_c = []
-  y_c = []
-  for i in range(0, len(x)):
-    if keep_2[i]:
-      x_c.append(x[i])
-      y_c.append(y[i])
-
-  return x_c, y_c
+  return x, y
 
