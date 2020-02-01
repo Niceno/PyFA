@@ -8,8 +8,9 @@ from Xfig.plot_legend     import plot_legend
 # Plot everything (the entire graph) from object list
 #
 # Parameters:
-#   - file:      Xfig file's handle
-#   - obj_list:  list of all objects representing modules or subroutines
+#   - file:       Xfig file's handle
+#   - obj_list:   list of all objects representing modules or subroutines
+#   - box_margins box margins which can be changed by command line option
 # Returns:
 #   - nothing
 #-------------------------------------------------------------------------------
@@ -19,8 +20,8 @@ def plot_all(file, obj_list, box_margins):
   for i in range(len(obj_list)):
     plot_object(file, obj_list[i])
 
-  # Plot splines
-  plot_all_spline(file, obj_list, box_margins)
+  # Plot splines                     offset          stride
+  plot_all_spline(file, obj_list, box_margins, box_margins * 0.5)
 
   # Plot grid
   plot_grid(file, obj_list)

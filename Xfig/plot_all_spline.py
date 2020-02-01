@@ -1,6 +1,6 @@
 import Const
 from Xfig.plot_spline import plot_spline
-from Spline.Spline    import Connect
+from Spline.Create    import Create
 
 #===============================================================================
 # Function for plotting all spline connections
@@ -13,7 +13,7 @@ from Spline.Spline    import Connect
 # Used by:
 #   - function for plotting everything (the entire graph) from object list
 #-------------------------------------------------------------------------------
-def plot_all_spline(file, obj_list, box_margins):
+def plot_all_spline(file, obj_list, offset, stride):
 
   use_objects  = []
   mod_objects  = []
@@ -37,7 +37,10 @@ def plot_all_spline(file, obj_list, box_margins):
   splines = []
 
   # Creating connections for use statements
+  # (inc_, max_ = 2.0, 5.0 was OK)
+  # (inc_, max_ = 3.0, 8.0 was still OK)
   counter = 0.0
+  inc_cnt = 2.0
   max_cnt = 5.0
   for i in range(len(use_objects)):
     use = use_objects[i].uses
@@ -46,15 +49,12 @@ def plot_all_spline(file, obj_list, box_margins):
       used = used.strip("use ")
       for m in range(len(mod_objects)):
         if used == mod_objects[m].name:
-          splines.append(Connect(obj_list,           \
-                         mod_objects[m],     \
-                         use_objects[i],     \
-                         "Continuous",       \
-                         101+len(splines),   \
-                         box_margins         \
-                       * (1.0 + counter / max_cnt)))
-          counter += 1.0
-          if counter > max_cnt: counter = 0.0
+          splines.append(                                        \
+            Create(obj_list, mod_objects[m], use_objects[i],     \
+                   "Continuous", 101+len(splines),               \
+                   offset * (1.0 + counter / max_cnt), stride))
+          counter += inc_cnt
+          if counter > max_cnt+0.5: counter -= (max_cnt)
 
   # Creating connections for call statements
   for i in range(len(call_objects)):
@@ -63,15 +63,12 @@ def plot_all_spline(file, obj_list, box_margins):
       called = call[k]
       for m in range(len(obj_list)):
         if called in obj_list[m].name:
-          splines.append(Connect(obj_list,            \
-                         call_objects[i],     \
-                         obj_list[m],         \
-                         "Dashed",            \
-                         201+len(splines),    \
-                         box_margins         \
-                       * (1.0 + counter / max_cnt)))
-          counter += 1.0
-          if counter > max_cnt: counter = 0.0
+          splines.append(                                        \
+            Create(obj_list, call_objects[i], obj_list[m],       \
+                   "Dashed", 201+len(splines),                   \
+                   offset * (1.0 + counter / max_cnt), stride))
+          counter += inc_cnt
+          if counter > max_cnt+0.5: counter -= (max_cnt)
 
   # Plot them all
   for s in range(len(splines)):
