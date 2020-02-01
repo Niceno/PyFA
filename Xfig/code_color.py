@@ -28,8 +28,40 @@ def code_color(name):
     return  7
   elif name == "LtBlue":
     return 11
-  elif name == "Pink2":
-    return 28
+  elif name == "Green4":
+    return 12
+  elif name == "Green3":
+    return 13
   elif name == "Green2":
     return 14
+  elif name == "Cyan4":
+    return 15
+  elif name == "Cyan3":
+    return 16
+  elif name == "Cyan2":
+    return 17
+  elif name == "Red4":
+    return 18
+  elif name == "Red3":
+    return 19
+  elif name == "Red2":
+    return 20
+  elif name == "Magenta4":
+    return 21
+  elif name == "Magenta3":
+    return 22
+  elif name == "Magenta2":
+    return 23
+  elif name == "Brown4":
+    return 24
+  elif name == "Brown3":
+    return 25
+  elif name == "Brown2":
+    return 26
+  elif name == "Pink4":
+    return 27
+  elif name == "Pink3":
+    return 28
+  elif name == "Pink2":
+    return 29
 
