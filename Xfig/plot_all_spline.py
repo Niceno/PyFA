@@ -49,9 +49,9 @@ def plot_all_spline(file, obj_list, offset, stride):
       used = used.strip("use ")
       for m in range(len(mod_objects)):
         if used == mod_objects[m].name:
-          splines.append(                                        \
-            Create(obj_list, mod_objects[m], use_objects[i],     \
-                   "Continuous", 101+len(splines),               \
+          splines.append(                                                 \
+            Create(obj_list, splines, mod_objects[m], use_objects[i],     \
+                   "Continuous", 101+len(splines),                        \
                    offset * (1.0 + counter / max_cnt), stride))
           counter += inc_cnt
           if counter > max_cnt+0.5: counter -= (max_cnt)
@@ -63,9 +63,9 @@ def plot_all_spline(file, obj_list, offset, stride):
       called = call[k]
       for m in range(len(obj_list)):
         if called in obj_list[m].name:
-          splines.append(                                        \
-            Create(obj_list, call_objects[i], obj_list[m],       \
-                   "Dashed", 201+len(splines),                   \
+          splines.append(                                                 \
+            Create(obj_list, splines, call_objects[i], obj_list[m],       \
+                   "Dashed", 201+len(splines),                            \
                    offset * (1.0 + counter / max_cnt), stride))
           counter += inc_cnt
           if counter > max_cnt+0.5: counter -= (max_cnt)
