@@ -1,5 +1,6 @@
 import Const
-from Spline.Spline import Spline
+from Spline.Spline      import Spline
+from Xfig.write_comment import write_comment
 
 #===============================================================================
 # Function to plot spline (with 6 coordinates)
@@ -15,6 +16,9 @@ from Spline.Spline import Spline
 #   - function for plotting spline connections
 #-------------------------------------------------------------------------------
 def plot_spline(file, spline):
+
+  # Print a comment
+  write_comment(file, spline.object1 + " ---> " + spline.object2, 3)
 
   # Take aliases
   depth     = spline.depth

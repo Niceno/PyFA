@@ -5,6 +5,7 @@ from Xfig.plot_var_list              import plot_var_list
 from Xfig.plot_type_list             import plot_type_list
 from Xfig.plot_object_end_compound   import plot_object_end_compound
 from Xfig.plot_object_start_compound import plot_object_start_compound
+from Xfig.write_comment              import write_comment
 
 #===============================================================================
 # Function to plot object box
@@ -18,6 +19,9 @@ from Xfig.plot_object_start_compound import plot_object_start_compound
 #   - function for plotting module/subroutine/function/program
 #-------------------------------------------------------------------------------
 def plot_object(file, object):
+
+  # Print a comment
+  write_comment(file, object.name, 3)
 
   # Start a compound around the module
   plot_object_start_compound(file, object)

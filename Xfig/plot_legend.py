@@ -4,6 +4,7 @@ from Xfig.plot_spline_legend import plot_spline_legend
 from Xfig.plot_text          import plot_text
 from Xfig.find_width         import find_width
 from Xfig.plot_object_name   import plot_object_name
+from Xfig.write_comment      import write_comment
 
 #===============================================================================
 # Function to plot legend
@@ -15,6 +16,9 @@ from Xfig.plot_object_name   import plot_object_name
 #   - nothing
 #-------------------------------------------------------------------------------
 def plot_legend(file, obj_list, x0, y0):
+
+  # Print a comment
+  write_comment(file, "Legend", 5)
 
   p = ""  # path
   u = []  # use
