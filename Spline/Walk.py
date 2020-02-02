@@ -70,9 +70,9 @@ def Walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list, spl_list, stride):
       step_x.pop(eliminate_steps[e])
       step_y.pop(eliminate_steps[e])
 
-    #---------------------------------------------------
-    # Eliminate steps which would fall in other objects
-    #---------------------------------------------------
+    #---------------------------------------------
+    # Eliminate steps which would fall in objects
+    #---------------------------------------------
     eliminate_steps = []
     for o in range(len(obj_list)):
       for s in range(len(step_x)):
@@ -89,10 +89,14 @@ def Walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list, spl_list, stride):
 
     #-------------------------------------
     # Eliminate steps which would go back
+    #  (too close to its own old steps)
     #-------------------------------------
     eliminate_steps = []
     for s in range(len(step_x)):
-      if step_x[s] == x[-2] and step_y[s] == y[-2]:
+      if step_x[s] >= (x[-2] - tol) and   \
+         step_x[s] <= (x[-2] + tol) and   \
+         step_y[s] >= (y[-2] - tol) and   \
+         step_y[s] <= (y[-2] + tol):
         eliminate_steps.append(s)
     eliminate_steps = list(set(eliminate_steps))
     eliminate_steps.sort(reverse = True)
