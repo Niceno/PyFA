@@ -1,6 +1,6 @@
 import Const
-from Xfig.plot_spline import plot_spline
-from Spline.Create    import Create
+from Spline.Create   import Create
+from Spline.Compress import Compress
 
 #===============================================================================
 # Function for plotting all spline connections
@@ -12,7 +12,7 @@ from Spline.Create    import Create
 # Used by:
 #   - function for plotting everything (the entire graph) from object list
 #-------------------------------------------------------------------------------
-def create_splines(obj_list, offset, stride):
+def connect_objects(obj_list, offset, stride):
 
   use_objects  = []
   mod_objects  = []
@@ -68,5 +68,8 @@ def create_splines(obj_list, offset, stride):
                    offset * (1.0 + counter / max_cnt), stride))
           counter += inc_cnt
           if counter > max_cnt+0.5: counter -= (max_cnt)
+
+  for i in range(len(splines)):
+    Compress(splines[i])
 
   return splines

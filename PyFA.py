@@ -11,6 +11,7 @@ import Xfig
 import Finder
 import Browse
 import Objects
+import Spline
 
 #===============================================================================
 # Function to print help screen and exit the program
@@ -248,7 +249,7 @@ if xy_specified != "None":
 #------------------------------------
 # Create connections between objects
 #------------------------------------          offset          stride
-spl_list = Objects.create_splines(obj_list, box_margins, box_margins * 0.5)
+spl_list = Spline.connect_objects(obj_list, box_margins, box_margins * 0.5)
 
 #----------------
 # Open Xfig file

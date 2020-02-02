@@ -20,7 +20,7 @@ def Create(obj_list, spl_list, object1, object2, line_type, depth, offset, strid
   # print("Connecting ", object1.name, "and", object2.name)
   # print("offset =   ", offset)
   # print("stride =   ", stride)
- 
+
   xc1 = object1.x0 + object1.w * 0.5
   xc2 = object2.x0 + object2.w * 0.5
 

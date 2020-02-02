@@ -12,6 +12,8 @@ import Const
 #-------------------------------------------------------------------------------
 def Compress(spline):
 
+  x = spline.x
+  y = spline.y
   keep = []
   for i in range(spline.N_Points()):
     keep.append(True)
@@ -46,5 +48,6 @@ def Compress(spline):
       x_c.append(x[i])
       y_c.append(y[i])
 
-  return x_c, y_c
+  spline.x = x_c
+  spline.y = y_c
 
