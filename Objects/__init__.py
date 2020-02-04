@@ -16,7 +16,9 @@ from Objects.module_objects     import module_objects
 from Objects.program_objects    import program_objects
 from Objects.subroutine_objects import subroutine_objects
 
-from Objects.object_level import object_level
+from Objects.object_level        import object_level
+from Objects.place_objects       import place_objects
+from Objects.set_objects_details import set_objects_details
 
 # Other general functions
 from Objects.classify_objects     import classify_objects
@@ -33,6 +35,8 @@ from Objects.load_xy_coordinates  import load_xy_coordinates
 from Objects.save_xy_coordinates  import save_xy_coordinates
 from Objects.update_box_ij_pos    import update_box_ij_pos
 from Objects.update_box_xy_pos    import update_box_xy_pos
+from Objects.load_object_details  import load_object_details
+from Objects.save_object_details  import save_object_details
 
 # Unused:
 # from Objects.print_info           import print_info

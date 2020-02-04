@@ -30,7 +30,7 @@ def place_objects_row(obj_list, align_boxes):
     # Choose alignment
     if align_boxes == "Diagonal":
       row = i
-    elif align_boxes == "Left":
+    elif align_boxes == "Straight":
       row = 0
 
     for l in range(len(lvl_lista[i])):

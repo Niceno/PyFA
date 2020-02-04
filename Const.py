@@ -8,6 +8,7 @@ WALK_DIRECTIONS         = 24                   # should be divideable by 4
 FIG_FILE_NAME           = "diagram.fig"        # xfig output file name
 IJ_FILE_NAME            = "diagram.ij"         # file with object i,j coords
 XY_FILE_NAME            = "diagram.xy"         # file with object i,j coords
+D_FILE_NAME             = "diagram.d"          # file with object details
 FONT_SIZE               = UNIT_BOX_HEIGHT*0.5  # font size related to box height
 FONT_HEADER             = "Courier-Bold"       # font for headers
 FONT_NORMAL             = "Courier"            # font for everything else

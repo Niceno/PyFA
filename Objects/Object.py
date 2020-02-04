@@ -34,6 +34,7 @@ class Object():
     self.fun_type = f_type  # function type (makes sense for Function only)
 
     self.level     = 0
+    self.detail    = "Normal"
 
     # Geometrical properties
     self.x0        = 0.0

@@ -26,10 +26,11 @@ def place_objects_column(obj_list, align_boxes):
   # Assign values to coordinates
   for i in range(len(lvl_lista)):
     lista = lvl_lista[i]
+
     # Choose alignment
     if align_boxes == "Diagonal":
       column = i
-    elif align_boxes == "Left":
+    elif align_boxes == "Straight":
       column = 0
 
     for l in range(len(lvl_lista[i])):

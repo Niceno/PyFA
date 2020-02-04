@@ -34,7 +34,7 @@ def print_help_and_exit():
    'straight' for straight alignment")
   print("                                  \
    'diagonal' for diagonal alignment")
-  print("  -d, --detail_level [SWITCH]     \
+  print("  -g, --graph_detail [SWITCH]     \
   Plot by specified object detail: ")
   print("                                  \
    'normal'  for normal representation")
@@ -42,18 +42,18 @@ def print_help_and_exit():
    'reduced' for reduced representation")
   print("                                  \
    'minimal' for minimal representation")
-  print("  -h, --help                      \
-  Displays this help screen")
-  print("  -ij,--ij_coordinates [FILE]     \
-  Read (i,j) object coordinates from the file")
-  print("  -m, --margins [MARGIN]          \
-  Set margin in cm for individual boxes")
-  print("  -o, --object_hierarchy [SWITCH] \
+  print("  -h, --hierarchy [SWITCH]        \
   Plot by specified object hierarchy: ")
   print("                                  \
    'row'    for row based hierarchy")
   print("                                  \
    'column' for column based hierarchy")
+  print("  -ij,--ij_coordinates [FILE]     \
+  Read (i,j) object coordinates from the file")
+  print("  -m, --margins [MARGIN]          \
+  Set margin in cm for individual boxes")
+  print("  -o, --object_details [FILE]     \
+  Read object details from the file. ")
   print("  -r, --root  [DIR]               \
   Root directory for browsing sources")
   print("  -s, --sources [FILE]            \
@@ -72,8 +72,8 @@ start = time.time()
 file_paths = []
 obj_list   = []
 
-align_boxes           = "Diagonal"
-object_hierarchy      = "Row-Based"
+align_boxes           = "Straight"
+object_hierarchy      = "Column-Based"
 object_representation = "Reduced"
 box_margins           = Const.BOX_MARGINS
 
@@ -82,6 +82,7 @@ r_specified  = "None"  # root directory
 s_specified  = "None"  # list of sources
 ij_specified = "None"
 xy_specified = "None"
+d_specified  = "None"
 
 # If no command line arguments were specified, print help and exit
 if len(sys.argv) == 1:
@@ -107,7 +108,7 @@ for j in range(1,len(sys.argv),2):
       if str(sys.argv[j+1]) == "diagonal":
         align_boxes  = "Diagonal"
       elif str(sys.argv[j+1]) == "straight":
-        align_boxes  = "Left"
+        align_boxes  = "Straight"
       else:
         print("Incorrect switch:", sys.argv[j+1], "after", sys.argv[j])
         print("Allowed switches are 'straight' or 'diagonal'")
@@ -115,8 +116,8 @@ for j in range(1,len(sys.argv),2):
         sys.exit()
 
     # Check if object hierarchy was specified
-    elif str(sys.argv[j]) == "-o" or            \
-         str(sys.argv[j]) == "--object_hierarchy":
+    elif str(sys.argv[j]) == "-h" or         \
+         str(sys.argv[j]) == "--hierarchy":
       if str(sys.argv[j+1]) == "column":
         object_hierarchy  = "Column-Based"
       elif str(sys.argv[j+1]) == "row":
@@ -128,8 +129,8 @@ for j in range(1,len(sys.argv),2):
         sys.exit()
 
     # Check if object representation was specified
-    elif str(sys.argv[j]) == "-d" or                 \
-         str(sys.argv[j]) == "--detail_level":
+    elif str(sys.argv[j]) == "-g" or                 \
+         str(sys.argv[j]) == "--graph_detail":
       if str(sys.argv[j+1]) == "normal":
         object_representation  = "Normal"
       elif str(sys.argv[j+1]) == "reduced":
@@ -155,6 +156,13 @@ for j in range(1,len(sys.argv),2):
 
       r_specified = sys.argv[j+1]
       print("Root directory for sources is:", str(sys.argv[j+1]))
+
+    # Check if list of sources were specified
+    elif str(sys.argv[j]) == "-o" or    \
+         str(sys.argv[j]) == "--object_details":
+
+      d_specified = sys.argv[j+1]
+      print("Object details are specified in:", str(sys.argv[j+1]))
 
     # Check if list of sources were specified
     elif str(sys.argv[j]) == "-s" or    \
@@ -217,14 +225,26 @@ else:
   for i in range(len(file_paths)):
     file_paths[i] = os.getcwd() + "/" + file_paths[i]
 
-#--------------------------------------------------------------------
-# For all cases, take object list from file paths and work out calls
-#--------------------------------------------------------------------
-obj_list, obj_memb = Objects.get_obj_lists(file_paths,             \
-                                           object_representation,  \
-                                           object_hierarchy,       \
+#-------------------------------------------------
+# For all cases, take object list from file paths
+#-------------------------------------------------
+obj_list, obj_memb = Objects.get_obj_lists(file_paths)
+
+obj_list = Objects.set_objects_details(obj_list, object_representation)
+if d_specified != "None":
+  obj_list = Objects.load_object_details(d_specified, obj_list)
+
+#--------------------------------------------------
+# The following line updates object.h and object.w
+# and it depends on object detail we want to have
+#--------------------------------------------------
+obj_list = Objects.update_dimensions(obj_list)
+
+#----------------------------------------------
+# Initial object placement, based on hierarchy
+#----------------------------------------------
+obj_list = Objects.place_objects(obj_list, object_hierarchy,       \
                                            align_boxes)
-obj_list = Finder.get_new_calls(file_paths, obj_list, obj_memb)
 
 #-------------------------------------------------
 # If logical coordinates specified, load them now
@@ -249,6 +269,11 @@ if xy_specified != "None":
   obj_list = Objects.load_xy_coordinates(xy_specified,      \
                                          obj_list,          \
                                          object_hierarchy)
+
+#----------------------------
+# Find calls between objects
+#----------------------------
+obj_list = Finder.get_new_calls(file_paths, obj_list, obj_memb)
 
 #------------------------------------
 # Create connections between objects
@@ -282,6 +307,8 @@ if ij_specified == "None" and xy_specified == "None":
 #---------------------------------------------------------
 elif xy_specified == "None":
   Objects.save_xy_coordinates(obj_list, Const.XY_FILE_NAME, object_hierarchy)
+
+Objects.save_object_details(obj_list, Const.D_FILE_NAME, object_hierarchy)
 
 # End
 file.close()
