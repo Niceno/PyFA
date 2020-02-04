@@ -8,16 +8,16 @@
 # Used by:
 #   - main program (simple.py)
 #-------------------------------------------------------------------------------
-def set_objects_details(obj_list, object_representation):
+def set_objects_details(obj_list, object_details):
 
   for o in range(len(obj_list)):
-    obj_list[o].detail = object_representation
+    obj_list[o].detail = object_details
 
-  if object_representation == "Reduced":
+  if object_details == "Reduced":
     for o in range(len(obj_list)):
       obj_list[o].vars = []
 
-  if object_representation == "Minimal":
+  if object_details == "Minimal":
     for o in range(len(obj_list)):
       obj_list[o].vars    = []
       obj_list[o].methods = []

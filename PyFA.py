@@ -74,7 +74,7 @@ obj_list   = []
 
 align_boxes           = "Straight"
 object_hierarchy      = "Column-Based"
-object_representation = "Reduced"
+object_details = "Reduced"
 box_margins           = Const.BOX_MARGINS
 
 src_file     = "None"
@@ -132,11 +132,11 @@ for j in range(1,len(sys.argv),2):
     elif str(sys.argv[j]) == "-g" or                 \
          str(sys.argv[j]) == "--graph_detail":
       if str(sys.argv[j+1]) == "normal":
-        object_representation  = "Normal"
+        object_details = "Normal"
       elif str(sys.argv[j+1]) == "reduced":
-        object_representation  = "Reduced"
+        object_details = "Reduced"
       elif str(sys.argv[j+1]) == "minimal":
-        object_representation  = "Minimal"
+        object_details = "Minimal"
       else:
         print("Incorrect switch:", sys.argv[j+1], "after", sys.argv[j])
         print("Allowed switches are: 'normal', 'reduced' or 'minimal'")
@@ -230,7 +230,7 @@ else:
 #-------------------------------------------------
 obj_list, obj_memb = Objects.get_obj_lists(file_paths)
 
-obj_list = Objects.set_objects_details(obj_list, object_representation)
+obj_list = Objects.set_objects_details(obj_list, object_details)
 if d_specified != "None":
   obj_list = Objects.load_object_details(d_specified, obj_list)
 
@@ -308,7 +308,8 @@ if ij_specified == "None" and xy_specified == "None":
 elif xy_specified == "None":
   Objects.save_xy_coordinates(obj_list, Const.XY_FILE_NAME, object_hierarchy)
 
-Objects.save_object_details(obj_list, Const.D_FILE_NAME, object_hierarchy)
+if d_specified == "None":
+  Objects.save_object_details(obj_list, Const.D_FILE_NAME, object_hierarchy)
 
 # End
 file.close()
