@@ -22,10 +22,10 @@ def get_obj_lists(file_paths,             \
                   object_hierarchy,       \
                   align_boxes):
 
-  mod_list  = module_objects (file_paths, [])         # list of all mod classes
-  sub_list  = subroutine_objects (file_paths, mod_list)   # list of all sub classes
-  fun_list  = function_objects (file_paths, mod_list)   # list of all fun classes
-  prog_list = program_objects(file_paths, mod_list)   # list of all prog classes
+  mod_list  = module_objects    (file_paths, [])        # list of module
+  sub_list  = subroutine_objects(file_paths, mod_list)  # list of subroutine
+  fun_list  = function_objects  (file_paths, mod_list)  # list of functions
+  prog_list = program_objects   (file_paths, mod_list)  # list of programs
 
   obj_list  = [*mod_list,   \
                *sub_list,   \

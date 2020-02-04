@@ -231,7 +231,9 @@ obj_list = Finder.get_new_calls(file_paths, obj_list, obj_memb)
 # (These should over-write those specified above)
 #-------------------------------------------------
 if ij_specified != "None":
-  obj_list = Objects.load_ij_coordinates(ij_specified, obj_list)
+  obj_list = Objects.load_ij_coordinates(ij_specified,     \
+                                         obj_list,         \
+                                         object_hierarchy)
 
 #------------------------------------------
 #
@@ -244,7 +246,9 @@ if ij_specified != "None":
 #---------------------------------------
 Xfig.find_coordinates(obj_list, box_margins)
 if xy_specified != "None":
-  obj_list = Objects.load_xy_coordinates(xy_specified, obj_list)
+  obj_list = Objects.load_xy_coordinates(xy_specified,      \
+                                         obj_list,          \
+                                         object_hierarchy)
 
 #------------------------------------
 # Create connections between objects
@@ -270,14 +274,14 @@ Xfig.plot_all(file, obj_list, spl_list, box_margins)
 # If neither (i,j) or (x,y) coordinates were not specified, save them now
 #-------------------------------------------------------------------------
 if ij_specified == "None" and xy_specified == "None":
-  Objects.save_ij_coordinates(obj_list, Const.IJ_FILE_NAME)
-  Objects.save_xy_coordinates(obj_list, Const.XY_FILE_NAME)
+  Objects.save_ij_coordinates(obj_list, Const.IJ_FILE_NAME, object_hierarchy)
+  Objects.save_xy_coordinates(obj_list, Const.XY_FILE_NAME, object_hierarchy)
 
 #---------------------------------------------------------
 # If only (x,y) coordinates were not specified, save them
 #---------------------------------------------------------
 elif xy_specified == "None":
-  Objects.save_xy_coordinates(obj_list, Const.XY_FILE_NAME)
+  Objects.save_xy_coordinates(obj_list, Const.XY_FILE_NAME, object_hierarchy)
 
 # End
 file.close()

@@ -11,7 +11,7 @@ from Objects.update_box_xy_pos import update_box_xy_pos
 # Used by:
 #   - main program (function for changing object placement in grid)
 #===============================================================================
-def load_xy_coordinates(file_with_names, obj_list):
+def load_xy_coordinates(file_with_names, obj_list, object_hierarchy):
 
   list = obj_list
   try: myfile = open(file_with_names, 'rt')
@@ -20,6 +20,18 @@ def load_xy_coordinates(file_with_names, obj_list):
     sys.exit()
 
   with myfile:
+    for line in myfile:
+      if not line.startswith("#"):
+        oh = line.strip("\n").strip(" ")
+        if oh != object_hierarchy:
+          print("Object hierarchy specified in file \"%s\" (%s) is not" %  \
+                (file_with_names, oh))
+          print("compatible with the one specified from command line (%s)" % \
+                object_hierarchy)
+          print("Exiting!")
+          sys.exit(0)
+        break
+
     for line in myfile:
       if not line.startswith("#"):
         data = line.split(";")
