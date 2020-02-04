@@ -2,7 +2,7 @@
 # Module with constants
 #-------------------------------------------------------------------------------
 BOX_MARGINS             =  1.5                 # box margins in cm (presumably)
-UNIT_BOX_HEIGHT         =  1.00                # unit box height
+UNIT_BOX_HEIGHT         =  1.0                 # unit box height
 THICKNESS               =  2                   # box line thickness
 WALK_DIRECTIONS         = 24                   # should be divideable by 4
 FIG_FILE_NAME           = "diagram.fig"        # xfig output file name
