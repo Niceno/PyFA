@@ -26,7 +26,6 @@ from Objects.find_max_lvl         import find_max_lvl
 from Objects.get_obj_lists        import get_obj_lists
 from Objects.get_objects_at_level import get_objects_at_level
 from Objects.update_dimensions    import update_dimensions
-from Objects.x_pos                import x_pos
 from Objects.load_ij_coordinates  import load_ij_coordinates
 from Objects.save_ij_coordinates  import save_ij_coordinates
 from Objects.load_xy_coordinates  import load_xy_coordinates
