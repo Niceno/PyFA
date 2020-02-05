@@ -19,8 +19,10 @@ def place_objects(obj_list, object_hierarchy):
   obj_ordered    = []
 
   # List of lists of levels
+  max_obj = 0  # max number of object over all levels
   for l in range(max_lvl + 1):
     levels_objects.append( get_objects_at_level(obj_list, l) )
+    max_obj = max(max_obj, len(levels_objects[-1]))
 
   # Assign values to coordinates
   for l in range(len(levels_objects)):
@@ -31,6 +33,7 @@ def place_objects(obj_list, object_hierarchy):
       if object_hierarchy == "Column-Based":
         objs_at_level[o].column = l  # level
         objs_at_level[o].row    = o  # object
+
       elif object_hierarchy == "Row-Based":
         objs_at_level[o].row    = l  # level
         objs_at_level[o].column = o  # object
