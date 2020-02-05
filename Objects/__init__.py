@@ -24,9 +24,7 @@ from Objects.set_objects_details import set_objects_details
 from Objects.classify_objects     import classify_objects
 from Objects.find_max_lvl         import find_max_lvl
 from Objects.get_obj_lists        import get_obj_lists
-from Objects.lvl_list             import lvl_list
-from Objects.place_objects_column import place_objects_column
-from Objects.place_objects_row    import place_objects_row
+from Objects.get_objects_at_level import get_objects_at_level
 from Objects.update_dimensions    import update_dimensions
 from Objects.x_pos                import x_pos
 from Objects.load_ij_coordinates  import load_ij_coordinates

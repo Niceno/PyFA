@@ -72,10 +72,9 @@ start = time.time()
 file_paths = []
 obj_list   = []
 
-align_boxes           = "Straight"
-object_hierarchy      = "Column-Based"
-object_details = "Reduced"
-box_margins           = Const.BOX_MARGINS
+object_hierarchy = "Column-Based"
+object_details   = "Reduced"
+box_margins      = Const.BOX_MARGINS
 
 src_file     = "None"
 r_specified  = "None"  # root directory
@@ -95,29 +94,16 @@ if len(sys.argv) == 1:
 #---------------------------------------
 for j in range(1,len(sys.argv),2):
 
-  # Check if help was specified, or no optios were specified at all
-  if str(sys.argv[j]) == "-h"      or  \
-     str(sys.argv[j]) == "--help":
-    print_help_and_exit()
+# # Check if help was specified, or no optios were specified at all
+# if str(sys.argv[j]) == "-h"      or  \
+#    str(sys.argv[j]) == "--help":
+#   print_help_and_exit()
 
   if(len(sys.argv) > j+1):
 
-    # Check if alignment was specified
-    if str(sys.argv[j]) == "-a" or \
-       str(sys.argv[j]) == "--align":
-      if str(sys.argv[j+1]) == "diagonal":
-        align_boxes  = "Diagonal"
-      elif str(sys.argv[j+1]) == "straight":
-        align_boxes  = "Straight"
-      else:
-        print("Incorrect switch:", sys.argv[j+1], "after", sys.argv[j])
-        print("Allowed switches are 'straight' or 'diagonal'")
-        print("Exiting the program")
-        sys.exit()
-
     # Check if object hierarchy was specified
-    elif str(sys.argv[j]) == "-h" or         \
-         str(sys.argv[j]) == "--hierarchy":
+    if str(sys.argv[j]) == "-h" or         \
+       str(sys.argv[j]) == "--hierarchy":
       if str(sys.argv[j+1]) == "column":
         object_hierarchy  = "Column-Based"
       elif str(sys.argv[j+1]) == "row":
@@ -243,8 +229,7 @@ obj_list = Objects.update_dimensions(obj_list)
 #----------------------------------------------
 # Initial object placement, based on hierarchy
 #----------------------------------------------
-obj_list = Objects.place_objects(obj_list, object_hierarchy,       \
-                                           align_boxes)
+obj_list = Objects.place_objects(obj_list, object_hierarchy)
 
 #-------------------------------------------------
 # If logical coordinates specified, load them now

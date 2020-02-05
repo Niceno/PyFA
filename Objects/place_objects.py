@@ -1,5 +1,5 @@
-from Objects.place_objects_column import place_objects_column
-from Objects.place_objects_row    import place_objects_row
+from Objects.find_max_lvl         import find_max_lvl
+from Objects.get_objects_at_level import get_objects_at_level
 
 #===============================================================================
 # Function for creating complete and updated object list
@@ -11,15 +11,31 @@ from Objects.place_objects_row    import place_objects_row
 # Used by:
 #   - main program (simple.py)
 #-------------------------------------------------------------------------------
-def place_objects(obj_list,          \
-                  object_hierarchy,  \
-                  align_boxes):
+def place_objects(obj_list, object_hierarchy):
 
-  if object_hierarchy == "Column-Based":
-    obj_list = place_objects_column(obj_list, align_boxes)
+  max_lvl = find_max_lvl(obj_list)   # get max level
 
-  elif object_hierarchy == "Row-Based":
-    obj_list = place_objects_row(obj_list, align_boxes)
+  levels_objects = []
+  obj_ordered    = []
 
-  return obj_list
+  # List of lists of levels
+  for l in range(max_lvl + 1):
+    levels_objects.append( get_objects_at_level(obj_list, l) )
+
+  # Assign values to coordinates
+  for l in range(len(levels_objects)):
+    objs_at_level = levels_objects[l]
+
+    # Browse through all objects at level "l"
+    for o in range(len(objs_at_level)):
+      if object_hierarchy == "Column-Based":
+        objs_at_level[o].column = l  # level
+        objs_at_level[o].row    = o  # object
+      elif object_hierarchy == "Row-Based":
+        objs_at_level[o].row    = l  # level
+        objs_at_level[o].column = o  # object
+
+      obj_ordered.append(objs_at_level[o])
+
+  return obj_ordered
 
