@@ -34,8 +34,15 @@ def save_object_details(obj_list, file_name, object_hierarchy):
                           "----------------------------\n")
 
     # Write coordinates
-    text_file.write("   %-40s %s\n" % (obj_list[o].name + ";",  \
-                                       obj_list[o].detail))
+    if obj_list[o].vars_hidden and obj_list[o].methods_hidden:
+      text_file.write("   %-40s %s\n" % (obj_list[o].name + ";",  \
+                                         "Minimal"))
+    elif obj_list[o].vars_hidden:
+      text_file.write("   %-40s %s\n" % (obj_list[o].name + ";",  \
+                                         "Reduced"))
+    else:
+      text_file.write("   %-40s %s\n" % (obj_list[o].name + ";",  \
+                                         "Normal"))
 
   text_file.close()
   print("File", file_name, \

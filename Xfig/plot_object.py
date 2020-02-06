@@ -38,11 +38,11 @@ def plot_object(file, object):
     plot_use_list(file, object)
 
   # If variables have been found, plot variables text box
-  if object.N_Vars() > 0:
+  if object.H_Vars() > 0:
     plot_var_list(file, object)
 
   # If methods have been found, plot methods text box
-  if object.N_Methods() > 0:
+  if object.H_Methods() > 0:
     plot_meth_list(file, object)
 
   # End the compound around the module

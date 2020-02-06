@@ -28,15 +28,16 @@ def load_object_details(file_with_names, obj_list):
         detail = data[1].strip("\n").strip(" ")
         for o in range(len(obj_list)):
           if obj_list[o].name == name:
-            obj_list[o].detail = detail
+            if detail == "Normal":
+              obj_list[o].vars_hidden    = False
+              obj_list[o].methods_hidden = False
+            elif detail == "Reduced":
+              obj_list[o].vars_hidden    = True
+              obj_list[o].methods_hidden = False
+            elif detail == "Minimal":
+              obj_list[o].vars_hidden    = True
+              obj_list[o].methods_hidden = True
   myfile.close()
-
-  for o in range(len(obj_list)):
-    if obj_list[o].detail == "Reduced":
-      obj_list[o].vars = []
-    if obj_list[o].detail == "Minimal":
-      obj_list[o].vars    = []
-      obj_list[o].methods = []
 
   return obj_list
 

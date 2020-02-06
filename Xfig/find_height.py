@@ -13,8 +13,8 @@ import Const
 def find_height(object):
 
   height = (  1                      \
-            + object.N_Vars()        \
-            + object.N_Methods()     \
+            + object.H_Vars()        \
+            + object.H_Methods()     \
             + object.N_Uses()        \
             + object.N_Types() ) * Const.UNIT_BOX_HEIGHT
 

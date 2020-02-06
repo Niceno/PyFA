@@ -33,8 +33,9 @@ class Object():
     self.types    = types   # list of defined types
     self.fun_type = f_type  # function type (makes sense for Function only)
 
-    self.level     = 0
-    self.detail    = "Normal"
+    self.level          = 0
+    self.vars_hidden    = False
+    self.methods_hidden = False
 
     # Geometrical properties
     self.x0        = 0.0
@@ -61,10 +62,22 @@ class Object():
   def N_Uses(self):
     return len(self.uses)
 
-  def N_Vars(self):
-    return len(self.vars)
+  def H_Vars(self):
+    if len(self.vars) == 0:
+      return 0
+    else:
+      if self.vars_hidden:
+        return 0.2
+      else:
+        return len(self.vars)
 
-  def N_Methods(self):
-    return len(self.methods)
+  def H_Methods(self):
+    if len(self.methods) == 0:
+      return 0
+    else:
+      if self.methods_hidden:
+        return 0.2
+      else:
+        return len(self.methods)
 
 

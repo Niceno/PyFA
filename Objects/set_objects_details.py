@@ -11,16 +11,18 @@
 def set_objects_details(obj_list, object_details):
 
   for o in range(len(obj_list)):
-    obj_list[o].detail = object_details
 
-  if object_details == "Reduced":
-    for o in range(len(obj_list)):
-      obj_list[o].vars = []
+    if object_details == "Normal":
+      obj_list[o].vars_hidden    = False
+      obj_list[o].methods_hidden = False
 
-  if object_details == "Minimal":
-    for o in range(len(obj_list)):
-      obj_list[o].vars    = []
-      obj_list[o].methods = []
+    elif object_details == "Reduced":
+      obj_list[o].vars_hidden    = True
+      obj_list[o].methods_hidden = False
+
+    elif object_details == "Minimal":
+      obj_list[o].vars_hidden    = True
+      obj_list[o].methods_hidden = True
 
   return obj_list
 

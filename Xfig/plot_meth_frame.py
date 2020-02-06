@@ -20,8 +20,8 @@ def plot_meth_frame(file, box_width, object):
   y0 = (object.y0 + ( 1                             \
            + object.N_Types()                       \
            + object.N_Uses()                        \
-           + object.N_Vars() ) * Const.UNIT_BOX_HEIGHT ) * Const.XFIG_SCALE
-  y1 = y0 + object.N_Methods() * Const.UNIT_BOX_HEIGHT * Const.XFIG_SCALE
+           + object.H_Vars() ) * Const.UNIT_BOX_HEIGHT ) * Const.XFIG_SCALE
+  y1 = y0 + object.H_Methods() * Const.UNIT_BOX_HEIGHT * Const.XFIG_SCALE
 
   file.write("2 2 0 ")
   file.write("%3d "       % Const.THICKNESS)

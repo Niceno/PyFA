@@ -94,11 +94,6 @@ if len(sys.argv) == 1:
 #---------------------------------------
 for j in range(1,len(sys.argv),2):
 
-# # Check if help was specified, or no optios were specified at all
-# if str(sys.argv[j]) == "-h"      or  \
-#    str(sys.argv[j]) == "--help":
-#   print_help_and_exit()
-
   if(len(sys.argv) > j+1):
 
     # Check if object hierarchy was specified
@@ -216,8 +211,9 @@ else:
 #-------------------------------------------------
 obj_list, obj_memb = Objects.get_obj_lists(file_paths)
 
-obj_list = Objects.set_objects_details(obj_list, object_details)
-if d_specified != "None":
+if d_specified == "None":
+  obj_list = Objects.set_objects_details(obj_list, object_details)
+else:
   obj_list = Objects.load_object_details(d_specified, obj_list)
 
 #--------------------------------------------------

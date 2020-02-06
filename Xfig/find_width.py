@@ -16,11 +16,13 @@ def find_width(object):
 
   # Find variable with maximum length
   longest_variable_name = ""
-  if object.N_Vars() > 0: longest_variable_name = max(object.vars, key=len)
+  if object.H_Vars() > 0 and not object.vars_hidden:
+    longest_variable_name = max(object.vars, key=len)
 
   # Find max length of methods
   longest_method_name = ""
-  if object.N_Methods() > 0: longest_method_name = max(object.methods, key=len)
+  if object.H_Methods() > 0 and not object.methods_hidden:
+    longest_method_name = max(object.methods, key=len)
 
   # Find longest type name
   longest_type_name = ""
