@@ -1,5 +1,6 @@
 from Objects.find_max_lvl         import find_max_lvl
 from Objects.get_objects_at_level import get_objects_at_level
+from Objects.evenize_list         import evenize_list
 
 #===============================================================================
 # Function for creating complete and updated object list
@@ -28,15 +29,17 @@ def place_objects(obj_list, object_hierarchy):
   for l in range(len(levels_objects)):
     objs_at_level = levels_objects[l]
 
+    obj_pos = evenize_list(0, max_obj, len(objs_at_level))
+
     # Browse through all objects at level "l"
     for o in range(len(objs_at_level)):
       if object_hierarchy == "Column-Based":
-        objs_at_level[o].column = l  # level
-        objs_at_level[o].row    = o  # object
+        objs_at_level[o].column = l           # level
+        objs_at_level[o].row    = obj_pos[o]  # object
 
       elif object_hierarchy == "Row-Based":
-        objs_at_level[o].row    = l  # level
-        objs_at_level[o].column = o  # object
+        objs_at_level[o].row    = l           # level
+        objs_at_level[o].column = obj_pos[o]  # object
 
       obj_ordered.append(objs_at_level[o])
 

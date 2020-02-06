@@ -23,6 +23,7 @@ from Objects.set_objects_details import set_objects_details
 # Other general functions
 from Objects.classify_objects     import classify_objects
 from Objects.find_max_lvl         import find_max_lvl
+from Objects.evenize_list         import evenize_list
 from Objects.get_obj_lists        import get_obj_lists
 from Objects.get_objects_at_level import get_objects_at_level
 from Objects.update_dimensions    import update_dimensions
