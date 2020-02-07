@@ -36,13 +36,13 @@ def plot_spline(file, spline):
     file.write("%5d" % (depth))
     file.write(" -1 -1 8.000 0 1 1 %6d" % len(x))  # 8.000 is dash length
 
-  # Arrow settings
+  # Arrow settings (135 and 180 are width and length, divide by 15)
   if line_type == "Continuous":
-    file.write("\n 1 1 1.00 135.00 180.00")
-    file.write("\n 6 1 1.00 135.00 180.00")
+    file.write("\n 1 1 2.00 135.00 180.00")
+    file.write("\n 6 1 2.00 135.00 180.00")
   elif line_type == "Dashed":
-    file.write("\n 1 0 1.00 135.00 180.00")
-    file.write("\n 6 0 1.00 135.00 180.00")
+    file.write("\n 1 0 2.00 135.00 180.00")
+    file.write("\n 6 0 2.00 135.00 180.00")
 
   cnt = 0
   for i in range(len(x)):

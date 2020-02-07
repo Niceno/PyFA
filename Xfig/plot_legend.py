@@ -47,10 +47,10 @@ def plot_legend(file, obj_list, x0, y0):
   plot_object_name(file, pobject)
 
   # Splines
-  plot_spline_legend(file, obj_list,                           \
+  plot_spline_legend(file,                                           \
                      x0,  y0+Const.UNIT_BOX_HEIGHT*5.5, text_width,  \
                      "Continuous")
-  plot_spline_legend(file, obj_list,                           \
+  plot_spline_legend(file,                                           \
                      x0, y0+Const.UNIT_BOX_HEIGHT*7.0, text_width,   \
                      "Dashed")
   plot_text(file, "Center",                   \
