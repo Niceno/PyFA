@@ -114,26 +114,27 @@ def Walk(x1, y1, x2, y2, x5, y5, x6, y6, obj_list, spl_list, stride):
       step_dist.append(math.sqrt(dx*dx + dy*dy))
 
     # Index of direction with minimum distance
-    min_dist = step_dist.index(min(step_dist))
+    if len(step_dist) > 0:
+      min_dist = step_dist.index(min(step_dist))
 
-    x.   append(step_x[min_dist])
-    y.   append(step_y[min_dist])
-    dist.append(min(step_dist))
-    keep.append(True)
+      x.   append(step_x[min_dist])
+      y.   append(step_y[min_dist])
+      dist.append(min(step_dist))
+      keep.append(True)
 
-    # Check if converged
-    if dist[-1] < (stride * 0.25):
-      x = x[:-2]
-      y = y[:-2]
-      break
+      # Check if converged
+      if dist[-1] < (stride * 0.25):
+        x = x[:-2]
+        y = y[:-2]
+        break
 
-    # Check if it wobbles (only if you are close)
-    if len(dist) > 2:
-      if dist[-1] < (stride):
-        if dist[-1] > dist[-2]:
-          x = x[:-3]
-          y = y[:-3]
-          break
+      # Check if it wobbles (only if you are close)
+      if len(dist) > 2:
+        if dist[-1] < (stride):
+          if dist[-1] > dist[-2]:
+            x = x[:-3]
+            y = y[:-3]
+            break
 
   x.   append(x5)
   y.   append(y5)
